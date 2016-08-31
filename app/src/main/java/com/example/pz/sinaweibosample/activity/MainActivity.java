@@ -93,10 +93,10 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
     private void handleLoginButton() {
         if(loginButton != null) {
-            AccessTokenKeeper.clear(this);
             if(AccessTokenKeeper.isTokenValid(this)) {
                 //显示用户名和信息、头像
                 MyLog.v(MyLog.LOGIN_TAG, "token可用，已登录");
+
                 loginButton.setVisibility(View.GONE);
             }else {
                 //显示登陆按钮
