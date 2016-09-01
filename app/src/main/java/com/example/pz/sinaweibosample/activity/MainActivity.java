@@ -110,6 +110,11 @@ public class MainActivity extends BaseActivity<MainPresenter>
         userHeadDrawee.setImageURI(user.getProfile_image_url());
     }
 
+    @Override
+    public void showErrorInfo(String error) {
+        Snackbar.make(addWeiboFab, error, Snackbar.LENGTH_LONG).show();
+    }
+
     private void handleLoginButton() {
         if(loginButton != null) {
             if(AccessTokenKeeper.isTokenValid()) {

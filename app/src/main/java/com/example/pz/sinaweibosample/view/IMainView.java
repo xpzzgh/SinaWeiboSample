@@ -10,4 +10,6 @@ import com.example.pz.sinaweibosample.model.entity.User;
 public interface IMainView extends IView{
 
     public void fillUserInfo(User user);
+
+    public void showErrorInfo(String error);
 }

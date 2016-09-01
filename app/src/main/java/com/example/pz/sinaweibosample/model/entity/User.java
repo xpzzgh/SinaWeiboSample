@@ -16,6 +16,8 @@
 
 package com.example.pz.sinaweibosample.model.entity;
 
+import com.example.pz.sinaweibosample.base.BaseObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,7 +27,7 @@ import org.json.JSONObject;
  * @author SINA
  * @since 2013-11-24
  */
-public class User {
+public class User extends BaseObject{
 
     /** 用户UID（int64） */
     public String id;

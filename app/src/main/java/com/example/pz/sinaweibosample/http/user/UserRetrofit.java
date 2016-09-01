@@ -1,6 +1,7 @@
 package com.example.pz.sinaweibosample.http.user;
 
 
+import com.example.pz.sinaweibosample.base.BaseObject;
 import com.example.pz.sinaweibosample.model.entity.StatusList;
 import com.example.pz.sinaweibosample.model.entity.User;
 
@@ -9,6 +10,8 @@ import java.util.Map;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 import rx.Observable;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Created by pz on 2016/9/1.
