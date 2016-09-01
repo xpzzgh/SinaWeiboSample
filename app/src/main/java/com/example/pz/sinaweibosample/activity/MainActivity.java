@@ -13,14 +13,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.BaseActivity;
+import com.example.pz.sinaweibosample.model.entity.User;
 import com.example.pz.sinaweibosample.oauth.AccessTokenKeeper;
 import com.example.pz.sinaweibosample.presenter.MainPresenter;
 import com.example.pz.sinaweibosample.util.AppInfo;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.view.IMainView;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -38,6 +41,10 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
     Button loginButton;
     View navigationHeaderView;
+    TextView usernameText;
+    TextView userDescription;
+    SimpleDraweeView userHeadDrawee;
+    User user;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -73,6 +80,9 @@ public class MainActivity extends BaseActivity<MainPresenter>
         mSsoHandler = new SsoHandler(this, mAuthInfo);
         //获取侧边栏头部实例
         navigationHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        usernameText = (TextView)navigationHeaderView.findViewById(R.id.text_username);
+        userDescription = (TextView)navigationHeaderView.findViewById(R.id.text_user_description);
+        userHeadDrawee = (SimpleDraweeView)navigationHeaderView.findViewById(R.id.image_head);
         loginButton = (Button)navigationHeaderView.findViewById(R.id.login_button);
         handleLoginButton();
         //设置actionBar
@@ -89,14 +99,23 @@ public class MainActivity extends BaseActivity<MainPresenter>
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         setImmerseBar();
+
+    }
+
+    @Override
+    public void fillUserInfo(User user) {
+        this.user = user;
+        usernameText.setText(user.getName());
+        userDescription.setText(user.getDescription());
+        userHeadDrawee.setImageURI(user.getProfile_image_url());
     }
 
     private void handleLoginButton() {
         if(loginButton != null) {
-            if(AccessTokenKeeper.isTokenValid(this)) {
+            if(AccessTokenKeeper.isTokenValid()) {
                 //显示用户名和信息、头像
                 MyLog.v(MyLog.LOGIN_TAG, "token可用，已登录");
-
+                presenter.getUserInfo();
                 loginButton.setVisibility(View.GONE);
             }else {
                 //显示登陆按钮
@@ -206,10 +225,11 @@ public class MainActivity extends BaseActivity<MainPresenter>
         public void onComplete(Bundle bundle) {
             mAccessToken = Oauth2AccessToken.parseAccessToken(bundle);
             if(mAccessToken.isSessionValid()) {
-                AccessTokenKeeper.writeToken(MainActivity.this, mAccessToken);
+                AccessTokenKeeper.writeToken(mAccessToken);
                 //登陆成功之后，隐藏登陆按钮
                 loginButton.setVisibility(View.GONE);
                 MyLog.v(MyLog.LOGIN_TAG, "授权成功，token：" + mAccessToken.getToken());
+                presenter.getUserInfo();
             }else {
                 String code = bundle.getString("code");
                 MyLog.v(MyLog.LOGIN_TAG, "授权失败，code：" + code);
@@ -227,6 +247,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
         super.onActivityResult(requestCode, resultCode, data);
         if(mSsoHandler != null) {
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+
         }
     }
 }

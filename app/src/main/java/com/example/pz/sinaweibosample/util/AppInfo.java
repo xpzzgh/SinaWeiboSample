@@ -37,6 +37,14 @@ public class AppInfo {
      */
     public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
 
+    /**
+     * 新浪微博开放平台 注册名
+     */
+    public static final String APP_NAME = "bigZ微博儿小助手";
 
+    /**
+     * 授权回调页和取消授权回调页, 需与跳转页一致
+     */
+    public static final String SIGN_CALLBACK = "https://api.weibo.com/oauth2/default.html";
 
 }

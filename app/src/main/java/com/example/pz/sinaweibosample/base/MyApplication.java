@@ -1,6 +1,7 @@
 package com.example.pz.sinaweibosample.base;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
@@ -9,6 +10,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
  */
 public class MyApplication extends Application{
 
+    static Context context;
 
     @Override
     public void onCreate() {
@@ -20,6 +22,11 @@ public class MyApplication extends Application{
 //        CustomActivityOnCrash.setShowErrorDetails(true); //是否显示报错详情和按钮
 //        CustomActivityOnCrash.setEnableAppRestart(true); //重启还是关闭app  true为重启
 //        CustomActivityOnCrash.install(this);
+        context = getApplicationContext();
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
 }

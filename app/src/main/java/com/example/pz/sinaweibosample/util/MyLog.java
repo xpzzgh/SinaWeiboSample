@@ -16,6 +16,8 @@ public class MyLog {
 
     public static final String LOGIN_TAG = "auth";
     public static final String BASE_TAG = "base";
+    public static final String STATUS_TAG = "weibo_status";
+    public static final String USER_TAG = "user";
 
 
     public static void v(String tag, String msg) {
