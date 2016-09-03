@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class BaseObject implements Serializable {
     public String request;
-    public int error_code;
+    public int error_code = 0;
     public String error;
 
     public String getError() {

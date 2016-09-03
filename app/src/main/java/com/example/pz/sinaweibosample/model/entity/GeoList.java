@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * @author SINA
  * @since 2013-11-24
  */
-public class GeoList {
+public class GeoList extends Object{
     public ArrayList<Geo> Geos;
 
     public ArrayList<Geo> getGeos() {

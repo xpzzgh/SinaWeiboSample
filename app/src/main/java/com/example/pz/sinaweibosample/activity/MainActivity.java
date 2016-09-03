@@ -21,8 +21,9 @@ import com.example.pz.sinaweibosample.model.entity.User;
 import com.example.pz.sinaweibosample.oauth.AccessTokenKeeper;
 import com.example.pz.sinaweibosample.presenter.MainPresenter;
 import com.example.pz.sinaweibosample.util.AppInfo;
+import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
-import com.example.pz.sinaweibosample.view.IMainView;
+import com.example.pz.sinaweibosample.view.iview.IMainView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -81,16 +82,15 @@ public class MainActivity extends BaseActivity<MainPresenter>
         //获取侧边栏头部实例
         navigationHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         usernameText = (TextView)navigationHeaderView.findViewById(R.id.text_username);
-        userDescription = (TextView)navigationHeaderView.findViewById(R.id.text_user_description);
+        userDescription = (TextView)navigationHeaderView.findViewById(R.id.text_description);
         userHeadDrawee = (SimpleDraweeView)navigationHeaderView.findViewById(R.id.image_head);
+        userHeadDrawee.setOnClickListener(this);
         loginButton = (Button)navigationHeaderView.findViewById(R.id.login_button);
         handleLoginButton();
         //设置actionBar
         setSupportActionBar(toolbar);
         //设置侧边栏item点击监听
         navigationView.setNavigationItemSelectedListener(this);
-
-
         //浮动按钮点击监听
         addWeiboFab.setOnClickListener(this);
         //抽屉增加开关
@@ -98,8 +98,13 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        setImmerseBar();
+//        setImmerseBar();
 
+    }
+
+    @Override
+    public void setTitle() {
+        getSupportActionBar().setTitle("所有微博");
     }
 
     @Override
@@ -107,7 +112,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
         this.user = user;
         usernameText.setText(user.getName());
         userDescription.setText(user.getDescription());
-        userHeadDrawee.setImageURI(user.getProfile_image_url());
+        userHeadDrawee.setImageURI(user.getAvatar_large());
     }
 
     @Override
@@ -128,7 +133,6 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 loginButton.setVisibility(View.VISIBLE);
                 loginButton.setOnClickListener(this);
             }
-//            loginButton.invalidate();
         }
     }
 
@@ -144,7 +148,14 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 break;
-
+            case R.id.image_head:
+                if(!user.getId().isEmpty()) {
+                    Intent intent = new Intent(this, UserActivity.class);
+                    intent.putExtra(Constant.USER, user);
+                    startActivity(intent);
+                    //fade_in 表示下一个activity淡入，fade_out表示这个activity切换时淡出
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }
         }
     }
 

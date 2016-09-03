@@ -16,6 +16,8 @@
 
 package com.example.pz.sinaweibosample.model.entity;
 
+import com.example.pz.sinaweibosample.base.BaseObject;
+
 import org.json.JSONObject;
 
 /**
@@ -24,7 +26,7 @@ import org.json.JSONObject;
  * @author SINA
  * @since 2013-11-24
  */
-public class Visible {
+public class Visible extends BaseObject{
     
     public static final int VISIBLE_NORMAL  = 0;
     public static final int VISIBLE_PRIVACY = 1;

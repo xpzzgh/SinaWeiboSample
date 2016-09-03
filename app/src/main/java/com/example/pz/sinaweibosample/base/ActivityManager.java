@@ -15,6 +15,10 @@ public class ActivityManager {
     private static ActivityManager manager;
     private static Stack<Activity> activityStack = new Stack<Activity>();
 
+    public Stack<Activity> getActivityStack() {
+        return activityStack;
+    }
+
     private ActivityManager() {}
 
     public static ActivityManager instanceOf() {

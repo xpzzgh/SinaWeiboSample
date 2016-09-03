@@ -18,6 +18,8 @@ package com.example.pz.sinaweibosample.model.entity;
 
 import android.text.TextUtils;
 
+import com.example.pz.sinaweibosample.base.BaseObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +29,7 @@ import org.json.JSONObject;
  * @author SINA
  * @since 2013-11-24
  */
-public class Geo {
+public class Geo extends BaseObject{
     
     /** 经度坐标 */
     public String longitude;

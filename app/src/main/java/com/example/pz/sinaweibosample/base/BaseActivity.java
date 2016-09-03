@@ -1,5 +1,6 @@
 package com.example.pz.sinaweibosample.base;
 
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,8 @@ import android.view.View;
 
 
 import com.example.pz.sinaweibosample.util.MyLog;
+
+import java.util.Stack;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -32,6 +35,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         unbinder = ButterKnife.bind(this); //初始化butterknife
         initPresenter();
         initView();
+        showActivityStack();
         MyLog.v(MyLog.BASE_TAG, this.getLocalClassName() + ": OnCreate");
     }
 
@@ -47,6 +51,17 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 //            getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
+
+    private void showActivityStack() {
+        Stack<Activity> activityStack =  ActivityManager.instanceOf().getActivityStack();
+        String allActivity = "当前所有activity：";
+        for(Activity activity:activityStack) {
+            allActivity  = allActivity + activity.getLocalClassName() + "；";
+        }
+        MyLog.v(MyLog.BASE_TAG, allActivity);
+    }
+
+    public abstract void setTitle();
 
     public T getPresenter() {
         return presenter;
@@ -72,6 +87,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onStart() {
         super.onStart();
+        setTitle();
         MyLog.v(MyLog.BASE_TAG, this.getLocalClassName() + ": OnStart");
     }
 
@@ -114,4 +130,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
     //释放泄露内存、占用cpu和时长较长的操作
     protected abstract void stopOperation();
+
+    @Override
+    public void onBackPressed() {
+        ActivityManager.instanceOf().finishActivity(this);
+    }
 }

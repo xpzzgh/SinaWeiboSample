@@ -16,6 +16,8 @@
 
 package com.example.pz.sinaweibosample.model.entity;
 
+import com.example.pz.sinaweibosample.base.BaseObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
  * @author SINA
  * @since 2013-11-22
  */
-public class Status {
+public class Status extends BaseObject{
     
     /** 微博创建时间 */
     public String created_at;

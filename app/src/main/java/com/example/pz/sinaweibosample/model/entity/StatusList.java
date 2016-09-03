@@ -18,6 +18,8 @@ package com.example.pz.sinaweibosample.model.entity;
 
 import android.text.TextUtils;
 
+import com.example.pz.sinaweibosample.base.BaseObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
  * @author SINA
  * @since 2013-11-22
  */
-public class StatusList {
+public class StatusList extends BaseObject{
     
     /** 微博列表 */
     public ArrayList<Status> statuses;

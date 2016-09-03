@@ -14,12 +14,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:name=".base.MyApplication"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MyTheme">
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,6 +31,8 @@
             android:windowSoftInputMode="adjustResize"
             android:exported="false" >
         </activity>
+        <activity android:name=".activity.UserActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
