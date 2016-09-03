@@ -5,15 +5,14 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 
 /**
- * This class is from the v7 samples of the Android SDK. It's not by me!
- * <p/>
- * See the license above for details.
+ * recyclerView简单分割线，支持垂直和水平两种
  */
 public class SimpleDecoration extends RecyclerView.ItemDecoration {
 
@@ -29,10 +28,26 @@ public class SimpleDecoration extends RecyclerView.ItemDecoration {
 
     private int mOrientation;
 
+    /**
+     * 根据系统主题定义的分割线分割
+     * @param context
+     * @param orientation
+     */
     public SimpleDecoration(Context context, int orientation) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
+        setOrientation(orientation);
+    }
+
+    /**
+     * 根据传入的drawable资源创建分割线
+     * @param context
+     * @param resId
+     * @param orientation
+     */
+    public SimpleDecoration(Context context, int resId, int orientation) {
+        mDivider = ContextCompat.getDrawable(context, resId);
         setOrientation(orientation);
     }
 

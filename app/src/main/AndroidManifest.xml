@@ -32,7 +32,8 @@
             android:exported="false" >
         </activity>
         <activity android:name=".activity.UserActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/MyTheme.User"></activity>
     </application>
 
 </manifest>
