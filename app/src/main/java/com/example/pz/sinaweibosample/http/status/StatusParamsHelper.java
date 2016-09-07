@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class StatusParamsHelper {
 
-    public static final int COUNT_PER_REQUEST = 20;
+    public static final int COUNT_PER_REQUEST = 5;
     public static final int BASE_APP = 0;
 
     public static Map<String, String> getPublicStatusParams(int page) {

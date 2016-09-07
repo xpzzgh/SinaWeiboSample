@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 /**
  * Created by pz on 2016/8/18.
  */
@@ -23,6 +25,8 @@ public class MyApplication extends Application{
 //        CustomActivityOnCrash.setEnableAppRestart(true); //重启还是关闭app  true为重启
 //        CustomActivityOnCrash.install(this);
         context = getApplicationContext();
+        //初始化joda时间库
+        JodaTimeAndroid.init(this);
     }
 
     public static Context getContext() {

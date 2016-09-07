@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorVeryLightGray"
+    android:paddingBottom="10dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/text_body_relay_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/colorFont"
+        android:maxLines="10"
+        android:ellipsize="end"
+        android:text="阿斯顿法国和健康阿fdgfdgdfgdfgdfgdfgdsfgsdfdfgsdfgsdfgsdfg斯顿发sdfgdfgsdf过火，第三方公司的发给对方给第三方第三方大风歌是丢发给。"/>
+
+    <com.example.pz.sinaweibosample.view.widget.MultiImageViewGroup
+        android:id="@+id/view_multi_images_relay_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="10dp"
+        custom:width_per_image="@dimen/width_images_little"
+        custom:width_image_gap="@dimen/gap_images_little"
+        custom:width_max="@dimen/width_image_max_little"
+        custom:height_image_fixed="@dimen/height_image_place_little"
+        >
+
+    </com.example.pz.sinaweibosample.view.widget.MultiImageViewGroup>
+</LinearLayout>

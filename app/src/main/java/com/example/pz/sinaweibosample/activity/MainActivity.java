@@ -149,7 +149,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
                         .setAction("Action", null).show();
                 break;
             case R.id.image_head:
-                if(!user.getId().isEmpty()) {
+                if(user != null && !user.getId().isEmpty()) {
                     Intent intent = new Intent(this, UserActivity.class);
                     intent.putExtra(Constant.USER, user);
                     startActivity(intent);
@@ -171,6 +171,11 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
     @Override
     protected void stopOperation() {
+
+    }
+
+    @Override
+    protected void destroyOperation() {
 
     }
 

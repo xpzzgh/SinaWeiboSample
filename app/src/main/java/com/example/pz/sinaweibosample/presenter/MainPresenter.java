@@ -5,8 +5,11 @@ import android.content.Context;
 import com.example.pz.sinaweibosample.base.BaseObject;
 import com.example.pz.sinaweibosample.base.BasePresenter;
 import com.example.pz.sinaweibosample.exception.RetrofitError;
+import com.example.pz.sinaweibosample.http.status.StatusParamsHelper;
+import com.example.pz.sinaweibosample.http.status.StatusRetrofitClient;
 import com.example.pz.sinaweibosample.http.user.UserParamsHelper;
 import com.example.pz.sinaweibosample.http.user.UserRetrofitClient;
+import com.example.pz.sinaweibosample.model.entity.StatusList;
 import com.example.pz.sinaweibosample.model.entity.User;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.PrefUtil;
@@ -37,11 +40,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                     @Override
                     public BaseObject call(User user) {
                         BaseObject object = RetrofitError.getBaseObject(user);
-                        if(object instanceof User) {
-                            return object;
-                        }else {
-                            return object;
-                        }
+                        return object;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

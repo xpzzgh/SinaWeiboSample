@@ -6,4 +6,9 @@
     <color name="colorBlack">#000000</color>
     <color name="colorFont">#212121</color>
     <color name="colorFontLight">#9E9E9E</color>
+    <color name="colorGray">#616161</color>
+    <color name="colorDeepOrange">#E64A19</color>
+    <color name="colorLightGray">#BDBDBD</color>
+    <color name="colorMediumGray">#939393</color>
+    <color name="colorVeryLightGray">#E7E7E7</color>
 </resources>

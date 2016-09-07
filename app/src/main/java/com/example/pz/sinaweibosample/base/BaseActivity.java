@@ -76,6 +76,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onDestroy() {
         presenter.destroy(); //释放presenter资源
+        destroyOperation();
         if(unbinder != null) {
             unbinder.unbind();  //butterKnife 解绑
         }
@@ -130,6 +131,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
     //释放泄露内存、占用cpu和时长较长的操作
     protected abstract void stopOperation();
+
+    //destroy之前，执行一些，释放控件的操作,如正在显示的progress
+    protected abstract void destroyOperation();
 
     @Override
     public void onBackPressed() {

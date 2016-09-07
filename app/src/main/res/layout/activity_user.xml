@@ -21,6 +21,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <ImageView
+                android:id="@+id/main.imageview.placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="390dp"
                 android:scaleType="centerCrop"
@@ -75,12 +76,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_user"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        app:behavior_overlapTop="30dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:scrollbars="vertical"
+        app:behavior_overlapTop="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,21 +107,21 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorVeryLightGray"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"/>
 
-            <android.support.v7.widget.CardView
+            <com.example.pz.sinaweibosample.view.widget.LoadMoreRecyclerView
+                android:id="@+id/list_user_statuses"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lorem"/>
-            </android.support.v7.widget.CardView>
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical">
+
+            </com.example.pz.sinaweibosample.view.widget.LoadMoreRecyclerView>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/view_user_toolbar"
@@ -166,7 +174,6 @@
         fresco:placeholderImage="@mipmap/james_3"
         fresco:roundAsCircle="true"
         />
-
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -2,6 +2,8 @@ package com.example.pz.sinaweibosample.base;
 
 import android.app.Activity;
 
+import com.example.pz.sinaweibosample.util.MyLog;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -42,9 +44,11 @@ public class ActivityManager {
      */
     public void finishActivity(Activity activity) {
         if(activity != null) {
+            String activityName = activity.getClass().getName();
             activityStack.remove(activity);
             if(!activity.isFinishing()) {
                 activity.finish();
+                MyLog.v(MyLog.BASE_TAG, activityName + "被清除了");
             }
             activity = null;
         }

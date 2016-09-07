@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/image_status_head"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        fresco:roundAsCircle="true"
+        fresco:actualImageScaleType="centerCrop"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        fresco:placeholderImage="@mipmap/james_1"
+        fresco:placeholderImageScaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/text_status_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ZEALER中国"
+        android:textColor="@color/colorFont"
+        android:maxLength="20"
+        android:textSize="14dp"
+        android:layout_alignTop="@+id/image_status_head"
+        android:paddingLeft="5dp"
+        android:paddingBottom="5dp"
+        android:layout_toRightOf="@+id/image_status_head"/>
+
+
+    <TextView
+        android:id="@+id/text_status_time_ago"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:text="8小时前"
+        android:layout_alignLeft="@+id/text_status_author"
+        android:paddingLeft="5dp"
+        android:paddingRight="8dp"
+        android:layout_below="@+id/text_status_author"
+        android:textColor="@color/colorDeepOrange"/>
+
+    <TextView
+        android:id="@+id/text_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="来自"
+        android:textSize="10sp"
+        android:layout_below="@+id/text_status_author"
+        android:layout_toRightOf="@+id/text_status_time_ago"
+        android:paddingRight="5dp" />
+
+    <TextView
+        android:id="@+id/text_client_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="iphone 9PLUS"
+        android:textSize="10sp"
+        android:layout_below="@+id/text_status_author"
+        android:layout_toRightOf="@+id/text_from"/>
+</RelativeLayout>

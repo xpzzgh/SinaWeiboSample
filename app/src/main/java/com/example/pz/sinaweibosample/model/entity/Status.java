@@ -18,10 +18,6 @@ package com.example.pz.sinaweibosample.model.entity;
 
 import com.example.pz.sinaweibosample.base.BaseObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 /**
@@ -81,15 +77,27 @@ public class Status extends BaseObject{
      */
     public Visible visible;
     /** 微博配图地址。多图时返回多图链接。无配图返回"[]" */
-    public ArrayList<String> pic_ids;
+    public ArrayList<ThumbNailPic> pic_urls;
     /** 微博流内的推广微博ID */
 //    public Ad ad;
 
     public String toString() {
-        if (retweeted_status != null && !retweeted_status.text.isEmpty()) {
-            return text + " 转发自：" + retweeted_status.text;
-        }
-        return text;
+            StringBuilder builder = new StringBuilder();
+            if(user != null) {
+                builder.append("发布人：" + user.getName());
+            }
+            if(text != null) {
+                builder.append("微博正文：" + text + "        ");
+            }
+            if(pic_urls != null) {
+                builder.append("图片ids：" + pic_urls);
+            }
+            if(bmiddle_pic != null) {
+                builder.append("中等图片地址：" + bmiddle_pic);
+            }
+            builder.append("转发:" + reposts_count + ",评论数:" + comments_count + ",点赞数:" + attitudes_count);
+
+            return builder.toString();
     }
 
     public int getAttitudes_count() {
@@ -204,12 +212,12 @@ public class Status extends BaseObject{
         this.original_pic = original_pic;
     }
 
-    public ArrayList<String> getPic_ids() {
-        return pic_ids;
+    public ArrayList<ThumbNailPic> getPic_urls() {
+        return pic_urls;
     }
 
-    public void setPic_ids(ArrayList<String> pic_ids) {
-        this.pic_ids = pic_ids;
+    public void setPic_urls(ArrayList<ThumbNailPic> pic_urls) {
+        this.pic_urls = pic_urls;
     }
 
     public int getReposts_count() {

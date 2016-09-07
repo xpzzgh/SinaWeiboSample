@@ -18,6 +18,10 @@ public class MyLog {
     public static final String BASE_TAG = "base";
     public static final String STATUS_TAG = "weibo_status";
     public static final String USER_TAG = "user";
+    public static final String STATUS_VIEW_TAG = "status_view";
+    public static final String UTIL_TAG = "util";
+    public static final String WIDGET_TAG = "widget";
+//    public static final String MODEL_TAG = "";
 
 
     public static void v(String tag, String msg) {
