@@ -204,7 +204,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
         }else {
             hideLoadMoreProgress();
         }
-        Snackbar.make(userStatusesRecycler, "没有更多微博了！", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(fab, "没有更多微博了！", Snackbar.LENGTH_LONG).show();
         page--;
     }
 

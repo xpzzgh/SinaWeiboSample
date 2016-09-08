@@ -78,7 +78,8 @@ public class UserPresenter extends BasePresenter<IUserView> {
 
                     @Override
                     public void onNext(List<Status> statusList) {
-                        if(statusList != null || statusList.size() != 0) {
+                        if(statusList != null && statusList.size() != 0) {
+                            MyLog.v(MyLog.USER_TAG, "请求的数据个数为：" + statusList.size());
                             int count = statusList.size();
                             for(int i = 0; i<count; i++) {
                                 MyLog.v(MyLog.STATUS_TAG, statusList.get(i).toString());

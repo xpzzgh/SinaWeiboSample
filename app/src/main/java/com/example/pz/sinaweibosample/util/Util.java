@@ -20,6 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by pz on 2016/9/4.
@@ -218,14 +219,19 @@ public class Util {
     public static Map<String, String> getUserDataMap(User user) {
         Map<String, String> data = new LinkedHashMap<String, String>();
         data.put("性别", SimpleUtil.parseGender(user.getGender()));
-//        data.put("粉丝数", user.getFollowers_count() + "");
-        data.put("粉丝数", "235万");
+        data.put("粉丝数", user.getFollowers_count() + "");
+//        data.put("粉丝数", "235万");
         data.put("关注数", user.getFriends_count() + "");
         data.put("所在地", user.getLocation());
         data.put("简介", user.getDescription());
         data.put("微博数", user.getStatuses_count() + "");
-//        data.put("认证信息", user.isVerified()?"已认证" + user.getVerified_reason():"未认证");
-        data.put("认证信息", "已认证");
+        data.put("认证信息", user.isVerified()?"已认证" + user.getVerified_reason():"未认证");
+//        data.put("认证信息", "已认证");
         return data;
+    }
+
+    public static int getRandomInt(int seed) {
+        Random random = new Random();
+        return random.nextInt(15);
     }
 }

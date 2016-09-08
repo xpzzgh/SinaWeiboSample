@@ -173,7 +173,7 @@ public class StatusView extends FrameLayout {
         statusHeadImage.setImageURI(user.getAvatar_large());
         statusAuthorText.setText(user.getName());
         statusClientFromText.setText(Html.fromHtml(status.getSource()));
-
+//        statusClientFromText.setText("iPhone7S");
     }
 
     /**
@@ -225,12 +225,12 @@ public class StatusView extends FrameLayout {
     }
 
     private void fillCommentInfo() {
-//        likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : status.getAttitudes_count() +"");
-//        commentNumberText.setText(status.getComments_count() == 0 ? "评论" : status.getComments_count()+"");
-//        relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : status.getReposts_count()+"");
-        likeNumberText.setText("12万");
-        commentNumberText.setText("9825");
-        relayNumberText.setText("7万");
+        likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : status.getAttitudes_count() +"");
+        commentNumberText.setText(status.getComments_count() == 0 ? "评论" : status.getComments_count()+"");
+        relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : status.getReposts_count()+"");
+//        likeNumberText.setText(Util.getRandomInt(20) + "万");
+//        commentNumberText.setText(Util.getRandomInt(5) + "万");
+//        relayNumberText.setText(Util.getRandomInt(9) + "万");
     }
 
 
