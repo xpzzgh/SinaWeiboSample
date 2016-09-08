@@ -76,52 +76,27 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_user"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        app:behavior_overlapTop="30dp">
-
-        <LinearLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_user_top"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_user_info"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+                android:id="@+id/refresh_user_bottom"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:background="@android:color/white">
-            </android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent"
+                app:srl_direction="bottom"
+                >
+        <com.example.pz.sinaweibosample.view.widget.FabRecyclerView
+            android:id="@+id/list_user_statuses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@color/colorVeryLightGray"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
+        </com.example.pz.sinaweibosample.view.widget.FabRecyclerView>
+    </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-            <com.example.pz.sinaweibosample.view.widget.LoadMoreRecyclerView
-                android:id="@+id/list_user_statuses"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical">
-
-            </com.example.pz.sinaweibosample.view.widget.LoadMoreRecyclerView>
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/view_user_toolbar"
@@ -174,6 +149,14 @@
         fresco:placeholderImage="@mipmap/james_3"
         fresco:roundAsCircle="true"
         />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_plus_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_plus"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

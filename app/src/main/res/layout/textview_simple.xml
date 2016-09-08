@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.percent.PercentFrameLayout
+    android:id="@+id/view_textview_simple"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="47dp">
 
     <TextView
         android:id="@+id/text_simple_value"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="17dp"
         app:layout_widthPercent="70%"
         android:textSize="15sp"
         android:layout_marginBottom="15dp"
@@ -20,11 +21,18 @@
     <TextView
         android:id="@+id/text_simple_key"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="17dp"
         app:layout_widthPercent="30%"
         android:textSize="15sp"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/colorFontLight"
         android:text="标题"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:background="@color/colorVeryLightGray"
+        android:id="@+id/imageView" />
 </android.support.percent.PercentFrameLayout>

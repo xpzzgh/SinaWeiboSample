@@ -225,9 +225,12 @@ public class StatusView extends FrameLayout {
     }
 
     private void fillCommentInfo() {
-        likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : status.getAttitudes_count() +"");
-        commentNumberText.setText(status.getComments_count() == 0 ? "评论" : status.getComments_count()+"");
-        relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : status.getReposts_count()+"");
+//        likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : status.getAttitudes_count() +"");
+//        commentNumberText.setText(status.getComments_count() == 0 ? "评论" : status.getComments_count()+"");
+//        relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : status.getReposts_count()+"");
+        likeNumberText.setText("12万");
+        commentNumberText.setText("9825");
+        relayNumberText.setText("7万");
     }
 
 

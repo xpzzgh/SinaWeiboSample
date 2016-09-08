@@ -84,34 +84,30 @@ public class UserPresenter extends BasePresenter<IUserView> {
                                 MyLog.v(MyLog.STATUS_TAG, statusList.get(i).toString());
                             }
                             iView.fillStatusesInfo(statusList);
+
+                            if(page == 1) {
+                                iView.fillUserSimpleInfo(user);
+                                iView.hideProgress();
+                            }else {
+                                iView.hideLoadMoreProgress();
+                            }
                         }else {
                             iView.showNoMoreStatus();
                         }
-                        if(page == 1) {
-                            iView.fillUserSimpleInfo(user);
-                            iView.fillListInfo(getKeyValueList(user));
-                        }
-                        iView.hideProgress();
                     }
 
                     @Override
                     public void onStart() {
-                        iView.showProgress();
+                        if(page == 1) {
+                            iView.showProgress();
+                        }else {
+                            iView.showLoadMoreProgress();
+                        }
                     }
                 });
     }
 
-    private List<MyKeyValue> getKeyValueList(User user) {
-        List<MyKeyValue> keyValueList = new ArrayList<MyKeyValue>();
-        keyValueList.add(new MyKeyValue("性别", SimpleUtil.parseGender(user.getGender())));
-        keyValueList.add(new MyKeyValue("粉丝数", user.getFollowers_count() + ""));
-        keyValueList.add(new MyKeyValue("关注数", user.getFriends_count() + ""));
-        keyValueList.add(new MyKeyValue("所在地", user.getLocation()));
-        keyValueList.add(new MyKeyValue("简介", user.getDescription()));
-        keyValueList.add(new MyKeyValue("微博数", user.getStatuses_count() + ""));
-        keyValueList.add(new MyKeyValue("认证信息", user.isVerified()?"已认证" + user.getVerified_reason():"未认证"));
-        return keyValueList;
-    }
+
 
     @Override
     public void destroy() {

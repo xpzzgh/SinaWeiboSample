@@ -3,8 +3,10 @@ package com.example.pz.sinaweibosample.util;
 import android.content.Context;
 import android.util.TypedValue;
 
+import com.example.pz.sinaweibosample.model.entity.MyKeyValue;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.model.entity.ThumbNailPic;
+import com.example.pz.sinaweibosample.model.entity.User;
 
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
@@ -13,8 +15,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by pz on 2016/9/4.
@@ -208,5 +213,19 @@ public class Util {
         }
         MyLog.v(MyLog.UTIL_TAG, timeDiff);
         return timeDiff;
+    }
+
+    public static Map<String, String> getUserDataMap(User user) {
+        Map<String, String> data = new LinkedHashMap<String, String>();
+        data.put("性别", SimpleUtil.parseGender(user.getGender()));
+//        data.put("粉丝数", user.getFollowers_count() + "");
+        data.put("粉丝数", "235万");
+        data.put("关注数", user.getFriends_count() + "");
+        data.put("所在地", user.getLocation());
+        data.put("简介", user.getDescription());
+        data.put("微博数", user.getStatuses_count() + "");
+//        data.put("认证信息", user.isVerified()?"已认证" + user.getVerified_reason():"未认证");
+        data.put("认证信息", "已认证");
+        return data;
     }
 }

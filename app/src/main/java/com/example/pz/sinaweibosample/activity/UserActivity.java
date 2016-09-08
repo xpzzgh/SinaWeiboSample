@@ -3,6 +3,7 @@ package com.example.pz.sinaweibosample.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,13 +23,14 @@ import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.model.entity.User;
 import com.example.pz.sinaweibosample.presenter.UserPresenter;
 import com.example.pz.sinaweibosample.util.Constant;
-import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.view.adapter.SimpleDivideAdapter;
 import com.example.pz.sinaweibosample.view.adapter.UserStatusAdapter;
 import com.example.pz.sinaweibosample.view.decoration.SimpleDecoration;
 import com.example.pz.sinaweibosample.view.iview.IUserView;
-import com.example.pz.sinaweibosample.view.widget.LoadMoreRecyclerView;
+import com.example.pz.sinaweibosample.view.widget.FabRecyclerView;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,7 @@ import butterknife.ButterKnife;
  */
 
 public class UserActivity extends BaseActivity<UserPresenter> implements IUserView, AppBarLayout.OnOffsetChangedListener,
-        SwipeRefreshLayout.OnRefreshListener, LoadMoreRecyclerView.OnLoadMoreListener{
+        SwipyRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnRefreshListener{
 
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
@@ -69,13 +71,16 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
     TextView mTitle;
     @BindView(R.id.image_user_head)
     SimpleDraweeView mHeadDrawee;
-    @BindView(R.id.list_user_info)
-    RecyclerView mUserInfoList;
     @BindView(R.id.list_user_statuses)
-    LoadMoreRecyclerView userStatusesRecycler;
+    FabRecyclerView userStatusesRecycler;
 
-    @BindView(R.id.refresh_user)
-    SwipeRefreshLayout userRefresh;
+    @BindView(R.id.refresh_user_bottom)
+    SwipyRefreshLayout userRefreshBottom;
+    @BindView(R.id.refresh_user_top)
+    SwipeRefreshLayout userRefreshTop;
+    @BindView(R.id.fab_plus_status)
+    FloatingActionButton fab;
+
 
 
     SimpleDivideAdapter simpleDivideAdapter;
@@ -109,24 +114,22 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
         //处理用户基本信息列表
         keyValueList = new ArrayList<MyKeyValue>();
         simpleDivideAdapter = new SimpleDivideAdapter(this, keyValueList);
-        mUserInfoList.setAdapter(simpleDivideAdapter);
-        mUserInfoList.setLayoutManager(new LinearLayoutManager(this));
-        mUserInfoList.addItemDecoration(new SimpleDecoration(this, LinearLayout.VERTICAL));
         //初始化用户界面 微博列表
         statusList = new ArrayList<Status>();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setAutoMeasureEnabled(true);
-        userStatusesRecycler.setLayoutManager(linearLayoutManager);
+//        LinearLayoutManager linearLayoutManager = ;
+//        linearLayoutManager.setAutoMeasureEnabled(true);
+        userStatusesRecycler.setLayoutManager(new LinearLayoutManager(this));
         statusAdapter = new UserStatusAdapter(this, statusList);
         userStatusesRecycler.setAdapter(statusAdapter);
         userStatusesRecycler.addItemDecoration(new SimpleDecoration(this, R.drawable.divider_status, LinearLayout.VERTICAL));
-        userStatusesRecycler.setLoadMoreListener(this);
-        //这两个方法可以屏蔽recyclerView的滚动方法，是recyclerView在nestedScrollView中平滑滚动
-        userStatusesRecycler.setNestedScrollingEnabled(false);
-//        userStatusesRecycler.setHasFixedSize(false);
+        userStatusesRecycler.bindFloatButton(fab);
+        fab.show();
+        //这个方法可以屏蔽recyclerView的滚动方法，是recyclerView在nestedScrollView中平滑滚动
+//        userStatusesRecycler.setNestedScrollingEnabled(false);
 
 
-        userRefresh.setOnRefreshListener(this);
+        userRefreshBottom.setOnRefreshListener(this);
+        userRefreshTop.setOnRefreshListener(this);
 
         mAppBarLayout.addOnOffsetChangedListener(this);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
@@ -140,13 +143,6 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
         mUserDescription.setText(user.getDescription());
         mHeadDrawee.setImageURI(user.getAvatar_large());
         mTitle.setText(user.getName());
-    }
-
-    @Override
-    public void fillListInfo(List<MyKeyValue> data) {
-        keyValueList.clear();
-        keyValueList.addAll(data);
-        simpleDivideAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -177,35 +173,21 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
 
     @Override
     protected void destroyOperation() {
-//        if(userDialog != null) {
-//            userDialog.dismiss();
-//        }
     }
 
     @Override
     public void showProgress() {
-//        if(userDialog == null) {
-//            userDialog = new ProgressDialog(this);
-////            userDialog.setIndeterminate(false);
-//            userDialog.setCancelable(false);
-//        }
-//        userDialog.setMessage(content);
-//        userDialog.setTitle(title);
-//        if(!userDialog.isShowing()) {
-//            userDialog.show();
-//        }
-        if(!userRefresh.isRefreshing()) {
-            userRefresh.setRefreshing(true);
+
+        if(!userRefreshTop.isRefreshing()) {
+            userRefreshTop.setRefreshing(true);
         }
     }
 
     @Override
     public void hideProgress() {
-//        if(userDialog != null && userDialog.isShowing()) {
-//            userDialog.dismiss();
-//        }
-        if(userRefresh.isRefreshing()) {
-            userRefresh.setRefreshing(false);
+
+        if(userRefreshTop.isRefreshing()) {
+            userRefreshTop.setRefreshing(false);
         }
     }
 
@@ -217,9 +199,36 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
 
     @Override
     public void showNoMoreStatus() {
-        hideProgress();
-        Snackbar.make(mTitleContainer, "没有更多微博了！", Snackbar.LENGTH_LONG).show();
+        if(page == 1) {
+            hideProgress();
+        }else {
+            hideLoadMoreProgress();
+        }
+        Snackbar.make(userStatusesRecycler, "没有更多微博了！", Snackbar.LENGTH_LONG).show();
         page--;
+    }
+
+    @Override
+    public void hideLoadMoreProgress() {
+        if(userRefreshBottom.isRefreshing()) {
+            userRefreshBottom.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void showLoadMoreProgress() {
+        if(!userRefreshBottom.isRefreshing()) {
+            userRefreshBottom.setRefreshing(true);
+        }
+    }
+
+    @Override
+    public void onRefresh(SwipyRefreshLayoutDirection direction) {
+        if(direction == SwipyRefreshLayoutDirection.BOTTOM) {
+            page++;
+            isRefresh = false;
+            presenter.fillUserStatusInfo(page);
+        }
     }
 
     @Override
@@ -230,13 +239,13 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
         presenter.fillUserStatusInfo(page);
     }
 
-    @Override
-    public void loadMore() {
-        MyLog.v(MyLog.USER_TAG, "加载更多！！");
-        page++;
-        isRefresh = false;
-        presenter.fillUserStatusInfo(page);
-    }
+    //    @Override
+//    public void loadMore() {
+//        MyLog.v(MyLog.USER_TAG, "加载更多！！");
+//        page++;
+//
+//        presenter.fillUserStatusInfo(page);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

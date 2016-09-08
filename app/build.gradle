@@ -55,4 +55,6 @@ dependencies {
     compile 'cat.ereza:customactivityoncrash:1.5.0'
     //时间处理库
     compile 'net.danlew:android.joda:2.9.4.1'
+    //上拉刷新
+    compile 'com.github.orangegangsters:swipy:1.2.3@aar'
 }

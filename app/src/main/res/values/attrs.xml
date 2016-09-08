@@ -16,5 +16,10 @@
         <attr name="finalHeight" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="InfoListView">
+        <attr name="childSimpleTextHeight" format="dimension" />
+        <attr name="childSimpleTextSize" format="dimension" />
+    </declare-styleable>
+
 
 </resources>

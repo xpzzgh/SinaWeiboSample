@@ -14,8 +14,8 @@ import java.util.List;
 public interface IUserView extends IView {
 
     void fillUserSimpleInfo(User user);
-
-    void fillListInfo(List<MyKeyValue> data);
+//
+//    void fillListInfo(List<MyKeyValue> data);
 
     void fillStatusesInfo(List<Status> statuses);
 
@@ -26,4 +26,8 @@ public interface IUserView extends IView {
     void showErrorInfo(String errorString);
 
     void showNoMoreStatus();
+
+    void hideLoadMoreProgress();
+
+    void showLoadMoreProgress();
 }
