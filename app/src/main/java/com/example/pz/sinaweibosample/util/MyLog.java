@@ -7,13 +7,6 @@ import android.util.Log;
  */
 public class MyLog {
 
-    private static int currentLevel = 8;
-    private static final int VERBOSE_LEVEL = 7;
-    private static final int DEBUG_LEVEL = 6;
-    private static final int INFO_LEVEL = 5;
-    private static final int WARN_LEVEL = 4;
-    private static final int ERROR_LEVEL = 3;
-
     public static final String LOGIN_TAG = "auth";
     public static final String BASE_TAG = "base";
     public static final String STATUS_TAG = "weibo_status";
@@ -21,7 +14,14 @@ public class MyLog {
     public static final String STATUS_VIEW_TAG = "status_view";
     public static final String UTIL_TAG = "util";
     public static final String WIDGET_TAG = "widget";
-//    public static final String MODEL_TAG = "";
+    public static final String MAIN_TAG = "main";
+
+    private static int currentLevel = 8;
+    private static final int VERBOSE_LEVEL = 7;
+    private static final int DEBUG_LEVEL = 6;
+    private static final int INFO_LEVEL = 5;
+    private static final int WARN_LEVEL = 4;
+    private static final int ERROR_LEVEL = 3;
 
 
     public static void v(String tag, String msg) {

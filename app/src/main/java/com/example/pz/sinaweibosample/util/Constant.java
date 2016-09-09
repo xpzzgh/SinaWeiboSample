@@ -12,4 +12,11 @@ public class Constant {
     public static final String SMALL_IMAGE = "small";
     public static final String MEDIUM_IMAGE = "medium";
     public static final String LARGE_IMAGE = "large";
+
+    public static final int ERROR_CODE = 1001;
+    public static final int NO_MORE_CODE = 1002;
+    public static final int SUCCESS_CODE = 1003;
+
+    public static final int FRIENDS_TYPE = 101;
+    public static final int PUBLIC_TYPE = 102;
 }

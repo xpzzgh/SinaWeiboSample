@@ -21,4 +21,6 @@ public interface StatusesRetrofit {
     @GET("user_timeline.json")
     Observable<StatusList> getUserStatuses(@QueryMap Map<String, String> params);
 
+    @GET("friends_timeline.json")
+    Observable<StatusList> getFriendsStatuses(@QueryMap Map<String, String> params);
 }

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class StatusParamsHelper {
 
-    public static final int COUNT_PER_REQUEST = 5;
+    public static final int COUNT_PER_REQUEST = 15;
     public static final int BASE_APP = 0;
 
     public static Map<String, String> getPublicStatusParams(int page) {
@@ -30,6 +30,14 @@ public class StatusParamsHelper {
         params.put("count", COUNT_PER_REQUEST + "");
         params.put("page", page+"");
         params.put("uid", AccessTokenKeeper.readToken().getUid());
+        return params;
+    }
+
+    public static Map<String, String> getFriendsStatusesParams(int page) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("access_token", AccessTokenKeeper.readToken().getToken());
+        params.put("count", COUNT_PER_REQUEST + "");
+        params.put("page", page+"");
         return params;
     }
 }
