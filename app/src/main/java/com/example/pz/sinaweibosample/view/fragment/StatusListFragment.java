@@ -81,7 +81,7 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
         //recycler的初始化
         statusListAdapter = new StatusListAdapter(context, statusList);
         recyclerView.setAdapter(statusListAdapter);
-        recyclerView.addItemDecoration(new SimpleDecoration(context, SimpleDecoration.VERTICAL_LIST));
+        recyclerView.addItemDecoration(new SimpleDecoration(context, R.drawable.divider_status, SimpleDecoration.VERTICAL_LIST));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         fab = ((com.example.pz.sinaweibosample.view.activity.MainActivity)context).getFab();
         recyclerView.bindFloatButton(fab);

@@ -6,6 +6,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,7 +56,7 @@ public class StatusView extends FrameLayout {
 //    @BindView(R.id.view_multi_images_relay_status)
     MultiImageViewGroup statusRelayMultiImagesView;
 //    @BindView(R.id.view_relay_status)
-    View statusRelayView;
+    RelayStatusView statusRelayView;
 //    @BindView(R.id.view_button_relay)
     View relayButtonView;
 //    @BindView(R.id.view_button_comment)
@@ -87,17 +88,27 @@ public class StatusView extends FrameLayout {
     }
 
     /**
+     * 加载完成后初始化 ButterKnife
+     */
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        ButterKnife.setDebug(true);
+        init();
+    }
+
+    /**
      * 初始化控件资源
      * @return
      */
     private void init() {
-        MyLog.v(MyLog.STATUS_VIEW_TAG, "总共有 " + getChildCount() + " 个子View！！");
+//        MyLog.v(MyLog.STATUS_VIEW_TAG, "总共有 " + getChildCount() + " 个子View！！");
         if(getChildCount() != 1) {
             throw new RuntimeException("瞎几把乱用微博控件");
         }
         View view = getChildAt(0);
-        MyLog.v(MyLog.STATUS_VIEW_TAG, view.getTag().toString());
-        view = getChildAt(0);
+//        MyLog.v(MyLog.STATUS_VIEW_TAG, view.getTag().toString());
+//        view = getChildAt(0);
         initView(view);
 
     }
@@ -113,7 +124,7 @@ public class StatusView extends FrameLayout {
         statusMultiImagesView = (MultiImageViewGroup) view.findViewById(R.id.view_multi_images);
         statusRelayBodyText = (TextView) view.findViewById(R.id.text_body_relay_status);
         statusRelayMultiImagesView = (MultiImageViewGroup) view.findViewById(R.id.view_multi_images_relay_status);
-        statusRelayView = view.findViewById(R.id.view_relay_status);
+        statusRelayView = (RelayStatusView) view.findViewById(R.id.view_relay_status);
         relayButtonView = view.findViewById(R.id.view_button_relay);
         commentButtonView = view.findViewById(R.id.view_button_comment);
         likeButtonView = view.findViewById(R.id.view_button_like);
@@ -123,30 +134,69 @@ public class StatusView extends FrameLayout {
         relayDivider = (ImageView) view.findViewById(R.id.image_divider_relay_status);
     }
 
-//    private List<View> getAllChildren(View view) {
-//        return null;
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//
+//        int maxWidth = getPaddingLeft() + getPaddingRight();  //初始宽度为左右两个padding
+//        int maxHeight = getPaddingTop() + getPaddingBottom();
+//        int childState = 0;
+//        View view = getChildAt(0);
+//        measureChild(view, widthMeasureSpec, heightMeasureSpec);
+//        maxWidth += view.getMeasuredWidth();
+//
+//        if(view instanceof LinearLayout) {
+//            LinearLayout viewGroup = (LinearLayout)view;
+//            int count = viewGroup.getChildCount();
+//            for(int i = 0; i<count; i++) {
+//                View childView = viewGroup.getChildAt(i);
+//                if(childView.getVisibility() != GONE) {
+//                    measureChild(childView, widthMeasureSpec, heightMeasureSpec);
+//                    maxHeight += childView.getMeasuredHeight();
+//                }
+//            }
+//        }else {
+//            maxHeight += view.getMeasuredHeight();
+//        }
+//
+//        childState = combineMeasuredStates(childState, view.getMeasuredState());
+//        setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
+//                resolveSizeAndState(maxHeight, heightMeasureSpec, childState));
 //    }
 //
 //    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+//        final int scopeLeft = getPaddingLeft();
+//        final int scopeTop = getPaddingTop();
+//        final int scopeRight = getMeasuredWidth() - getPaddingRight();
+//        final int scopeBottom = getMeasuredHeight() - getPaddingBottom();
+//
+//        List<String> imageUris = Util.getPriorityImagesUris(status, Constant.SMALL_IMAGE);
+//        int imageCount = imageUris == null ? 0 : imageUris.size();
+//
+//
+//        int currentTop = scopeTop;
+//
+//        View view = getChildAt(0);
+//        if(view instanceof LinearLayout) {
+//            view.layout(scopeLeft, scopeTop, scopeRight, scopeBottom);
+//            LinearLayout viewGroup = (LinearLayout) view;
+//            int count = viewGroup.getChildCount();
+//            for(int i = 0; i<count; i++) {
+//                View childView = viewGroup.getChildAt(i);
+//                if(childView.getVisibility() != GONE) {
+//                    childView.layout(scopeLeft, currentTop, scopeLeft + childView.getMeasuredWidth(), currentTop+childView.getMeasuredHeight());
+//                    MyLog.v(MyLog.STATUS_VIEW_TAG, "子view的左上右下分别为：" + scopeLeft + " " + currentTop + " " + childView.getMeasuredWidth() + " " + (currentTop+childView.getMeasuredHeight())
+//                     + "有图片张数：" + imageCount);
+//                    currentTop += childView.getMeasuredHeight();
+//                }
+//            }
+//        }else {
+//            view.layout(scopeLeft, scopeTop, scopeRight, scopeBottom);
+//        }
 //    }
 
-    @Override
-    protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
-        super.onLayout(b, i, i1, i2, i3);
-        MyLog.v(MyLog.STATUS_VIEW_TAG, "左上右下：" + i + " " +i1 + " " +i2 + " " +i3 );
-    }
 
-    /**
-     * 加载完成后初始化 ButterKnife
-     */
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        ButterKnife.setDebug(true);
-        init();
-    }
+
 
     /**
      * 将数据填充到控件
@@ -155,7 +205,8 @@ public class StatusView extends FrameLayout {
         if(status == null) {
             return;
         }
-        MyLog.v(MyLog.STATUS_VIEW_TAG, status.toString());
+
+//        MyLog.v(MyLog.STATUS_VIEW_TAG, status.toString());
         statusBodyText.setText(status.getText());
         fillstatusHeadInfo();
         fillMultiImagesUri();
@@ -183,12 +234,12 @@ public class StatusView extends FrameLayout {
         List<String> imageUris = Util.getPriorityImagesUris(status, Constant.SMALL_IMAGE);
         if(imageUris == null) {
             statusMultiImagesView.setVisibility(GONE);
-            MyLog.v(MyLog.STATUS_VIEW_TAG, "没有有效图片地址，不显示图片控件");
+//            MyLog.v(MyLog.STATUS_VIEW_TAG, "没有有效图片地址，不显示图片控件");
             return;
         }else if(imageUris.size() == 1) {
             imageUris = Util.getPriorityImagesUris(status, Constant.MEDIUM_IMAGE);
         }
-
+        statusMultiImagesView.setVisibility(VISIBLE);
         //将地址填进去
         statusMultiImagesView.setData(imageUris);
     }
@@ -201,10 +252,12 @@ public class StatusView extends FrameLayout {
         if(relayStatus == null) {
             relayDivider.setVisibility(GONE);
             statusRelayView.setVisibility(GONE);
+//            MyLog.v(MyLog.STATUS_VIEW_TAG, "转发控件不可见！！");
             return;
         }
-        statusRelayBodyText.setText(Util.pieceRelayBody(relayStatus));
-        fillRelayMultiImagesUri(relayStatus);
+        relayDivider.setVisibility(VISIBLE);
+        statusRelayView.setVisibility(VISIBLE);
+        statusRelayView.setData(relayStatus);
     }
 
     /**
@@ -228,9 +281,6 @@ public class StatusView extends FrameLayout {
         likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : status.getAttitudes_count() +"");
         commentNumberText.setText(status.getComments_count() == 0 ? "评论" : status.getComments_count()+"");
         relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : status.getReposts_count()+"");
-//        likeNumberText.setText(Util.getRandomInt(20) + "万");
-//        commentNumberText.setText(Util.getRandomInt(5) + "万");
-//        relayNumberText.setText(Util.getRandomInt(9) + "万");
     }
 
 

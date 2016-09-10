@@ -28,7 +28,7 @@
         <com.example.pz.sinaweibosample.view.widget.MultiImageViewGroup
             android:id="@+id/view_multi_images"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:layout_marginBottom="10dp"
             custom:width_per_image="@dimen/width_images_little"

@@ -71,8 +71,8 @@ public class MultiImageViewGroup extends ViewGroup {
             widthImageGap = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_width_image_gap, Util.dpToPx(10, context));
             widthMax = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_width_max, Util.dpToPx(230, context));
             fixedHeight = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_height_image_fixed, Util.dpToPx(150, context));
-            MyLog.v(MyLog.STATUS_VIEW_TAG, "1 单图固定高度为：" + fixedHeight);
-            MyLog.v(MyLog.STATUS_VIEW_TAG, "1 多图单位高度为：" + widthPerImage);
+//            MyLog.v(MyLog.STATUS_VIEW_TAG, "1 单图固定高度为：" + fixedHeight);
+//            MyLog.v(MyLog.STATUS_VIEW_TAG, "1 多图单位高度为：" + widthPerImage);
         }finally {
             //回收TypedArray
             a.recycle();
@@ -130,11 +130,11 @@ public class MultiImageViewGroup extends ViewGroup {
             maxWidth += measuredWidth;
             maxHeight += measuredHeight;
             childState = combineMeasuredStates(childState, view.getMeasuredState());
-            MyLog.v(MyLog.STATUS_VIEW_TAG, "2 单图固定高度为：" + measuredHeight);
+//            MyLog.v(MyLog.STATUS_VIEW_TAG, "2 单图固定高度为：" + measuredHeight);
             maxWidth = Math.max(maxWidth, getSuggestedMinimumHeight());
             maxHeight = Math.max(maxHeight, getSuggestedMinimumWidth());
             //设置测量结果
-            MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
+//            MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
             setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
                     resolveSizeAndState(maxHeight, heightMeasureSpec, childState));
         }else{  //多图时，宽高按照多图模式定义的小图宽高直接计算
@@ -151,12 +151,12 @@ public class MultiImageViewGroup extends ViewGroup {
             }else {
                 maxWidth += widthPerImage * 3 + widthImageGap * 2;
             }
-            MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
+//            MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
             setMeasuredDimension(maxWidth, maxHeight);
 
         }
 
-        MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
+//        MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
     }
 
     @Override
@@ -213,9 +213,9 @@ public class MultiImageViewGroup extends ViewGroup {
     }
 
     public void setData(List<String> imageList) {
-        MyLog.v(MyLog.STATUS_VIEW_TAG, "请求的地址：" + imageList.get(0));
+//        MyLog.v(MyLog.STATUS_VIEW_TAG, "请求的地址：" + imageList.get(0));
         if(getChildCount() != 0) {
-            MyLog.v(MyLog.STATUS_VIEW_TAG, "清除已存在的图片！！");
+//            MyLog.v(MyLog.STATUS_VIEW_TAG, "清除已存在的图片！！");
             removeAllViews();
         }
         final int imageSize = imageList.size();
@@ -237,7 +237,7 @@ public class MultiImageViewGroup extends ViewGroup {
                     if(imageSize > 1) {
                         updateViewSize(imageInfo, singleImage);
                     }
-                    Log.v("listener", id + " : 下载完成 ！！");
+//                    Log.v("listener", id + " : 下载完成 ！！");
                 }
             };
 
@@ -252,12 +252,8 @@ public class MultiImageViewGroup extends ViewGroup {
 
             addView(singleImage);
         }
-        requestLayout();
         MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件一共有：" + getChildCount() + "张图片");
     }
-
-
-
 }
 
 
