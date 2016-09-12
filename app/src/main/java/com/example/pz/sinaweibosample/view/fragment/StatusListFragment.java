@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.BaseFragment;
 import com.example.pz.sinaweibosample.model.entity.Status;
+import com.example.pz.sinaweibosample.oauth.AccessTokenKeeper;
 import com.example.pz.sinaweibosample.presenter.StatusListPresenter;
 import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.PrefUtil;
@@ -89,7 +90,7 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
         fab = ((com.example.pz.sinaweibosample.view.activity.MainActivity)context).getFab();
         recyclerView.bindFloatButton(fab);
         //设置刷新操作
-        if(PrefUtil.getUserInfo() != null) {
+        if(AccessTokenKeeper.isTokenValid()) {
             refreshLayout.setOnRefreshListener(this);
             fragmentPresenter.fillStatusList(1, type);
         }

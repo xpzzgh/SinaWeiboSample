@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
     @Override
     public void setTitle() {
-        getSupportActionBar().setTitle("所有微博");
+        getSupportActionBar().setTitle("bigZ微博");
     }
 
     @Override
@@ -336,6 +336,10 @@ public class MainActivity extends BaseActivity<MainPresenter>
 //                loginButton.setVisibility(View.GONE);
                 MyLog.v(MyLog.LOGIN_TAG, "授权成功，token：" + mAccessToken.getToken());
                 presenter.getUserInfo();
+                //获取viewPager下面的所有fragment，并做一些操作。
+                for(int i = 0; i<statusListViewPagerAdapter.getCount(); i++) {
+                    ((StatusListFragment)(statusListViewPagerAdapter.getItem(i))).bindOperateAfterLogin();
+                }
             }else {
                 String code = bundle.getString("code");
                 MyLog.v(MyLog.LOGIN_TAG, "授权失败，code：" + code);
@@ -360,10 +364,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
 //            if (page != null) {
 //                ((StatusListFragment)page).bindOperateAfterLogin();
 //            }
-            //获取viewPager下面的所有fragment，并做一些操作。
-            for(int i = 0; i<statusListViewPagerAdapter.getCount(); i++) {
-                ((StatusListFragment)(statusListViewPagerAdapter.getItem(i))).bindOperateAfterLogin();
-            }
+
         }
     }
 }
