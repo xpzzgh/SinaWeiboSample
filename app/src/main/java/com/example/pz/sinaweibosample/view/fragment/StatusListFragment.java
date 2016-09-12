@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.BaseFragment;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.presenter.StatusListPresenter;
 import com.example.pz.sinaweibosample.util.Constant;
+import com.example.pz.sinaweibosample.util.PrefUtil;
 import com.example.pz.sinaweibosample.view.adapter.StatusListAdapter;
 import com.example.pz.sinaweibosample.view.decoration.SimpleDecoration;
 import com.example.pz.sinaweibosample.view.iview.IStatusListView;
@@ -36,7 +38,7 @@ import butterknife.ButterKnife;
  */
 
 public class StatusListFragment extends BaseFragment<StatusListPresenter> implements IStatusListView,
-        SwipyRefreshLayout.OnRefreshListener{
+        SwipyRefreshLayout.OnRefreshListener, StatusListAdapter.IViewHolderClick{
 
     View view;
     StatusListAdapter statusListAdapter;
@@ -80,12 +82,20 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
         unbinder = ButterKnife.bind(this, view);
         //recycler的初始化
         statusListAdapter = new StatusListAdapter(context, statusList);
+        statusListAdapter.setViewHolderClick(this);
         recyclerView.setAdapter(statusListAdapter);
         recyclerView.addItemDecoration(new SimpleDecoration(context, R.drawable.divider_status, SimpleDecoration.VERTICAL_LIST));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         fab = ((com.example.pz.sinaweibosample.view.activity.MainActivity)context).getFab();
         recyclerView.bindFloatButton(fab);
         //设置刷新操作
+        if(PrefUtil.getUserInfo() != null) {
+            refreshLayout.setOnRefreshListener(this);
+            fragmentPresenter.fillStatusList(1, type);
+        }
+    }
+
+    public void bindOperateAfterLogin() {
         refreshLayout.setOnRefreshListener(this);
         fragmentPresenter.fillStatusList(1, type);
     }
@@ -119,6 +129,16 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
     }
 
     @Override
+    public void showProgress() {
+        if(!refreshLayout.isRefreshing()) {
+//            SwipyRefreshLayoutDirection direction = refreshLayout.getDirection();
+//            refreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+            refreshLayout.setRefreshing(true);
+//            refreshLayout.setDirection(direction);
+        }
+    }
+
+    @Override
     public void hideProgress() {
         if(refreshLayout.isRefreshing()) {
             refreshLayout.setRefreshing(false);
@@ -145,4 +165,13 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
         }).show();
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(getActivity(), "单击了第" + position + "条微博！", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        Toast.makeText(getActivity(), "长按了第" + position + "条微博！", Toast.LENGTH_SHORT).show();
+    }
 }

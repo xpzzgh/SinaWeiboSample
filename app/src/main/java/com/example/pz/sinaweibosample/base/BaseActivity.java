@@ -75,7 +75,6 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
     @Override
     protected void onDestroy() {
-        presenter.destroy(); //释放presenter资源
         destroyOperation();
         if(unbinder != null) {
             unbinder.unbind();  //butterKnife 解绑
@@ -100,16 +99,17 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
     @Override
     protected void onPause() {
+        pauseOperation();
         super.onPause();
         MyLog.v(MyLog.BASE_TAG, this.getLocalClassName() + ": OnPause");
-        pauseOperation();
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
+        presenter.destroy(); //释放presenter资源
         stopOperation();
         MyLog.v(MyLog.BASE_TAG, this.getLocalClassName() + ": OnStop");
+        super.onStop();
     }
 
     @Override

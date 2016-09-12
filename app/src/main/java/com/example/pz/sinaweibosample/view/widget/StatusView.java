@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.model.entity.Status;
@@ -29,15 +30,17 @@ import butterknife.Unbinder;
  * Created by pz on 2016/9/3.
  */
 
-public class StatusView extends FrameLayout {
+public class StatusView extends FrameLayout implements View.OnClickListener{
 
     public static final int MINE_MODE = 111;
     public static final int OTHER_MODE = 222;
+//    public static final int HEAD_ID = 10001;
 
     Status status;
     Context context;
     User user;
     int currentMode;
+    Status relayStatus;
 
 //    @BindView(R.id.image_status_head)
     SimpleDraweeView statusHeadImage;
@@ -107,8 +110,6 @@ public class StatusView extends FrameLayout {
             throw new RuntimeException("瞎几把乱用微博控件");
         }
         View view = getChildAt(0);
-//        MyLog.v(MyLog.STATUS_VIEW_TAG, view.getTag().toString());
-//        view = getChildAt(0);
         initView(view);
 
     }
@@ -132,9 +133,44 @@ public class StatusView extends FrameLayout {
         commentNumberText = (TextView) view.findViewById(R.id.text_number_comment);
         likeNumberText = (TextView) view.findViewById(R.id.text_number_like);
         relayDivider = (ImageView) view.findViewById(R.id.image_divider_relay_status);
+
+        statusRelayView.setOnClickListener(this);
+        commentButtonView.setOnClickListener(this);
+        likeButtonView.setOnClickListener(this);
+        relayButtonView.setOnClickListener(this);
+        statusHeadImage.setOnClickListener(this);
+        statusAuthorText.setOnClickListener(this);
     }
 
-//    @Override
+    @Override
+    public void onClick(View view) {
+        if(status != null) {
+            int id = view.getId();
+
+            switch (id) {
+                case R.id.view_relay_status:
+                    if(relayStatus != null) {
+                        Toast.makeText(context, "点击了转发信息，信息内容为：" + relayStatus.getText(), Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case R.id.view_button_comment:
+                    Toast.makeText(context, "有" + status.getComments_count() + "条评论！", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.view_button_relay:
+                    Toast.makeText(context,  "有" + status.getReposts_count() + "条转发！", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.view_button_like:
+                    Toast.makeText(context,  "有" + status.getAttitudes_count() + "个赞！", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.image_status_head:
+                case R.id.text_status_author:
+                    Toast.makeText(context, "点击了" + status.getUser().getName() + "的头像", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
+
+    //    @Override
 //    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //
 //        int maxWidth = getPaddingLeft() + getPaddingRight();  //初始宽度为左右两个padding
@@ -206,7 +242,6 @@ public class StatusView extends FrameLayout {
             return;
         }
 
-//        MyLog.v(MyLog.STATUS_VIEW_TAG, status.toString());
         statusBodyText.setText(status.getText());
         fillstatusHeadInfo();
         fillMultiImagesUri();
@@ -220,11 +255,15 @@ public class StatusView extends FrameLayout {
      * 填充微博头，即发布人、时间、来源等
      */
     private void fillstatusHeadInfo() {
-        statusTimeAgoText.setText(Util.getTimeDiffFromUTC(status.getCreated_at()));
+        String timeAgo = Util.getTimeDiffFromUTC(status.getCreated_at());
+        if(timeAgo != null) {
+            statusTimeAgoText.setText(timeAgo);
+        }else {
+            statusTimeAgoText.setText("未知客户端");
+        }
         statusHeadImage.setImageURI(user.getAvatar_large());
         statusAuthorText.setText(user.getName());
         statusClientFromText.setText(Html.fromHtml(status.getSource()));
-//        statusClientFromText.setText("iPhone7S");
     }
 
     /**
@@ -234,7 +273,6 @@ public class StatusView extends FrameLayout {
         List<String> imageUris = Util.getPriorityImagesUris(status, Constant.SMALL_IMAGE);
         if(imageUris == null) {
             statusMultiImagesView.setVisibility(GONE);
-//            MyLog.v(MyLog.STATUS_VIEW_TAG, "没有有效图片地址，不显示图片控件");
             return;
         }else if(imageUris.size() == 1) {
             imageUris = Util.getPriorityImagesUris(status, Constant.MEDIUM_IMAGE);
@@ -248,11 +286,10 @@ public class StatusView extends FrameLayout {
      * 填充转发微博信息
      */
     private void fillRelayStatus() {
-        Status relayStatus = status.getRetweeted_status();
+        relayStatus = status.getRetweeted_status();
         if(relayStatus == null) {
             relayDivider.setVisibility(GONE);
             statusRelayView.setVisibility(GONE);
-//            MyLog.v(MyLog.STATUS_VIEW_TAG, "转发控件不可见！！");
             return;
         }
         relayDivider.setVisibility(VISIBLE);
@@ -260,29 +297,11 @@ public class StatusView extends FrameLayout {
         statusRelayView.setData(relayStatus);
     }
 
-    /**
-     * 填充微博转发图片信息
-     * @param status
-     */
-    private void fillRelayMultiImagesUri(Status status) {
-        List<String> imageUris = Util.getPriorityImagesUris(status, Constant.SMALL_IMAGE);
-        if(imageUris == null) {
-            statusRelayMultiImagesView.setVisibility(GONE);
-            return;
-        }else if(imageUris.size() == 1) {
-            imageUris = Util.getPriorityImagesUris(status, Constant.MEDIUM_IMAGE);
-        }
-
-        //填充地址
-        statusRelayMultiImagesView.setData(imageUris);
-    }
-
     private void fillCommentInfo() {
         likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : status.getAttitudes_count() +"");
         commentNumberText.setText(status.getComments_count() == 0 ? "评论" : status.getComments_count()+"");
         relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : status.getReposts_count()+"");
     }
-
 
     /**
      * 数据请求成功之后，将微博数据设置到控件（他人模式，即数据为公共用户的微博）
@@ -315,6 +334,7 @@ public class StatusView extends FrameLayout {
         if(status == null) {
             return;
         }
+        relayStatus = status.getRetweeted_status();
         fillData();
     }
 

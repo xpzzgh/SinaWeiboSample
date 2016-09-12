@@ -17,10 +17,13 @@ import com.example.pz.sinaweibosample.view.iview.IStatusListView;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 /**
@@ -28,6 +31,8 @@ import rx.schedulers.Schedulers;
  */
 
 public class StatusListPresenter extends BasePresenter<IStatusListView> {
+
+    private static final int RETRY_TIME = 2;
 
     public StatusListPresenter(Context context, IStatusListView iView) {
         super(context, iView);
@@ -44,43 +49,39 @@ public class StatusListPresenter extends BasePresenter<IStatusListView> {
             observable = StatusRetrofitClient.instanceOf().
                     getPublicStatuses(StatusParamsHelper.getPublicStatusParams(page));
         }
-        subscription = observable.timeout(10, TimeUnit.SECONDS)
+
+        subscription = observable
+                .timeout(10, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
                 .map(new Func1<StatusList, List<Status>>() {
                     @Override
                     public List<Status> call(StatusList statusList) {
                         if(statusList != null) {
                             List<Status> statuses = statusList.getStatuses();
-                            return statuses;
+                            if(statuses != null && statuses.size() != 0) {
+                                return statuses;
+                            }
                         }
-                        BaseObject errorObject = new BaseObject();
-                        errorObject.setError("请求结果为空");
-                        errorObject.setError_code(0);
-                        throw new ApiException(errorObject);
+                        throw new ApiException(statusList);
                     }
                 })
-                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        iView.showProgress();
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Observable<? extends Throwable> observable) {
+                        return observable.compose(handleRetryWhen());
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Status>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        try {
-                            BaseObject errorObject = RetrofitError.parse(e);
-                            iView.showSnackInfo(errorObject.getError(), Constant.ERROR_CODE);
-                        }catch (Exception e1) {
-                            MyLog.v(MyLog.STATUS_TAG, e1.toString());
-                        }
-                    }
-
+                .subscribe(new BaseSubscriber<List<Status>>() {
                     @Override
                     public void onNext(List<Status> statuses) {
-                        if(statuses == null || statuses.size() == 0) {
-                            iView.showSnackInfo("没有更多数据了", Constant.NO_MORE_CODE);
-                        }
                         iView.fillDataList(statuses);
                         iView.hideProgress();
                     }

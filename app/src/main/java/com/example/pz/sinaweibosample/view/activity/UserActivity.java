@@ -5,9 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.TransitionInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -90,7 +94,23 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         user = (User) getIntent().getSerializableExtra(Constant.USER);
         super.onCreate(savedInstanceState);
+//        setupWindowTransitions();
+    }
 
+//    void setupWindowTransitions() {
+//        Explode explode = (Explode) TransitionInflater.from(this).inflateTransition(R.transition.explode_activity);
+//        getWindow().setEnterTransition(explode);
+//    }
+
+    void setupWindowTransitions() {
+//        Fade fade = (Fade) TransitionInflater.from(this).inflateTransition(R.transition.fade_activity);
+//        getWindow().setEnterTransition(fade);
+//        Fade fade = new Fade();
+//        fade.setDuration(1000);
+//        getWindow().setEnterTransition(fade);
+        Explode explode = new Explode();
+        explode.setDuration(1000);
+        getWindow().setEnterTransition(explode);
     }
 
     @Override
@@ -172,11 +192,12 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
 
     @Override
     protected void destroyOperation() {
+        statusList = null;
+        statusAdapter = null;
     }
 
     @Override
     public void showProgress() {
-
         if(!userRefreshTop.isRefreshing()) {
             userRefreshTop.setRefreshing(true);
         }
@@ -184,27 +205,29 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
 
     @Override
     public void hideProgress() {
-
         if(userRefreshTop.isRefreshing()) {
             userRefreshTop.setRefreshing(false);
         }
     }
 
     @Override
-    public void showErrorInfo(String errorString) {
-        hideProgress();
-        Snackbar.make(mTitleContainer, errorString, Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void showNoMoreStatus() {
-        if(page == 1) {
-            hideProgress();
-        }else {
-            hideLoadMoreProgress();
-        }
-        Snackbar.make(fab, "没有更多微博了！", Snackbar.LENGTH_LONG).show();
+    public void showSnackInfo(String errorString, int errorCode) {
         page--;
+        hideProgress();
+        hideLoadMoreProgress();
+        Snackbar snackbar = Snackbar.make(fab, errorString, Snackbar.LENGTH_LONG);
+        TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        if(errorCode == Constant.NO_MORE_CODE) {
+            tv.setTextColor(getResources().getColor(R.color.colorWhite));
+        }else if(errorCode == Constant.ERROR_CODE) {
+            tv.setTextColor(getResources().getColor(R.color.colorRed));
+        }
+        snackbar.setAction("点击重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.fillUserStatusInfo(++page);
+            }
+        }).show();
     }
 
     @Override
@@ -310,5 +333,6 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
     @Override
     public void onBackPressed() {
         ActivityManager.instanceOf().finishActivity(this);
+
     }
 }

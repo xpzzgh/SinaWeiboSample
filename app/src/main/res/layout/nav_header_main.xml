@@ -18,7 +18,8 @@
         android:layout_height="60dp"
         fresco:placeholderImage="@mipmap/james_2"
         fresco:placeholderImageScaleType="centerCrop"
-        fresco:roundAsCircle="true"/>
+        fresco:roundAsCircle="true"
+        android:transitionName="@string/transition_image_head"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

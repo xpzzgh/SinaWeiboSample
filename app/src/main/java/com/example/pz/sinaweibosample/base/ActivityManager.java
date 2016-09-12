@@ -1,6 +1,7 @@
 package com.example.pz.sinaweibosample.base;
 
 import android.app.Activity;
+import android.support.v4.app.ActivityCompat;
 
 import com.example.pz.sinaweibosample.util.MyLog;
 
@@ -47,7 +48,7 @@ public class ActivityManager {
             String activityName = activity.getClass().getName();
             activityStack.remove(activity);
             if(!activity.isFinishing()) {
-                activity.finish();
+                ActivityCompat.finishAfterTransition(activity);
                 MyLog.v(MyLog.BASE_TAG, activityName + "被清除了");
             }
             activity = null;

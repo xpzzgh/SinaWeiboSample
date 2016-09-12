@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -41,68 +42,55 @@ public class UserPresenter extends BasePresenter<IUserView> {
 
     public void fillUserStatusInfo(final int page) {
 
-        subscription = StatusRetrofitClient.instanceOf().getUserStatuses(StatusParamsHelper.getUserStatusParams(page))
-                .timeout(10, TimeUnit.SECONDS)
+        Observable<StatusList> observable = StatusRetrofitClient.instanceOf().getUserStatuses(StatusParamsHelper.getUserStatusParams(page));
+        subscription = observable
                 .subscribeOn(Schedulers.io())
-                .map(new Func1<StatusList, List<Status>>() {
+                .timeout(10, TimeUnit.SECONDS)
+                .map(new Func1<BaseObject, List<Status>>() {
                     @Override
-                    public List<Status> call(StatusList statusList) {
-                        if(statusList != null) {
-                            List<Status> statuses = statusList.getStatuses();
-                            if(statuses.size() > 0 && page == 1) {
-                                User newUser = statuses.get(0).getUser();
-                                MyLog.v(MyLog.USER_TAG, "1. 用户数据更新了，微博总数为：" + newUser.getStatuses_count());
-                                if(newUser != null) {
-                                    user = newUser;
-                                    MyLog.v(MyLog.USER_TAG, "2. 用户数据更新了，微博总数为：" + user.getStatuses_count());
+                    public List<Status> call(BaseObject statusList) {
+                        if(statusList != null && statusList instanceof StatusList) {
+                            List<Status> statuses = ((StatusList)statusList).getStatuses();
+                            if(statuses.size() > 0) {
+                                if(page == 1) {
+                                    User newUser = statuses.get(0).getUser();
+                                    if(newUser != null) {
+                                        user = newUser;
+                                    }
                                 }
+                                return statuses;
                             }
-                            return statuses;
                         }
                         throw new ApiException(statusList);
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Status>>() {
+                .doOnSubscribe(new Action0() {
                     @Override
-                    public void onCompleted() {
-                        MyLog.v(MyLog.STATUS_TAG, "complete");
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        BaseObject errorObject = RetrofitError.parse(e);
-                        iView.showErrorInfo(errorObject.getError());
-                    }
-
-                    @Override
-                    public void onNext(List<Status> statusList) {
-                        if(statusList != null && statusList.size() != 0) {
-                            MyLog.v(MyLog.USER_TAG, "请求的数据个数为：" + statusList.size());
-                            int count = statusList.size();
-                            for(int i = 0; i<count; i++) {
-                                MyLog.v(MyLog.STATUS_TAG, statusList.get(i).toString());
-                            }
-                            iView.fillStatusesInfo(statusList);
-
-                            if(page == 1) {
-                                iView.fillUserSimpleInfo(user);
-                                iView.hideProgress();
-                            }else {
-                                iView.hideLoadMoreProgress();
-                            }
-                        }else {
-                            iView.showNoMoreStatus();
-                        }
-                    }
-
-                    @Override
-                    public void onStart() {
+                    public void call() {
                         if(page == 1) {
                             iView.showProgress();
                         }else {
                             iView.showLoadMoreProgress();
+                        }
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Observable<? extends Throwable> observable) {
+                        return observable.compose(handleRetryWhen());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseSubscriber<List<Status>>() {
+                    @Override
+                    public void onNext(List<Status> statuses) {
+                        iView.fillStatusesInfo(statuses);
+                        if(page == 1) {
+                            iView.fillUserSimpleInfo(user);
+                            iView.hideProgress();
+                        }else {
+                            iView.hideLoadMoreProgress();
                         }
                     }
                 });

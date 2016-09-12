@@ -4,22 +4,22 @@ import android.content.Context;
 
 import com.example.pz.sinaweibosample.base.BaseObject;
 import com.example.pz.sinaweibosample.base.BasePresenter;
+import com.example.pz.sinaweibosample.exception.ApiException;
 import com.example.pz.sinaweibosample.exception.RetrofitError;
-import com.example.pz.sinaweibosample.http.status.StatusParamsHelper;
-import com.example.pz.sinaweibosample.http.status.StatusRetrofitClient;
 import com.example.pz.sinaweibosample.http.user.UserParamsHelper;
 import com.example.pz.sinaweibosample.http.user.UserRetrofitClient;
-import com.example.pz.sinaweibosample.model.entity.StatusList;
 import com.example.pz.sinaweibosample.model.entity.User;
+import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.PrefUtil;
 import com.example.pz.sinaweibosample.view.iview.IMainView;
 
 import java.util.concurrent.TimeUnit;
 
-import rx.Subscriber;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 /**
@@ -33,40 +33,34 @@ public class MainPresenter extends BasePresenter<IMainView> {
     }
 
     public void getUserInfo() {
-        subscription = UserRetrofitClient.instanceOf().getUserInfo(UserParamsHelper.getUserInfoParams())
-                .timeout(10, TimeUnit.SECONDS)
+        Observable<User> observable = UserRetrofitClient.instanceOf().getUserInfo(UserParamsHelper.getUserInfoParams());
+        subscription = observable.timeout(10, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
-                .map(new Func1<User, BaseObject>() {
+                .map(new Func1<User, User>() {
                     @Override
-                    public BaseObject call(User user) {
-                        BaseObject object = RetrofitError.getBaseObject(user);
-                        return object;
+                    public User call(User user) {
+                        if(user != null) {
+                            return user;
+                        }
+                        throw new ApiException(user);
+                    }
+                })
+                .retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Observable<? extends Throwable> observable) {
+                        return observable.compose(handleRetryWhen());
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BaseObject>() {
+                .subscribe(new BaseSubscriber<User>() {
                     @Override
-                    public void onCompleted() {
-                        MyLog.v(MyLog.STATUS_TAG, "complete");
+                    public void onNext(User user) {
+                        PrefUtil.setUserInfo(user);
+                        MyLog.v(MyLog.USER_TAG, user.getName());
+                        iView.fillUserInfo(user);
+                        iView.hideLoginButton();
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        BaseObject errorObject = RetrofitError.parse(e);
-                        iView.showErrorInfo(errorObject.getError());
-                    }
-
-                    @Override
-                    public void onNext(BaseObject object) {
-                        if(object instanceof User) {
-                            User user = (User)object;
-                            PrefUtil.setUserInfo(user);
-                            MyLog.v(MyLog.USER_TAG, user.getName());
-                            iView.fillUserInfo(user);
-                        }
-
-                }
-            });
+                });
     }
 
     @Override

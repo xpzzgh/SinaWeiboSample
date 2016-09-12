@@ -16,4 +16,6 @@ public interface IStatusListView extends IView {
     void fillDataList(List<Status> statusList);
 
     void showSnackInfo(String infoString, final int code);
+
+    void showProgress();
 }

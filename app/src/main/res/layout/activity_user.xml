@@ -148,7 +148,7 @@
         fresco:placeholderImageScaleType="centerCrop"
         fresco:placeholderImage="@mipmap/james_3"
         fresco:roundAsCircle="true"
-        />
+        android:transitionName="@string/transition_image_head"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_plus_status"

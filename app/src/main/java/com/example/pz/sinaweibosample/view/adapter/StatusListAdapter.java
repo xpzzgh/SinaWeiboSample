@@ -20,6 +20,7 @@ public class StatusListAdapter extends RecyclerView.Adapter<StatusListAdapter.St
 
     Context context;
     List<Status> statusList;
+    public static IViewHolderClick viewHolderClick;
 
     public StatusListAdapter(Context context, List<Status> statusList) {
         this.context = context;
@@ -42,13 +43,41 @@ public class StatusListAdapter extends RecyclerView.Adapter<StatusListAdapter.St
         holder.statusView.setData(statusList.get(position));
     }
 
-    public class StatusListViewHolder extends RecyclerView.ViewHolder {
+    public void setViewHolderClick(IViewHolderClick viewHolderClick) {
+        this.viewHolderClick = viewHolderClick;
+    }
+
+    public interface IViewHolderClick {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
+    }
+
+    public static class StatusListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public StatusView statusView;
 
         public StatusListViewHolder(View itemView) {
             super(itemView);
             statusView = (StatusView) itemView.findViewById(R.id.view_status);
+            statusView.setOnClickListener(this);
+            statusView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(viewHolderClick != null) {
+                viewHolderClick.onItemClick(statusView, getAdapterPosition());
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if(viewHolderClick != null) {
+                viewHolderClick.onItemLongClick(statusView, getAdapterPosition());
+                //表示控件消耗了长点击
+                return true;
+            }
+            return false;
         }
     }
 }

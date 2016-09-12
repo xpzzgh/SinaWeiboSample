@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.util.MyLog;
@@ -71,8 +72,6 @@ public class MultiImageViewGroup extends ViewGroup {
             widthImageGap = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_width_image_gap, Util.dpToPx(10, context));
             widthMax = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_width_max, Util.dpToPx(230, context));
             fixedHeight = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_height_image_fixed, Util.dpToPx(150, context));
-//            MyLog.v(MyLog.STATUS_VIEW_TAG, "1 单图固定高度为：" + fixedHeight);
-//            MyLog.v(MyLog.STATUS_VIEW_TAG, "1 多图单位高度为：" + widthPerImage);
         }finally {
             //回收TypedArray
             a.recycle();
@@ -115,14 +114,12 @@ public class MultiImageViewGroup extends ViewGroup {
          * 当只有一个字view时，显示大图
          */
         if(realViewCount == 0) {
-//            setVisibility(GONE);
             setMeasuredDimension(0,0);
             return;
         }else if(realViewCount == 1) {
             final View view = realViewList.get(0);
             int measuredWidth = view.getMeasuredWidth();
             int measuredHeight = fixedHeight;
-//            int maxWithWidthAndHeight = Math.max(measuredHeight, measuredWidth);
             //当宽度大于定义的最大宽度时，将宽度设为定义的最大宽度
             if(widthMax < measuredWidth) {
                 measuredWidth = widthMax;
@@ -130,11 +127,9 @@ public class MultiImageViewGroup extends ViewGroup {
             maxWidth += measuredWidth;
             maxHeight += measuredHeight;
             childState = combineMeasuredStates(childState, view.getMeasuredState());
-//            MyLog.v(MyLog.STATUS_VIEW_TAG, "2 单图固定高度为：" + measuredHeight);
             maxWidth = Math.max(maxWidth, getSuggestedMinimumHeight());
             maxHeight = Math.max(maxHeight, getSuggestedMinimumWidth());
             //设置测量结果
-//            MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
             setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
                     resolveSizeAndState(maxHeight, heightMeasureSpec, childState));
         }else{  //多图时，宽高按照多图模式定义的小图宽高直接计算
@@ -151,17 +146,13 @@ public class MultiImageViewGroup extends ViewGroup {
             }else {
                 maxWidth += widthPerImage * 3 + widthImageGap * 2;
             }
-//            MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
             setMeasuredDimension(maxWidth, maxHeight);
-
         }
-
-//        MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件测完之后的宽度和高度分别为：" + maxWidth + ", " + maxHeight);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件布局！！");
+        MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件布局！！" + "一共有" + getChildCount() + "张图片");
         int count = getChildCount();
         List<View> realViewList = new ArrayList<View>();
         //占位子的子view数量
@@ -213,9 +204,8 @@ public class MultiImageViewGroup extends ViewGroup {
     }
 
     public void setData(List<String> imageList) {
-//        MyLog.v(MyLog.STATUS_VIEW_TAG, "请求的地址：" + imageList.get(0));
+        MyLog.v(MyLog.STATUS_VIEW_TAG, "为图片控件设置数据，一共有" + imageList.size() + "张图片！");
         if(getChildCount() != 0) {
-//            MyLog.v(MyLog.STATUS_VIEW_TAG, "清除已存在的图片！！");
             removeAllViews();
         }
         final int imageSize = imageList.size();
@@ -237,7 +227,6 @@ public class MultiImageViewGroup extends ViewGroup {
                     if(imageSize > 1) {
                         updateViewSize(imageInfo, singleImage);
                     }
-//                    Log.v("listener", id + " : 下载完成 ！！");
                 }
             };
 
@@ -252,7 +241,30 @@ public class MultiImageViewGroup extends ViewGroup {
 
             addView(singleImage);
         }
+
+        int childCount = getChildCount();
+        if(childCount > 0) {
+            for(int i = 0; i<childCount; i++) {
+                SimpleDraweeView image = (SimpleDraweeView) getChildAt(i);
+                image.setOnClickListener(new MyOnClickListener(i));
+            }
+        }
+
         MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件一共有：" + getChildCount() + "张图片");
+    }
+
+    public class MyOnClickListener implements OnClickListener {
+
+        int i;
+
+        public MyOnClickListener(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(context, "点击了第" + i + "张图片！", Toast.LENGTH_LONG).show();
+        }
     }
 }
 
