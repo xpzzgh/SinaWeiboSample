@@ -1,6 +1,7 @@
 package com.example.pz.sinaweibosample.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,12 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
+import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.base.BaseFragment;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.oauth.AccessTokenKeeper;
 import com.example.pz.sinaweibosample.presenter.StatusListPresenter;
 import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.PrefUtil;
+import com.example.pz.sinaweibosample.view.activity.StatusDetailActivity;
 import com.example.pz.sinaweibosample.view.adapter.StatusListAdapter;
 import com.example.pz.sinaweibosample.view.decoration.SimpleDecoration;
 import com.example.pz.sinaweibosample.view.iview.IStatusListView;
@@ -107,6 +110,22 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(type != 0) {
+            outState.putInt("type", type);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null) {
+            type = savedInstanceState.getInt("type");
+        }
+    }
+
+    @Override
     public void onRefresh(SwipyRefreshLayoutDirection direction) {
         if(direction == SwipyRefreshLayoutDirection.BOTTOM) {
             page++;
@@ -169,6 +188,9 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
     @Override
     public void onItemClick(View view, int position) {
         Toast.makeText(getActivity(), "单击了第" + position + "条微博！", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), StatusDetailActivity.class);
+        intent.putExtra("status", statusList.get(position));
+        startActivity(intent);
     }
 
     @Override

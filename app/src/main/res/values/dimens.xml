@@ -11,4 +11,6 @@
     <dimen name="gap_images_little">10dp</dimen>
     <dimen name="width_image_max_little">230dp</dimen>
     <dimen name="width_image_place_little">150dp</dimen>
+    <dimen name="width_icon_follow">22dp</dimen>
+    <dimen name="width_icon_collect">22dp</dimen>
 </resources>

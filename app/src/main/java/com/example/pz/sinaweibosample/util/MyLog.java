@@ -15,6 +15,7 @@ public class MyLog {
     public static final String UTIL_TAG = "util";
     public static final String WIDGET_TAG = "widget";
     public static final String MAIN_TAG = "main";
+    public static final String STATUS_DETAIL = "status_detail";
 
     private static int currentLevel = 8;
     private static final int VERBOSE_LEVEL = 7;

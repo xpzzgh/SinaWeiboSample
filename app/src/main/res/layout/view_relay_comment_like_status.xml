@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.pz.sinaweibosample.view.widget.BottomOperateTabView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -28,6 +29,7 @@
                     android:orientation="horizontal"
                     android:layout_centerInParent="true">
                     <ImageView
+                        android:id="@+id/image_relay_status"
                         android:layout_width="30dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_relay" />
@@ -36,7 +38,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="1dp"
-                        android:text="2591"
+                        android:text="转发"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -62,6 +64,7 @@
                     android:orientation="horizontal"
                     android:layout_centerInParent="true">
                     <ImageView
+                        android:id="@+id/image_comment_status"
                         android:layout_width="30dp"
                         android:layout_height="16dp"
                         android:src="@drawable/ic_comment" />
@@ -70,7 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="1dp"
-                        android:text="2591"
+                        android:text="评价"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -95,6 +98,7 @@
                     android:orientation="horizontal"
                     android:layout_centerInParent="true">
                     <ImageView
+                        android:id="@+id/image_like_status"
                         android:layout_width="30dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_like" />
@@ -103,14 +107,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="1dp"
-                        android:text="2591"
+                        android:text="点赞"
                         android:textSize="12sp" />
                 </LinearLayout>
 
             </RelativeLayout>
 
-
         </LinearLayout>
 
 
-</LinearLayout>
+</com.example.pz.sinaweibosample.view.widget.BottomOperateTabView>

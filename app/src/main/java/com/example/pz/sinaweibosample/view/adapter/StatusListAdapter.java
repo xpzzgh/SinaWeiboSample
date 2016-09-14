@@ -19,8 +19,8 @@ import java.util.List;
 public class StatusListAdapter extends RecyclerView.Adapter<StatusListAdapter.StatusListViewHolder> {
 
     Context context;
-    List<Status> statusList;
-    public static IViewHolderClick viewHolderClick;
+    final List<Status> statusList;
+    public IViewHolderClick viewHolderClick;
 
     public StatusListAdapter(Context context, List<Status> statusList) {
         this.context = context;
@@ -52,7 +52,7 @@ public class StatusListAdapter extends RecyclerView.Adapter<StatusListAdapter.St
         void onItemLongClick(View view, int position);
     }
 
-    public static class StatusListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class StatusListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public StatusView statusView;
 

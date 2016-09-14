@@ -1,15 +1,13 @@
 package com.example.pz.sinaweibosample.view.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,14 +15,12 @@ import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.model.entity.User;
 import com.example.pz.sinaweibosample.util.Constant;
-import com.example.pz.sinaweibosample.util.MyLog;
+import com.example.pz.sinaweibosample.util.PrefUtil;
 import com.example.pz.sinaweibosample.util.Util;
+import com.example.pz.sinaweibosample.view.activity.StatusDetailActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
-
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by pz on 2016/9/3.
@@ -61,19 +57,22 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
 //    @BindView(R.id.view_relay_status)
     RelayStatusView statusRelayView;
 //    @BindView(R.id.view_button_relay)
-    View relayButtonView;
-//    @BindView(R.id.view_button_comment)
-    View commentButtonView;
-//    @BindView(R.id.view_button_like)
-    View likeButtonView;
-//    @BindView(R.id.text_number_relay)
-    TextView relayNumberText;
-//    @BindView(R.id.text_number_comment)
-    TextView commentNumberText;
-//    @BindView(R.id.text_number_like)
-    TextView likeNumberText;
+//    View relayButtonView;
+////    @BindView(R.id.view_button_comment)
+//    View commentButtonView;
+////    @BindView(R.id.view_button_like)
+//    View likeButtonView;
+////    @BindView(R.id.text_number_relay)
+//    TextView relayNumberText;
+////    @BindView(R.id.text_number_comment)
+//    TextView commentNumberText;
+////    @BindView(R.id.text_number_like)
+//    TextView likeNumberText;
+    BottomOperateTabView bottomOperateTabView;
 
     ImageView relayDivider;
+
+    ImageView followImage;
 
 
 
@@ -96,7 +95,7 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.setDebug(true);
+//        ButterKnife.setDebug(true);
         init();
     }
 
@@ -126,20 +125,19 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         statusRelayBodyText = (TextView) view.findViewById(R.id.text_body_relay_status);
         statusRelayMultiImagesView = (MultiImageViewGroup) view.findViewById(R.id.view_multi_images_relay_status);
         statusRelayView = (RelayStatusView) view.findViewById(R.id.view_relay_status);
-        relayButtonView = view.findViewById(R.id.view_button_relay);
-        commentButtonView = view.findViewById(R.id.view_button_comment);
-        likeButtonView = view.findViewById(R.id.view_button_like);
-        relayNumberText = (TextView) view.findViewById(R.id.text_number_relay);
-        commentNumberText = (TextView) view.findViewById(R.id.text_number_comment);
-        likeNumberText = (TextView) view.findViewById(R.id.text_number_like);
+//        relayButtonView = view.findViewById(R.id.view_button_relay);
+//        commentButtonView = view.findViewById(R.id.view_button_comment);
+//        likeButtonView = view.findViewById(R.id.view_button_like);
+//        relayNumberText = (TextView) view.findViewById(R.id.text_number_relay);
+//        commentNumberText = (TextView) view.findViewById(R.id.text_number_comment);
+//        likeNumberText = (TextView) view.findViewById(R.id.text_number_like);
         relayDivider = (ImageView) view.findViewById(R.id.image_divider_relay_status);
-
+        followImage = (ImageView) view.findViewById(R.id.image_follow);
+        bottomOperateTabView = (BottomOperateTabView)view.findViewById(R.id.view_relay_comment_like_status);
         statusRelayView.setOnClickListener(this);
-        commentButtonView.setOnClickListener(this);
-        likeButtonView.setOnClickListener(this);
-        relayButtonView.setOnClickListener(this);
         statusHeadImage.setOnClickListener(this);
         statusAuthorText.setOnClickListener(this);
+        followImage.setOnClickListener(this);
     }
 
     @Override
@@ -151,23 +149,24 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
                 case R.id.view_relay_status:
                     if(relayStatus != null) {
                         Toast.makeText(context, "点击了转发信息，信息内容为：" + relayStatus.getText(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, StatusDetailActivity.class);
+                        intent.putExtra("status", relayStatus);
+                        context.startActivity(intent);
                     }
-                    break;
-                case R.id.view_button_comment:
-                    Toast.makeText(context, "有" + status.getComments_count() + "条评论！", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.view_button_relay:
-                    Toast.makeText(context,  "有" + status.getReposts_count() + "条转发！", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.view_button_like:
-                    Toast.makeText(context,  "有" + status.getAttitudes_count() + "个赞！", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.image_status_head:
                 case R.id.text_status_author:
                     Toast.makeText(context, "点击了" + status.getUser().getName() + "的头像", Toast.LENGTH_SHORT).show();
                     break;
+                case R.id.image_follow:
+                    Toast.makeText(context, "点击了关注按钮", Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
+    }
+
+    public void setRelayCommentLikeViewGone() {
+        bottomOperateTabView.setVisibility(GONE);
     }
 
     //    @Override
@@ -246,8 +245,10 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         fillstatusHeadInfo();
         fillMultiImagesUri();
         fillRelayStatus();
-        fillCommentInfo();
-        requestLayout();
+        if(bottomOperateTabView.getVisibility() != GONE) {
+            bottomOperateTabView.setData(status);
+        }
+//        requestLayout();
     }
 
 
@@ -264,6 +265,17 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         statusHeadImage.setImageURI(user.getAvatar_large());
         statusAuthorText.setText(user.getName());
         statusClientFromText.setText(Html.fromHtml(status.getSource()));
+//        MyLog.e(MyLog.STATUS_TAG, "用户id和当前登陆id分别为" + user.getId() + ", " + PrefUtil.getUserInfo().getId());
+//        else if(user.isFollowing() && user.isFollow_me()) {
+//            followImage.setImageResource(R.drawable.ic_eachother_follow);
+//        }
+        if(user.getId().equals(PrefUtil.getUserInfo().getId())) {
+            followImage.setVisibility(GONE);
+        }else if(user.isFollowing()) {
+            followImage.setImageResource(R.drawable.ic_followed);
+        }else {
+            followImage.setImageResource(R.drawable.ic_no_follow);
+        }
     }
 
     /**
@@ -295,12 +307,6 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         relayDivider.setVisibility(VISIBLE);
         statusRelayView.setVisibility(VISIBLE);
         statusRelayView.setData(relayStatus);
-    }
-
-    private void fillCommentInfo() {
-        likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : status.getAttitudes_count() +"");
-        commentNumberText.setText(status.getComments_count() == 0 ? "评论" : status.getComments_count()+"");
-        relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : status.getReposts_count()+"");
     }
 
     /**

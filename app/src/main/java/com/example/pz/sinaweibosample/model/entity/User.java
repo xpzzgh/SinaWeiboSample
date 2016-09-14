@@ -67,7 +67,7 @@ public class User extends BaseObject{
     public int favourites_count;
     /** 用户创建（注册）时间 */
     public String created_at;
-    /** 暂未支持 */
+    /** 是否已关注该用户 */
     public boolean following;
     /** 是否允许所有人给我发私信，true：是，false：否 */
     public boolean allow_all_act_msg;

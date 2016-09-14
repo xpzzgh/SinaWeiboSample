@@ -34,6 +34,8 @@
         <activity android:name=".view.activity.UserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyTheme.User"></activity>
+        <activity android:name=".view.activity.StatusDetailActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

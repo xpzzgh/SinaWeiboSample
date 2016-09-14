@@ -16,6 +16,8 @@
 
 package com.example.pz.sinaweibosample.model.entity;
 
+import com.example.pz.sinaweibosample.base.BaseObject;
+
 import java.util.ArrayList;
 
 /**
@@ -24,7 +26,7 @@ import java.util.ArrayList;
  * @author SINA
  * @since 2013-11-24
  */
-public class CommentList {
+public class CommentList extends BaseObject{
 
     /** 微博列表 */
     public ArrayList<Comment> commentList;

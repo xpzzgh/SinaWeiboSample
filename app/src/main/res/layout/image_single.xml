@@ -7,6 +7,7 @@
     android:layout_height="@dimen/height_image_place_little"
     fresco:actualImageScaleType="centerCrop"
     fresco:placeholderImage="@mipmap/a3"
-    fresco:placeholderImageScaleType="centerCrop">
+    fresco:placeholderImageScaleType="centerCrop"
+    fresco:retryImage="@mipmap/a4">
 
     </com.facebook.drawee.view.SimpleDraweeView>
