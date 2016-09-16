@@ -26,6 +26,7 @@ public class UserStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     List<Status> statusList;
     Context context;
+    IViewHolderClick viewHolderClick;
 
     public UserStatusAdapter(Context context, List<Status> statusList) {
         this.context = context;
@@ -79,14 +80,37 @@ public class UserStatusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return position == 0;
     }
 
+    public void setViewHolderClick (IViewHolderClick viewHolderClick) {
+        this.viewHolderClick = viewHolderClick;
+    }
 
-    class StatusViewHolder extends RecyclerView.ViewHolder {
+    public interface IViewHolderClick {
+        void onClick();
+        void onLongClick();
+    }
+
+    class StatusViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         StatusView statusView;
 
         public StatusViewHolder(View itemView) {
             super(itemView);
             statusView = (StatusView) itemView.findViewById(R.id.view_status);
+            statusView.setOnClickListener(this);
+            statusView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(viewHolderClick != null) {
+                viewHolderClick.onClick();
+            }
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+//            if()
+            return false;
         }
     }
 

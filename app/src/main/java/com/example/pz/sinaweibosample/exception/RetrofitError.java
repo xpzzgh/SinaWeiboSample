@@ -57,6 +57,27 @@ public class RetrofitError {
         MyLog.e(MyLog.LOGIN_TAG, e.toString());
         return errorObject;
     }
+
+    public static ApiException handleSinaHttpException(Throwable throwable) {
+        BaseObject errorObject;
+        try {
+//            MyLog.e(MyLog.BASE_TAG, "HTTP错误！");
+            String errorInfo = ((HttpException)throwable).response().errorBody().source().readUtf8Line();
+
+            try{
+                errorObject = gson.fromJson(errorInfo, BaseObject.class);
+            }catch (IllegalStateException | JsonSyntaxException exception) {
+                errorObject = new BaseObject();
+                errorObject.setError("http返回错误");
+                errorObject.setError_code(Constant.CAPACITY_CODE);
+            }
+        } catch (IOException e1) {
+            errorObject = new BaseObject();
+            errorObject.setError("http解析中IO错误");
+            errorObject.setError_code(Constant.ERROR_CODE);
+        }
+        return new ApiException(errorObject);
+    }
 //
 //    public static BaseObject getBaseObject(BaseObject baseObject) {
 //        if(baseObject != null && baseObject.getError_code() == 0) {

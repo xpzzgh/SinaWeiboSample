@@ -21,5 +21,11 @@
         <attr name="childSimpleTextSize" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="CommentItemView">
+        <attr name="itemType" format="enum">
+            <enum name="relay" value="1" />
+            <enum name="comment" value="2" />
+        </attr>
+    </declare-styleable>
 
 </resources>

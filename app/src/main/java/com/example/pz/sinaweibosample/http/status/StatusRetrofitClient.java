@@ -19,7 +19,7 @@ public class StatusRetrofitClient {
         Gson gson = new GsonBuilder().setLenient().create();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.weibo.com/2/statuses/")
+                .baseUrl("https://api.weibo.com/2/")
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

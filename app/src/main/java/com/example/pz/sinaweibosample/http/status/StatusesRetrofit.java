@@ -1,6 +1,9 @@
 package com.example.pz.sinaweibosample.http.status;
 
 
+import com.example.pz.sinaweibosample.model.entity.CommentList;
+import com.example.pz.sinaweibosample.model.entity.RelayList;
+import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.model.entity.StatusList;
 
 import java.util.Map;
@@ -15,12 +18,21 @@ import rx.Observable;
 
 public interface StatusesRetrofit {
 
-    @GET("public_timeline.json")
+    @GET("statuses/public_timeline.json")
     Observable<StatusList> getPublicStatuses(@QueryMap Map<String, String> params);
 
-    @GET("user_timeline.json")
+    @GET("statuses/user_timeline.json")
     Observable<StatusList> getUserStatuses(@QueryMap Map<String, String> params);
 
-    @GET("friends_timeline.json")
+    @GET("statuses/friends_timeline.json")
     Observable<StatusList> getFriendsStatuses(@QueryMap Map<String, String> params);
+
+    @GET("statuses/show.json")
+    Observable<Status> getStatusById(@QueryMap Map<String, String> params);
+
+    @GET("comments/show.json")
+    Observable<CommentList> getComments(@QueryMap Map<String, String> params);
+
+    @GET("statuses/repost_timeline.json")
+    Observable<RelayList> getRalays(@QueryMap Map<String ,String> params);
 }

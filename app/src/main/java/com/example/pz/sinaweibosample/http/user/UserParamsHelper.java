@@ -21,4 +21,11 @@ public class UserParamsHelper {
         return params;
     }
 
+    public static Map<String, String> getOtherUserInfoParams(String uid) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("access_token", AccessTokenKeeper.readToken().getToken());
+        params.put("uid", uid);
+        return params;
+    }
+
 }

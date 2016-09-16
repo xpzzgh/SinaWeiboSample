@@ -11,6 +11,13 @@ public class BaseObject implements Serializable {
     public int error_code = 0;
     public String error;
 
+    public BaseObject() {}
+
+    public BaseObject(String errorString, int errorCode) {
+        error = errorString;
+        error_code = errorCode;
+    }
+
     public String getError() {
         return error;
     }

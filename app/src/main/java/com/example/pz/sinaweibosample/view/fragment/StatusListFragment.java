@@ -2,13 +2,11 @@ package com.example.pz.sinaweibosample.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
-import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.base.BaseFragment;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.oauth.AccessTokenKeeper;
 import com.example.pz.sinaweibosample.presenter.StatusListPresenter;
 import com.example.pz.sinaweibosample.util.Constant;
-import com.example.pz.sinaweibosample.util.PrefUtil;
 import com.example.pz.sinaweibosample.view.activity.StatusDetailActivity;
 import com.example.pz.sinaweibosample.view.adapter.StatusListAdapter;
 import com.example.pz.sinaweibosample.view.decoration.SimpleDecoration;
@@ -74,12 +70,12 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_status_list, container, false);
         initPresenter();
-        init();
+        initView();
         return view;
     }
 
     @Override
-    public void init() {
+    public void initView() {
         page = 1;
         context = getActivity();
         statusList = new ArrayList<Status>();

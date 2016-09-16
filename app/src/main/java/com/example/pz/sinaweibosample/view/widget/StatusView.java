@@ -18,6 +18,7 @@ import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.PrefUtil;
 import com.example.pz.sinaweibosample.util.Util;
 import com.example.pz.sinaweibosample.view.activity.StatusDetailActivity;
+import com.example.pz.sinaweibosample.view.activity.UserActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
     }
 
     /**
-     * 加载完成后初始化 ButterKnife
+     * 加载完成后初始化
      */
     @Override
     protected void onFinishInflate() {
@@ -125,12 +126,6 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         statusRelayBodyText = (TextView) view.findViewById(R.id.text_body_relay_status);
         statusRelayMultiImagesView = (MultiImageViewGroup) view.findViewById(R.id.view_multi_images_relay_status);
         statusRelayView = (RelayStatusView) view.findViewById(R.id.view_relay_status);
-//        relayButtonView = view.findViewById(R.id.view_button_relay);
-//        commentButtonView = view.findViewById(R.id.view_button_comment);
-//        likeButtonView = view.findViewById(R.id.view_button_like);
-//        relayNumberText = (TextView) view.findViewById(R.id.text_number_relay);
-//        commentNumberText = (TextView) view.findViewById(R.id.text_number_comment);
-//        likeNumberText = (TextView) view.findViewById(R.id.text_number_like);
         relayDivider = (ImageView) view.findViewById(R.id.image_divider_relay_status);
         followImage = (ImageView) view.findViewById(R.id.image_follow);
         bottomOperateTabView = (BottomOperateTabView)view.findViewById(R.id.view_relay_comment_like_status);
@@ -148,7 +143,7 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
             switch (id) {
                 case R.id.view_relay_status:
                     if(relayStatus != null) {
-                        Toast.makeText(context, "点击了转发信息，信息内容为：" + relayStatus.getText(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "点击了转发信息，信息内容为：" + relayStatus.getText(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, StatusDetailActivity.class);
                         intent.putExtra("status", relayStatus);
                         context.startActivity(intent);
@@ -157,6 +152,9 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
                 case R.id.image_status_head:
                 case R.id.text_status_author:
                     Toast.makeText(context, "点击了" + status.getUser().getName() + "的头像", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, UserActivity.class);
+                    intent.putExtra(Constant.USER, status.getUser());
+                    context.startActivity(intent);
                     break;
                 case R.id.image_follow:
                     Toast.makeText(context, "点击了关注按钮", Toast.LENGTH_SHORT).show();
@@ -265,10 +263,6 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         statusHeadImage.setImageURI(user.getAvatar_large());
         statusAuthorText.setText(user.getName());
         statusClientFromText.setText(Html.fromHtml(status.getSource()));
-//        MyLog.e(MyLog.STATUS_TAG, "用户id和当前登陆id分别为" + user.getId() + ", " + PrefUtil.getUserInfo().getId());
-//        else if(user.isFollowing() && user.isFollow_me()) {
-//            followImage.setImageResource(R.drawable.ic_eachother_follow);
-//        }
         if(user.getId().equals(PrefUtil.getUserInfo().getId())) {
             followImage.setVisibility(GONE);
         }else if(user.isFollowing()) {
@@ -283,15 +277,13 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
      */
     private void fillMultiImagesUri() {
         List<String> imageUris = Util.getPriorityImagesUris(status, Constant.SMALL_IMAGE);
-        if(imageUris == null) {
+        if(imageUris == null || imageUris.size() == 0) {
             statusMultiImagesView.setVisibility(GONE);
             return;
-        }else if(imageUris.size() == 1) {
-            imageUris = Util.getPriorityImagesUris(status, Constant.MEDIUM_IMAGE);
         }
         statusMultiImagesView.setVisibility(VISIBLE);
         //将地址填进去
-        statusMultiImagesView.setData(imageUris);
+        statusMultiImagesView.setData(status);
     }
 
     /**

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.pz.sinaweibosample.view.widget.CommentItemView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/view_item_comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:background="?android:attr/selectableItemBackground">
+    <TextView
+        android:id="@+id/text_author_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ZEALER中国"
+        android:textColor="@color/colorFont"
+        android:maxLength="20"
+        android:textSize="10sp"
+        android:layout_alignTop="@+id/image_head_comment"
+        android:paddingLeft="5dp"
+        android:paddingBottom="5dp"
+        android:layout_toRightOf="@+id/image_head_comment"/>
+
+
+    <TextView
+        android:id="@+id/text_time_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="7sp"
+        android:text="9-15 08:00"
+        android:layout_alignLeft="@+id/text_author_comment"
+        android:paddingLeft="5dp"
+        android:paddingRight="8dp"
+        android:layout_below="@+id/text_author_comment"
+        android:textColor="@color/colorGray"/>
+
+    <TextView
+        android:id="@+id/text_from_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="来自"
+        android:textSize="7sp"
+        android:layout_below="@+id/text_author_comment"
+        android:layout_toRightOf="@+id/text_time_comment"
+        android:paddingRight="5dp" />
+
+    <TextView
+        android:id="@+id/text_client_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="iphone 9PLUS"
+        android:textSize="7sp"
+        android:layout_below="@+id/text_author_comment"
+        android:layout_toRightOf="@+id/text_from_comment"/>
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/image_head_comment"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        fresco:roundAsCircle="true"
+        fresco:actualImageScaleType="centerCrop"
+        android:layout_marginRight="10dp"
+        fresco:placeholderImage="@mipmap/james_1"
+        fresco:placeholderImageScaleType="centerCrop"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/text_content_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="15dp"
+        android:layout_below="@+id/image_head_comment"
+        android:layout_alignLeft="@+id/text_author_comment"
+        android:text="评论内容"
+        android:textColor="@color/colorFont"
+        android:textSize="14sp"/>
+
+</com.example.pz.sinaweibosample.view.widget.CommentItemView>

@@ -62,7 +62,8 @@ public class StatusListPresenter extends BasePresenter<IStatusListView> {
                                 return statuses;
                             }
                         }
-                        throw new ApiException(statusList);
+                        ApiException exception = new ApiException(statusList);
+                        throw exception;
                     }
                 })
                 .doOnSubscribe(new Action0() {

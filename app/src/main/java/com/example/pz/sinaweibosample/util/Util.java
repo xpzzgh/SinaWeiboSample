@@ -3,6 +3,8 @@ package com.example.pz.sinaweibosample.util;
 import android.content.Context;
 import android.util.TypedValue;
 
+import com.example.pz.sinaweibosample.base.BaseObject;
+import com.example.pz.sinaweibosample.exception.ApiException;
 import com.example.pz.sinaweibosample.model.entity.MyKeyValue;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.model.entity.ThumbNailPic;
@@ -41,7 +43,7 @@ public class Util {
     /**
      * 根据图片模式（大图、中图、小图），获取图片地址。
      * 优先选择匹配模式，如果没有，则找偏大的图，最后找偏小的图。
-     * 都没有的情况下，返回长度为0的列表
+     * 都没有的情况下，返回空
      * @param status  微博
      * @param priorityImageSize 图片模式 （大、中、小）
      * @return
@@ -71,40 +73,62 @@ public class Util {
     }
 
     /**
-     * 多图的情况下，直接拿小图
+     * 图片转换工具
      * @param status
      * @param imageSize
      * @return
      */
     private static List<String> getImageUris(Status status, String imageSize) {
         List<String> realUrls = new ArrayList<String>();
+        List<String> smallImageList = new ArrayList<String>();
         if(!isEmpty(imageSize) && status.getPic_urls() != null && status.getPic_urls().size() != 0) {
             List<ThumbNailPic> picUrls = status.getPic_urls();
-            if(picUrls.size() == 1) {
-                if(imageSize.equals(Constant.LARGE_IMAGE)) {
-                    if(status.getOriginal_pic() != null) {
-                        realUrls.add(status.getOriginal_pic());
-                    }
-                }else if(imageSize.equals(Constant.MEDIUM_IMAGE)) {
-                    if(status.getBmiddle_pic() != null) {
-                        realUrls.add(status.getBmiddle_pic());
-                    }
-                }else {
-                    realUrls.add(picUrls.get(0).getThumbnail_pic());
-                }
 
-            }else {
-                for(int i = 0; i<picUrls.size(); i++) {
-                    String parsedUrl = picUrls.get(i).getThumbnail_pic();
-                    if(parsedUrl != null && !parsedUrl.isEmpty()) {
-                        realUrls.add(parsedUrl);
-                    }
+            for(int i = 0; i<picUrls.size(); i++) {
+                String parsedUrl = picUrls.get(i).getThumbnail_pic();
+                if(parsedUrl != null && !parsedUrl.isEmpty()) {
+                    smallImageList.add(parsedUrl);
                 }
             }
 
-            return realUrls;
+            if(imageSize.equals(Constant.SMALL_IMAGE)) {
+                return smallImageList;
+            }else if(imageSize.equals(Constant.MEDIUM_IMAGE) && status.getBmiddle_pic() != null) {
+
+                return smallImageToBig(smallImageList, status.getBmiddle_pic());
+            }else if(imageSize.equals(Constant.LARGE_IMAGE) && status.getOriginal_pic() != null) {
+                return smallImageToBig(smallImageList, status.getOriginal_pic());
+            }
         }
         return null;
+    }
+
+    private static List<String> smallImageToBig(List<String> smallImageList, String bigImage) {
+        int count;
+        if(bigImage == null || bigImage.isEmpty() || smallImageList == null || (count = smallImageList.size()) == 0) {
+            return null;
+        }
+
+        String bigImagePrefix = bigImage.substring(0, bigImage.lastIndexOf("/") + 1);
+//        bigImage.sub
+        MyLog.v(MyLog.UTIL_TAG, "大图的前缀：" + bigImagePrefix);
+        String smallImage;
+        String convertBigImage;
+        List<String> bigImageList = new ArrayList<String>();
+        for(int i = 0; i<count; i++) {
+            smallImage = smallImageList.get(i);
+            convertBigImage = bigImagePrefix + smallImage.substring(smallImage.lastIndexOf("/") + 1);
+            MyLog.v(MyLog.UTIL_TAG, convertBigImage);
+            bigImageList.add(convertBigImage);
+        }
+        return bigImageList;
+//        if(imageSize.equals(Constant.LARGE_IMAGE)) {
+//
+//        }else if(imageSize.equals(Constant.MEDIUM_IMAGE)) {
+//            for(int i = 0; i<count; i++) {
+//                smallImage = smallImageList.get(i);
+//            }
+//        }
     }
 
 //    private static String parseSmallPic(String urlString) {
@@ -193,7 +217,7 @@ public class Util {
      */
     public static String getDimeDiff(Date date) {
         if(date == null) {
-            throw new RuntimeException("时间参数为空");
+            throw new ApiException(new BaseObject("时间参数为空", Constant.ERROR_CODE));
         }
         String timeDiff;
         DateTime dtStart = new DateTime(date);
@@ -216,6 +240,24 @@ public class Util {
         return timeDiff;
     }
 
+    public static String timeFormatFromUTC(String utcTime) {
+        if(utcTime == null || utcTime.isEmpty()) {
+            throw new RuntimeException("时间字符串为空");
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.US);
+        String formattedTime;
+        try{
+            Date date = sdf.parse(utcTime);
+            SimpleDateFormat newSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            formattedTime = newSdf.format(date);
+            return formattedTime;
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
     public static Map<String, String> getUserDataMap(User user) {
         Map<String, String> data = new LinkedHashMap<String, String>();
         data.put("性别", SimpleUtil.parseGender(user.getGender()));
@@ -233,5 +275,19 @@ public class Util {
     public static int getRandomInt(int seed) {
         Random random = new Random();
         return random.nextInt(15);
+    }
+
+    /**
+     * 数字超过1万时转换成**万
+     * @return
+     */
+    public static String bigNumToStr(int num) {
+        int bigNum;
+        if(num/10000 > 0) {
+            bigNum = num/10000;
+            return bigNum + "万";
+        }else {
+            return num + "";
+        }
     }
 }

@@ -333,6 +333,5 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
     @Override
     public void onBackPressed() {
         ActivityManager.instanceOf().finishActivity(this);
-
     }
 }

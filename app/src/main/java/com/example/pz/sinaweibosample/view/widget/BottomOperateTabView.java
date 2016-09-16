@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.model.entity.Status;
+import com.example.pz.sinaweibosample.util.Util;
 
 /**
  * Created by pz on 2016/9/13.
@@ -66,9 +67,9 @@ public class BottomOperateTabView extends LinearLayout implements View.OnClickLi
     }
 
     private void fillData() {
-        likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : status.getAttitudes_count() +"");
-        commentNumberText.setText(status.getComments_count() == 0 ? "评论" : status.getComments_count()+"");
-        relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : status.getReposts_count()+"");
+        likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : Util.bigNumToStr(status.getAttitudes_count()));
+        commentNumberText.setText(status.getComments_count() == 0 ? "评论" : Util.bigNumToStr(status.getComments_count()));
+        relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : Util.bigNumToStr(status.getReposts_count()));
     }
 
     public void undoData() {

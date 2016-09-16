@@ -29,17 +29,17 @@ import java.util.ArrayList;
 public class CommentList extends BaseObject{
 
     /** 微博列表 */
-    public ArrayList<Comment> commentList;
+    public ArrayList<Comment> comments;
     public String previous_cursor;
     public String next_cursor;
     public int total_number;
 
-    public ArrayList<Comment> getCommentList() {
-        return commentList;
+    public ArrayList<Comment> getComments() {
+        return comments;
     }
 
-    public void setCommentList(ArrayList<Comment> commentList) {
-        this.commentList = commentList;
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
     }
 
     public String getNext_cursor() {

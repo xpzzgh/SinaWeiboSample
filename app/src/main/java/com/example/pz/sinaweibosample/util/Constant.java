@@ -30,5 +30,8 @@ public class Constant {
     /**
      * 网络请求失败之后，重试的次数
      */
-    public static final int RETRY_TIME = 2;
+    public static final int RETRY_TIME = 0;
+
+    public static final int COMMENT_TYPE = 11;
+    public static final int RELAY_TYPE = 12;
 }

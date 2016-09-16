@@ -4,23 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_status_detail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/view_relay_comment_like_status_detail">
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:fitsSystemWindows="false">
+        android:fitsSystemWindows="false"
+        android:layout_above="@+id/view_relay_comment_like_status_detail">
         <android.support.design.widget.AppBarLayout
             android:id="@+id/view_appbar_status_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:background="@android:color/transparent"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:theme="@style/AppTheme.AppBarOverlay">
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_status_detail"
             android:layout_width="match_parent"
@@ -42,22 +38,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_below="@+id/view_status_detail"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 app:layout_collapseMode="pin"
                 android:gravity="top"
-                app:titleMarginTop="15dp"/>
+                app:titleMarginTop="15dp"
+                android:background="@android:color/transparent"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
-            <android.support.design.widget.TabLayout
-                android:id="@+id/view_tab_status_detail"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                app:tabIndicatorColor="@color/colorAccent"
-                app:tabMode="scrollable"
-                app:tabTextColor="@color/colorFontLight"
-                app:tabSelectedTextColor="@color/colorAccent">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            </android.support.design.widget.TabLayout>
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/view_tab_status_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="4"
+                    app:tabIndicatorColor="@color/colorAccent"
+                    app:tabMode="scrollable"
+                    app:tabTextColor="@color/colorGray"
+                    app:tabSelectedTextColor="@color/colorAccent">
+
+                </android.support.design.widget.TabLayout>
+
+                <TextView
+                    android:id="@+id/text_like_status_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:text="点赞"
+                    android:textColor="@color/colorGray"
+                    android:gravity="center">
+
+                </TextView>
+            </LinearLayout>
         </android.support.design.widget.AppBarLayout>
 
 
@@ -67,7 +83,6 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </android.support.design.widget.CoordinatorLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
     <include
         android:id="@+id/view_relay_comment_like_status_detail"
         layout="@layout/view_relay_comment_like_status"

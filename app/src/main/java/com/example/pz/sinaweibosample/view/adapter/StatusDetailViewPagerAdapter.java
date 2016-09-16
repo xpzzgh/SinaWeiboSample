@@ -4,7 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.pz.sinaweibosample.base.BaseFragment;
+import com.example.pz.sinaweibosample.base.BaseObject;
+import com.example.pz.sinaweibosample.exception.ApiException;
+import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.view.fragment.CommentListFragment;
+import com.example.pz.sinaweibosample.view.fragment.RelayListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,31 +20,55 @@ import java.util.List;
 
 public class StatusDetailViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final List<CommentListFragment> mFragments = new ArrayList<>();
+//    private final List<CommentListFragment> mFragments = new ArrayList<>();
     private final List<String> mFragmentTitles = new ArrayList<>();
+    private CommentListFragment mCommentListFragment;
+    private RelayListFragment mRelayListFragment;
 
     public StatusDetailViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public void addFragment(CommentListFragment fragment, String title) {
-        mFragments.add(fragment);
-        mFragmentTitles.add(title);
+    public void addFragments(RelayListFragment relayListFragment, CommentListFragment commentListFragment) {
+        mCommentListFragment = commentListFragment;
+        mRelayListFragment = relayListFragment;
     }
 
-    public void setTitles(List<String> titles) {
+    public void notifyDataChanged() {
+
+    }
+
+    public void setTitles(String relayCount, String commentCount) {
         mFragmentTitles.clear();
-        mFragmentTitles.addAll(titles);
+        mFragmentTitles.add(relayCount);
+        mFragmentTitles.add(commentCount);
+        notifyDataSetChanged();
+    }
+
+    public void setCommentTitle(String commentCount) {
+        mFragmentTitles.set(1, commentCount);
+        notifyDataSetChanged();
+    }
+
+    public void setRelayTitle(String relayCount) {
+        mFragmentTitles.set(0, relayCount);
+        notifyDataSetChanged();
     }
 
     @Override
-    public CommentListFragment getItem(int position) {
-        return mFragments.get(position);
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                return mRelayListFragment;
+            case 1:
+                return mCommentListFragment;
+        }
+        throw new ApiException(new BaseObject("没有拿到viewPager的fragment", Constant.ERROR_CODE));
     }
 
     @Override
     public int getCount() {
-        return mFragments.size();
+        return 2;
     }
 
     @Override
@@ -47,7 +76,4 @@ public class StatusDetailViewPagerAdapter extends FragmentPagerAdapter {
         return mFragmentTitles.get(position);
     }
 
-    public boolean canScrollVertically(int position, int direction) {
-        return getItem(position).canScrollVertically(direction);
-    }
 }

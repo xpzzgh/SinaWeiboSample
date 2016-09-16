@@ -5,14 +5,14 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Animatable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
+import com.example.pz.sinaweibosample.model.entity.Status;
+import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.Util;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -53,6 +53,11 @@ public class MultiImageViewGroup extends ViewGroup {
     Context context;
 
     ControllerListener listener;
+
+    Status status;
+
+    List<String> imageList;
+    List<String> bigImageList;
 
     public MultiImageViewGroup(Context context) {
         this(context, null, 0);
@@ -203,8 +208,15 @@ public class MultiImageViewGroup extends ViewGroup {
         }
     }
 
-    public void setData(List<String> imageList) {
-        MyLog.v(MyLog.STATUS_VIEW_TAG, "为图片控件设置数据，一共有" + imageList.size() + "张图片！");
+    public void setData(Status status) {
+        this.status = status;
+        imageList = Util.getPriorityImagesUris(this.status, Constant.SMALL_IMAGE);
+        bigImageList = Util.getPriorityImagesUris(this.status, Constant.LARGE_IMAGE);
+        if(imageList.size() == 1) {
+            imageList = Util.getPriorityImagesUris(this.status, Constant.MEDIUM_IMAGE);
+        }
+//        List<String> imageList
+//        MyLog.v(MyLog.STATUS_VIEW_TAG, "为图片控件设置数据，一共有" + imageList.size() + "张图片！");
         if(getChildCount() != 0) {
             removeAllViews();
         }
@@ -238,31 +250,38 @@ public class MultiImageViewGroup extends ViewGroup {
 
             singleImage.setController(controller);
             singleImage.setMinimumWidth(Util.dpToPx((int)(getResources().getDimension(R.dimen.width_image_place_little)), context));
-
+            singleImage.setTag(bigImageList.get(i));
+            singleImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, "点击了大图地址为" + view.getTag() + "的图片！", Toast.LENGTH_LONG).show();
+                }
+            });
             addView(singleImage);
         }
 
-        int childCount = getChildCount();
-        if(childCount > 0) {
-            for(int i = 0; i<childCount; i++) {
-                SimpleDraweeView image = (SimpleDraweeView) getChildAt(i);
-                image.setOnClickListener(new MyOnClickListener(i));
-            }
-        }
+//        int childCount = getChildCount();
+//        if(childCount > 0) {
+//            for(int i = 0; i<childCount; i++) {
+//                SimpleDraweeView image = (SimpleDraweeView) getChildAt(i);
+//                image.setOnClickListener(new ImageOnClickListener(i));
+//            }
+//        }
 
         MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件一共有：" + getChildCount() + "张图片");
     }
 
-    public class MyOnClickListener implements OnClickListener {
+    public class ImageOnClickListener implements OnClickListener {
 
         int i;
 
-        public MyOnClickListener(int i) {
+        public ImageOnClickListener(int i) {
             this.i = i;
         }
 
         @Override
         public void onClick(View view) {
+            status.getAttitudes_count();
             Toast.makeText(context, "点击了第" + i + "张图片！", Toast.LENGTH_LONG).show();
         }
     }

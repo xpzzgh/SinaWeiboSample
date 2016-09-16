@@ -8,6 +8,8 @@ import com.example.pz.sinaweibosample.exception.ApiException;
 import com.example.pz.sinaweibosample.exception.RetrofitError;
 import com.example.pz.sinaweibosample.http.status.StatusParamsHelper;
 import com.example.pz.sinaweibosample.http.status.StatusRetrofitClient;
+import com.example.pz.sinaweibosample.http.user.UserParamsHelper;
+import com.example.pz.sinaweibosample.http.user.UserRetrofitClient;
 import com.example.pz.sinaweibosample.model.entity.MyKeyValue;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.model.entity.StatusList;
@@ -22,8 +24,10 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -34,6 +38,7 @@ import rx.schedulers.Schedulers;
 public class UserPresenter extends BasePresenter<IUserView> {
 
     User user;
+    Subscription newSubscription;
 
     public UserPresenter(Context context, IUserView iView, User user) {
         super(context, iView);
@@ -94,6 +99,25 @@ public class UserPresenter extends BasePresenter<IUserView> {
                         }
                     }
                 });
+
+//        newSubscription = UserRetrofitClient.instanceOf().getUserInfo(UserParamsHelper.getOtherUserInfoParams(user.getId()))
+//                .subscribeOn(Schedulers.io())
+//                .timeout(10, TimeUnit.SECONDS)
+//                .subscribeOn(Schedulers.io())
+//                .map(new Func1<User, User>() {
+//                    @Override
+//                    public User call(User user) {
+//                        user.getName();
+//                        return user;
+//                    }
+//                })
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<User>() {
+//                    @Override
+//                    public void call(User user) {
+//                        MyLog.v(MyLog.USER_TAG, "点击用户为：" + user.getName());
+//                    }
+//                });
     }
 
 
@@ -102,6 +126,9 @@ public class UserPresenter extends BasePresenter<IUserView> {
     public void destroy() {
         if(subscription != null) {
             subscription.unsubscribe();
+        }
+        if(newSubscription != null) {
+            newSubscription.unsubscribe();
         }
     }
 }

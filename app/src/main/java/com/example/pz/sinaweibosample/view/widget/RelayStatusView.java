@@ -121,16 +121,14 @@ public class RelayStatusView extends LinearLayout {
 
         List<String> imageUris = Util.getPriorityImagesUris(status, Constant.SMALL_IMAGE);
 //        MyLog.v(MyLog.STATUS_VIEW_TAG, "设置转发消息的图片控件可见，图片有" + imageUris.size() + "张！");
-        if(imageUris == null) {
+        if(imageUris == null || imageUris.size() == 0) {
             imageViewGroup.setVisibility(GONE);
             MyLog.v(MyLog.STATUS_VIEW_TAG, "设置转发消息的图片控件不可见，图片数据为空！");
             return;
-        }else if(imageUris.size() == 1) {
-            imageUris = Util.getPriorityImagesUris(status, Constant.MEDIUM_IMAGE);
         }
 //        MyLog.v(MyLog.STATUS_VIEW_TAG, "设置转发消息的图片控件可见，图片有" + imageUris.size() + "张！");
         imageViewGroup.setVisibility(VISIBLE);
         //填充地址
-        imageViewGroup.setData(imageUris);
+        imageViewGroup.setData(status);
     }
 }

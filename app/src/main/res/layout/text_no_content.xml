@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text_no_content"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:textSize="20sp"
+    android:text="这里还没有人来拜访"
+    android:gravity="center"
+    android:textColor="@color/colorDeepOrange"
+    android:background="@color/colorVeryLightGray"
+    android:maxLines="1"
+    android:scrollbars="vertical"
+    />

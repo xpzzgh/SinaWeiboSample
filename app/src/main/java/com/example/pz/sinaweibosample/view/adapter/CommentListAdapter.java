@@ -8,7 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.pz.sinaweibosample.R;
+import com.example.pz.sinaweibosample.model.entity.Comment;
+import com.example.pz.sinaweibosample.model.entity.CommentList;
 import com.example.pz.sinaweibosample.model.entity.MyKeyValue;
+import com.example.pz.sinaweibosample.model.entity.Status;
+import com.example.pz.sinaweibosample.view.widget.CommentItemView;
 
 import java.util.List;
 import java.util.Map;
@@ -19,11 +23,10 @@ import java.util.Map;
 
 public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.CommentListViewHolder>{
 
-    View view;
     Context context;
-    List<MyKeyValue> data;
+    List<Comment> data;
 
-    public CommentListAdapter(Context context, List<MyKeyValue> data) {
+    public CommentListAdapter(Context context, List<Comment> data) {
         this.context = context;
         this.data = data;
     }
@@ -35,25 +38,22 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     @Override
     public CommentListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.textview_simple, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_item_comment, parent, false);
         return new CommentListViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(CommentListViewHolder holder, int position) {
-        holder.key.setText(data.get(position).getKey());
-        holder.value.setText(data.get(position).getValue());
+        holder.commentItemView.setData(data.get(position));
     }
 
     public class CommentListViewHolder extends RecyclerView.ViewHolder {
 
-        TextView value;
-        TextView key;
+        CommentItemView commentItemView;
 
         public CommentListViewHolder(View itemView) {
             super(itemView);
-            value = (TextView)itemView.findViewById(R.id.text_simple_value);
-            key = (TextView)itemView.findViewById(R.id.text_simple_key);
+            commentItemView = (CommentItemView)itemView.findViewById(R.id.view_item_comment);
         }
     }
 }

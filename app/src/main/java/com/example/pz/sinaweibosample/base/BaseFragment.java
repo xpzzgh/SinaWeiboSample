@@ -25,7 +25,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
     /**
      * ButterKnife绑定及其他初始化操作
      */
-    public abstract void init();
+    public abstract void initView();
 
 
     public T getPresenter() {
