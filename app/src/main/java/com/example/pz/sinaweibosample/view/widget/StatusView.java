@@ -48,7 +48,7 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
 //    @BindView(R.id.text_client_from)
     TextView statusClientFromText;
 //    @BindView(R.id.text_status_body)
-    TextView statusBodyText;
+    PlexTextView statusBodyText;
 //    @BindView(R.id.view_multi_images)
     MultiImageViewGroup statusMultiImagesView;
 //    @BindView(R.id.text_body_relay_status)
@@ -111,7 +111,6 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         }
         View view = getChildAt(0);
         initView(view);
-
     }
 
     private void initView(View view) {
@@ -121,7 +120,7 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         statusClientFromText = (TextView) view.findViewById(R.id.text_client_from);
         statusClientFromText.setClickable(true);
         statusClientFromText.setMovementMethod(LinkMovementMethod.getInstance());
-        statusBodyText = (TextView) view.findViewById(R.id.text_status_body);
+        statusBodyText = (PlexTextView) view.findViewById(R.id.text_status_body);
         statusMultiImagesView = (MultiImageViewGroup) view.findViewById(R.id.view_multi_images);
         statusRelayBodyText = (TextView) view.findViewById(R.id.text_body_relay_status);
         statusRelayMultiImagesView = (MultiImageViewGroup) view.findViewById(R.id.view_multi_images_relay_status);

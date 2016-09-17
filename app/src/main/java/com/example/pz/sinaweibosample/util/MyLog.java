@@ -13,7 +13,7 @@ public class MyLog {
     public static final String USER_TAG = "user";
     public static final String STATUS_VIEW_TAG = "status_view";
     public static final String UTIL_TAG = "weibo_util";
-    public static final String WIDGET_TAG = "widget";
+    public static final String WIDGET_TAG = "view_widget";
     public static final String MAIN_TAG = "main";
     public static final String STATUS_DETAIL = "status_detail";
     public static final String Image = "big_image";

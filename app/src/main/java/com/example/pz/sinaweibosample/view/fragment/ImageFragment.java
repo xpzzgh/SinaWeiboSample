@@ -86,7 +86,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener, Vie
         image.setController(draweeController);
         MyLog.v(MyLog.Image, "加载大图：" + imageUrl);
         image.setOnClickListener(this);
-        image.setOnTouchListener(this);
+//        image.setOnTouchListener(this);
 
     }
 

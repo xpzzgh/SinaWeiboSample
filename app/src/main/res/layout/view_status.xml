@@ -19,12 +19,12 @@
 
         <include layout="@layout/view_head_status" />
 
-        <TextView
+        <com.example.pz.sinaweibosample.view.widget.PlexTextView
             android:id="@+id/text_status_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:text="这条微博是测试微博，屌不屌，就问你屌不屌，怕不怕是丢发给按时丢分撒都if个按时到覅顾！！！！！"
+            android:text="asd"
             android:textColor="@color/colorFont"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"/>

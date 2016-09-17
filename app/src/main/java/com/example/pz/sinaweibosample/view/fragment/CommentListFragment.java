@@ -15,9 +15,11 @@ import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.BaseFragment;
+import com.example.pz.sinaweibosample.http.status.StatusParamsHelper;
 import com.example.pz.sinaweibosample.model.entity.Comment;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.presenter.CommentListPresenter;
+import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.view.adapter.CommentListAdapter;
 import com.example.pz.sinaweibosample.view.iview.ICommentListView;
@@ -132,6 +134,12 @@ public class CommentListFragment extends BaseFragment<CommentListPresenter> impl
             comments.addAll(commentList);
         }
         commentListAdapter.notifyDataSetChanged();
+        //如果请求到的数目小于请求的数目，那么去掉加载更多的监听
+        if(commentList.size() < StatusParamsHelper.COMMENT_COUNT_PER_REQUEST) {
+            commentListRecycler.setLoadMoreListener(null);
+        }else {
+            commentListRecycler.setLoadMoreListener(this);
+        }
     }
 
     @Override

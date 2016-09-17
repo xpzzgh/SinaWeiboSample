@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.example.pz.sinaweibosample.util.MyLog;
+
 /**
  * Created by pz on 2016/9/15.
  */
@@ -54,6 +56,8 @@ public class LoadMoreRecyclerView extends RecyclerView {
         }
     }
 
+
+
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
@@ -62,6 +66,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
             int lastItem = layoutManager.findLastVisibleItemPosition();
             int itemCount = layoutManager.getItemCount();
             if(lastItem == (itemCount-1) && listener != null) {
+                MyLog.v(MyLog.WIDGET_TAG, "要加载更多了！！！！");
                 listener.loadMore();
             }
         }
