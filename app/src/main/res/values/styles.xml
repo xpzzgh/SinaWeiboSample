@@ -7,10 +7,14 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowEnterTransition">@transition/explode_activity</item>
-        <item name="android:windowExitTransition">@transition/explode_activity</item>
-        <item name="android:windowSharedElementEnterTransition">@transition/changebounds_default</item>
-        <item name="android:windowSharedElementExitTransition">@transition/changebounds_default</item>
+        <!--<item name="android:windowEnterTransition">@transition/fade_activity</item>-->
+        <!--<item name="android:windowExitTransition">@transition/fade_activity</item>-->
+        <item name="android:windowReenterTransition">@null</item>
+        <!--<item name="android:windowSharedElementEnterTransition">@transition/changebounds_default</item>-->
+        <!--<item name="android:windowSharedElementExitTransition">@transition/changebounds_default</item>-->
+        <item name="android:windowSharedElementReturnTransition">@transition/changebounds_default</item>
+        <item name="android:windowSharedElementReenterTransition">@null</item>
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>
     </style>
 
     <style name="MyTheme.User">

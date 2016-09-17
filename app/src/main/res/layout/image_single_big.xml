@@ -5,8 +5,8 @@
     android:id="@+id/image_single_big"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    fresco:actualImageScaleType="fitCenter"
     fresco:placeholderImage="@mipmap/a3"
-    fresco:placeholderImageScaleType="centerInside"
+    fresco:placeholderImageScaleType="fitCenter"
     fresco:failureImage="@mipmap/a5"
-    fresco:failureImageScaleType="fitCenter"/>
+    fresco:failureImageScaleType="fitCenter"
+    android:transitionName="@string/transition_image_big"/>

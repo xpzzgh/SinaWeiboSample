@@ -36,6 +36,9 @@
             android:theme="@style/MyTheme.User"></activity>
         <activity android:name=".view.activity.StatusDetailActivity"
             android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".view.activity.ImageActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

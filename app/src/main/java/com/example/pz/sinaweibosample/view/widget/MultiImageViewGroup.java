@@ -1,9 +1,12 @@
 package com.example.pz.sinaweibosample.view.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Animatable;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
+import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.Util;
+import com.example.pz.sinaweibosample.view.activity.ImageActivity;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
@@ -57,7 +62,7 @@ public class MultiImageViewGroup extends ViewGroup {
     Status status;
 
     List<String> imageList;
-    List<String> bigImageList;
+    ArrayList<String> bigImageList;
 
     public MultiImageViewGroup(Context context) {
         this(context, null, 0);
@@ -211,7 +216,7 @@ public class MultiImageViewGroup extends ViewGroup {
     public void setData(Status status) {
         this.status = status;
         imageList = Util.getPriorityImagesUris(this.status, Constant.SMALL_IMAGE);
-        bigImageList = Util.getPriorityImagesUris(this.status, Constant.LARGE_IMAGE);
+        bigImageList = (ArrayList<String>) Util.getPriorityImagesUris(this.status, Constant.MEDIUM_IMAGE);
         if(imageList.size() == 1) {
             imageList = Util.getPriorityImagesUris(this.status, Constant.MEDIUM_IMAGE);
         }
@@ -250,10 +255,19 @@ public class MultiImageViewGroup extends ViewGroup {
 
             singleImage.setController(controller);
             singleImage.setMinimumWidth(Util.dpToPx((int)(getResources().getDimension(R.dimen.width_image_place_little)), context));
-            singleImage.setTag(bigImageList.get(i));
+            singleImage.setTag(i);
             singleImage.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Intent intent = new Intent(context, ImageActivity.class);
+                    intent.putExtra("current_item", (int)view.getTag());
+                    intent.putStringArrayListExtra("url_list", bigImageList);
+                    intent.putStringArrayListExtra("url_small_list", (ArrayList<String>) imageList);
+                    String transitionName = context.getString(R.string.transition_image_big);
+                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(ActivityManager.instanceOf().getCurrentActivity())
+                            .toBundle();
+//                    .makeSceneTransitionAnimation(ActivityManager.instanceOf().getCurrentActivity(), view, transitionName)
+                    context.startActivity(intent, bundle);
                     Toast.makeText(context, "点击了大图地址为" + view.getTag() + "的图片！", Toast.LENGTH_LONG).show();
                 }
             });
@@ -283,6 +297,7 @@ public class MultiImageViewGroup extends ViewGroup {
         public void onClick(View view) {
             status.getAttitudes_count();
             Toast.makeText(context, "点击了第" + i + "张图片！", Toast.LENGTH_LONG).show();
+
         }
     }
 }

@@ -220,8 +220,10 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 if(user != null && !user.getId().isEmpty()) {
                     Intent intent = new Intent(this, UserActivity.class);
                     intent.putExtra(Constant.USER, user);
-                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle();
-//                    String transitionName = getString(R.string.transition_image_head);
+                    String transitionName = getString(R.string.transition_image_head);
+                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+                            .toBundle();
+//                    .makeSceneTransitionAnimation(this, userHeadDrawee, transitionName)
 //                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, userHeadDrawee, transitionName).toBundle();
                     startActivity(intent, bundle);
 //                    overridePendingTransition(R.transition.fade_activity, R.transition.explode_activity);

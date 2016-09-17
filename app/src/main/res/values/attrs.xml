@@ -27,5 +27,10 @@
             <enum name="comment" value="2" />
         </attr>
     </declare-styleable>
+    
+    <declare-styleable name="PointProgressBar">
+        <attr name="pointWidth" format="dimension" />
+        <attr name="pointGapWidth" format="dimension" />
+    </declare-styleable>
 
 </resources>

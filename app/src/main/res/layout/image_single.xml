@@ -8,6 +8,7 @@
     fresco:actualImageScaleType="centerCrop"
     fresco:placeholderImage="@mipmap/a3"
     fresco:placeholderImageScaleType="centerCrop"
-    fresco:retryImage="@mipmap/a4">
+    fresco:retryImage="@mipmap/a4"
+    android:transitionName="@string/transition_image_big">
 
     </com.facebook.drawee.view.SimpleDraweeView>
