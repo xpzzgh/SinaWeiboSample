@@ -11,11 +11,12 @@
     android:paddingRight="5dp"
     android:paddingTop="10dp">
 
-    <TextView
+    <com.example.pz.sinaweibosample.view.widget.PlexTextView
         android:id="@+id/text_body_relay_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        custom:emojiWidth="14sp"
         android:textColor="@color/colorFont"
         android:maxLines="10"
         android:ellipsize="end"

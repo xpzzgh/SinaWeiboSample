@@ -77,7 +77,7 @@ public class CommentItemView extends RelativeLayout {
             commentAuthorText.setText(comment.getUser().getName());
             commentTimeText.setText(Util.timeFormatFromUTC(comment.getCreated_at()));
             commentClientText.setText(Html.fromHtml(comment.getSource()));
-            commentContentText.setText(pieceCommentContent());
+            commentContentText.setText(comment.getText());
             commentHeadImage.setImageURI(comment.getUser().getAvatar_large());
         }
     }

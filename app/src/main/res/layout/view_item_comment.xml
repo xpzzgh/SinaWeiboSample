@@ -2,6 +2,7 @@
 <com.example.pz.sinaweibosample.view.widget.CommentItemView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/view_item_comment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -67,7 +68,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
+    <com.example.pz.sinaweibosample.view.widget.PlexTextView
         android:id="@+id/text_content_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,6 +78,7 @@
         android:layout_alignLeft="@+id/text_author_comment"
         android:text="评论内容"
         android:textColor="@color/colorFont"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        custom:emojiWidth="14sp"/>
 
 </com.example.pz.sinaweibosample.view.widget.CommentItemView>

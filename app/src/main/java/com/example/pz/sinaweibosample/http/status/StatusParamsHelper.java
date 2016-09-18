@@ -1,5 +1,7 @@
 package com.example.pz.sinaweibosample.http.status;
 
+import android.support.annotation.Nullable;
+
 import com.example.pz.sinaweibosample.oauth.AccessTokenKeeper;
 
 import java.util.HashMap;
@@ -64,5 +66,15 @@ public class StatusParamsHelper {
         params.put("count", COMMENT_COUNT_PER_REQUEST + "");
         params.put("page", page+"");
         return params;
+    }
+
+    public static Map<String, String> getEmotionParams(@Nullable String type) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("access_token", AccessTokenKeeper.readToken().getToken());
+        if(type != null) {
+            params.put("type", type);
+        }
+        return params;
+
     }
 }

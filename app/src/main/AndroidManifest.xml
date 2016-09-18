@@ -16,16 +16,17 @@
         android:name=".base.MyApplication"
         android:theme="@style/MyTheme">
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name=".view.activity.IndexActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="adjustResize"
@@ -35,7 +36,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyTheme.User"></activity>
         <activity android:name=".view.activity.StatusDetailActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"></activity>
 
         <activity android:name=".view.activity.ImageActivity"
             android:screenOrientation="portrait"></activity>

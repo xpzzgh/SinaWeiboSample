@@ -1,15 +1,20 @@
 package com.example.pz.sinaweibosample.view.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
-import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,11 +23,10 @@ import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.util.MyLog;
+import com.example.pz.sinaweibosample.util.Util;
+import com.example.pz.sinaweibosample.view.util.Emoticons;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,9 +40,14 @@ public class PlexTextView extends TextView {
 //    OnNotifySpanClickListener onNotifySpanClickListener;
     BufferType bufferType;
     CharSequence text;
-    SpannableString spannableString;
-    private final static String notifyPatternString = "@[^ |:|@]+?[ |:]";
+    SpannableStringBuilder spannableStringBuild;
+    int emojiWidth;
+
+    private final static String notifyPatternString = "@[^ |:|@|,|，|。|！|？]+?[ |:|,|，|。|！|？]";
     private final static String topicPatternString = "#[^#]+?#";
+    private final static String emojiPatternString = "\\[\\S+?\\]";
+    private final static String urlPatternString = "http://[a-zA-Z0-9+&@#/%?=~_\\-|!:,\\.;]*[a-zA-Z0-9+&@#/%=~_|]";
+    private final static String allPatternString = "(" + notifyPatternString + ")" + "|" + "(" + topicPatternString + ")" + "|" + "(" + emojiPatternString + ")" + "|" + "(" + urlPatternString + ")";
     List<String> asd;
 
 
@@ -52,8 +61,13 @@ public class PlexTextView extends TextView {
 
     public PlexTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         this.context = context;
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PlexTextView, 0, 0);
+        try {
+            emojiWidth = a.getDimensionPixelSize(R.styleable.PlexTextView_emojiWidth, Util.spToPx(15, context));
+        }finally {
+            a.recycle();
+        }
     }
 
     @Override
@@ -74,12 +88,83 @@ public class PlexTextView extends TextView {
     }
 
     private void setText() {
-        spannableString = new SpannableString(text);
-        handleNotifyText();
-        handleTopicText();
-        super.setText(spannableString, bufferType);
+        spannableStringBuild = new SpannableStringBuilder(text);
+        handleAll();
+        super.setText(spannableStringBuild, bufferType);
         setMovementMethod(new LinkTouchMovementMethod());
         setHighlightColor(Color.TRANSPARENT);
+    }
+
+    void handleAll() {
+        Pattern pattern = Pattern.compile(allPatternString);
+        Matcher matcher = pattern.matcher(text);
+//        String asf;
+        //1 @ 2 ## 3 emoji 4 url
+        while (matcher.find()) {
+            if(matcher.group(1) != null) {
+                final int start = matcher.start();
+                final int stop = matcher.end() - 1;
+                TouchableSpan touchableSpan = new TouchableSpan(getResources().getColor(R.color.colorPrimary),
+                        getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorLightGray)) {
+                    @Override
+                    public void onClick(View view) {
+                        CharSequence clickedText = text.subSequence(start, stop);
+                        Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
+                    }
+                };
+                spannableStringBuild.setSpan(touchableSpan, start, stop, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }else if(matcher.group(2) != null) {
+                final int start = matcher.start();
+                final int stop = matcher.end();
+                TouchableSpan touchableSpan = new TouchableSpan(getResources().getColor(R.color.colorPrimary),
+                        getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorLightGray)) {
+                    @Override
+                    public void onClick(View view) {
+                        CharSequence clickedText = text.subSequence(start, stop);
+                        Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
+                    }
+                };
+                spannableStringBuild.setSpan(touchableSpan, start, stop, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }else if(matcher.group(3) != null) {
+                final int start = matcher.start();
+                final int stop = matcher.end();
+                String emojiName = Emoticons.getImgName(matcher.group(3));
+                if(emojiName != null && !emojiName.isEmpty()) {
+                    int resId = context.getResources().getIdentifier(emojiName, "drawable", context.getPackageName());
+                    Drawable emojiDrawable = context.getResources().getDrawable(resId);
+                    emojiDrawable.setBounds(0, 0, emojiWidth, emojiWidth);
+                    ImageSpan imageSpan = new ImageSpan(emojiDrawable, ImageSpan.ALIGN_BOTTOM) {
+
+                        @Override
+                        public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+                            Drawable b = getDrawable();
+                            canvas.save();
+                            int transY = bottom - b.getBounds().bottom;
+                            transY -= paint.getFontMetricsInt().descent / 2;
+                            canvas.translate(x, transY);
+                            b.draw(canvas);
+                            canvas.restore();
+                        }
+                    };
+                    spannableStringBuild.setSpan(imageSpan, start, stop, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }else if(matcher.group(4) != null) {
+                final String url = matcher.group(4);
+                final String replaceStr = "☞网页链接";
+                final int start = matcher.start();
+                final int stop = matcher.end();
+                spannableStringBuild.replace(start, stop, replaceStr);
+                TouchableSpan touchableSpan = new TouchableSpan(getResources().getColor(R.color.colorPrimary),
+                        getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorLightGray)) {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
+                    }
+                };
+
+                spannableStringBuild.setSpan(touchableSpan, start, start + replaceStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
     }
 
     void handleNotifyText() {
@@ -114,7 +199,7 @@ public class PlexTextView extends TextView {
                     Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
                 }
             };
-            spannableString.setSpan(touchableSpan, start, stop - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableStringBuild.setSpan(touchableSpan, start, stop - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
 
@@ -134,7 +219,7 @@ public class PlexTextView extends TextView {
 //                    ds.setUnderlineText(false);
 //                }
 //            };
-//            spannableString.setSpan(clickableSpan, Integer.parseInt(indexMap.get("start")),
+//            spannableStringBuild.setSpan(clickableSpan, Integer.parseInt(indexMap.get("start")),
 //                    Integer.parseInt(indexMap.get("stop")), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        }
     }
@@ -152,20 +237,6 @@ public class PlexTextView extends TextView {
             final int start = matcher.start();
             final int stop = matcher.end();
             startIndex = stop;
-
-//            ClickableSpan clickableSpan = new ClickableSpan() {
-//                @Override
-//                public void onClick(View view) {
-//                    CharSequence clickedText = text.subSequence(start, stop);
-//                    Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
-//                }
-//
-//                @Override
-//                public void updateDrawState(TextPaint ds) {
-//                    super.updateDrawState(ds);
-//                    ds.setUnderlineText(false);
-//                }
-//            };
             TouchableSpan touchableSpan = new TouchableSpan(getResources().getColor(R.color.colorPrimary),
                     getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorLightGray)) {
                 @Override
@@ -174,7 +245,7 @@ public class PlexTextView extends TextView {
                     Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
                 }
             };
-            spannableString.setSpan(touchableSpan, start, stop, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableStringBuild.setSpan(touchableSpan, start, stop, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 
@@ -239,6 +310,7 @@ public class PlexTextView extends TextView {
         private int mPressedBackgroundColor;
         private int mNormalTextColor;
         private int mPressedTextColor;
+        int orignalBgColor;
 
         public TouchableSpan(int normalTextColor, int pressedTextColor, int pressedBackgroundColor) {
             mNormalTextColor = normalTextColor;
@@ -253,8 +325,12 @@ public class PlexTextView extends TextView {
         @Override
         public void updateDrawState(TextPaint ds) {
             super.updateDrawState(ds);
+
+            if(orignalBgColor == 0) {
+                orignalBgColor = ds.bgColor;
+            }
             ds.setColor(mIsPressed ? mPressedTextColor : mNormalTextColor);
-            ds.bgColor = mIsPressed ? mPressedBackgroundColor : getResources().getColor(android.support.v7.appcompat.R.color.background_material_light);
+            ds.bgColor = mIsPressed ? mPressedBackgroundColor : orignalBgColor;
             ds.setUnderlineText(false);
         }
     }

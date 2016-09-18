@@ -40,6 +40,11 @@ public class Util {
         return px;
     }
 
+    public static int spToPx(int sp, Context context) {
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
+        return px;
+    }
+
     /**
      * 根据图片模式（大图、中图、小图），获取图片地址。
      * 优先选择匹配模式，如果没有，则找偏大的图，最后找偏小的图。

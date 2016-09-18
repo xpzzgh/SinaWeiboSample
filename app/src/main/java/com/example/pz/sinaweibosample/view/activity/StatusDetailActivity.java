@@ -1,5 +1,6 @@
 package com.example.pz.sinaweibosample.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -9,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
@@ -63,6 +65,12 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
         status = (Status)getIntent().getSerializableExtra("status");
         super.onCreate(savedInstanceState);
 //        initData();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Toast.makeText(this, "点击了转发消息", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -2,10 +2,12 @@ package com.example.pz.sinaweibosample.http.status;
 
 
 import com.example.pz.sinaweibosample.model.entity.CommentList;
+import com.example.pz.sinaweibosample.model.entity.Emotion;
 import com.example.pz.sinaweibosample.model.entity.RelayList;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.model.entity.StatusList;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.http.GET;
@@ -35,4 +37,7 @@ public interface StatusesRetrofit {
 
     @GET("statuses/repost_timeline.json")
     Observable<RelayList> getRalays(@QueryMap Map<String ,String> params);
+
+    @GET("emotions.json")
+    Observable<List<Emotion>> getEmotions(@QueryMap Map<String, String> params);
 }
