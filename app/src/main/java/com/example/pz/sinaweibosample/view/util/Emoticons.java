@@ -151,7 +151,7 @@ public class Emoticons {
         emojiMap.put("[神马]", "shenma");
         emojiMap.put("[微风]", "w_weifeng");
         emojiMap.put("[下雨]", "w_xiayu");
-        emojiMap.put("[色]", "huaxin");
+        emojiMap.put("[色]", "d_huaxin");
         emojiMap.put("[沙尘暴]", "w_shachenbao");
         emojiMap.put("[落叶]", "w_luoye");
         emojiMap.put("[雪人]", "w_xueren");

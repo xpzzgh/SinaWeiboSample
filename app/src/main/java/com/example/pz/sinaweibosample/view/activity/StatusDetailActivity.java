@@ -67,11 +67,11 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
 //        initData();
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Toast.makeText(this, "点击了转发消息", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        Toast.makeText(this, "点击了转发消息", Toast.LENGTH_SHORT).show();
+//    }
 
     @Override
     public void setTitle() {

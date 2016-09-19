@@ -36,8 +36,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyTheme.User"></activity>
         <activity android:name=".view.activity.StatusDetailActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"></activity>
+            android:screenOrientation="portrait"></activity>
 
         <activity android:name=".view.activity.ImageActivity"
             android:screenOrientation="portrait"></activity>

@@ -80,6 +80,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
             unbinder.unbind();  //butterKnife 解绑
         }
         MyLog.v(MyLog.BASE_TAG, this.getLocalClassName() + ": OnDestroy");
+        presenter = null;
         activityManager.finishActivity(this); //将要destroy的activity移出堆栈
         super.onDestroy();
     }

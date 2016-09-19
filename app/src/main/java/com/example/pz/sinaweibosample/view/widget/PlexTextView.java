@@ -13,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.method.Touch;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
@@ -42,8 +43,10 @@ public class PlexTextView extends TextView {
     CharSequence text;
     SpannableStringBuilder spannableStringBuild;
     int emojiWidth;
+    boolean linkHit;
+    boolean dontConsumeNonUrlClicks = true;
 
-    private final static String notifyPatternString = "@[^ |:|@|,|，|。|！|？]+?[ |:|,|，|。|！|？]";
+    private final static String notifyPatternString = "@[^ |:|@|,|，|。|！|？|：]+?[ |:|,|，|。|！|？|：]";
     private final static String topicPatternString = "#[^#]+?#";
     private final static String emojiPatternString = "\\[\\S+?\\]";
     private final static String urlPatternString = "http://[a-zA-Z0-9+&@#/%?=~_\\-|!:,\\.;]*[a-zA-Z0-9+&@#/%=~_|]";
@@ -83,7 +86,7 @@ public class PlexTextView extends TextView {
     @Override
     public void setText(CharSequence text, BufferType type) {
         bufferType = type;
-        this.text = text;
+        this.text = text + " ";
         setText();
     }
 
@@ -100,36 +103,39 @@ public class PlexTextView extends TextView {
         Matcher matcher = pattern.matcher(text);
 //        String asf;
         //1 @ 2 ## 3 emoji 4 url
+        int reduceCount = 0;
         while (matcher.find()) {
             if(matcher.group(1) != null) {
-                final int start = matcher.start();
-                final int stop = matcher.end() - 1;
+                final String notifyName = matcher.group(1);
+                final int start = matcher.start() - reduceCount;
+                final int stop = matcher.end() - 1 - reduceCount;
                 TouchableSpan touchableSpan = new TouchableSpan(getResources().getColor(R.color.colorPrimary),
                         getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorLightGray)) {
                     @Override
                     public void onClick(View view) {
-                        CharSequence clickedText = text.subSequence(start, stop);
-                        Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, notifyName, Toast.LENGTH_SHORT).show();
                     }
                 };
                 spannableStringBuild.setSpan(touchableSpan, start, stop, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }else if(matcher.group(2) != null) {
-                final int start = matcher.start();
-                final int stop = matcher.end();
+                final String topicName = matcher.group(2);
+                final int start = matcher.start() - reduceCount;
+                final int stop = matcher.end() - reduceCount;
                 TouchableSpan touchableSpan = new TouchableSpan(getResources().getColor(R.color.colorPrimary),
                         getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorLightGray)) {
                     @Override
                     public void onClick(View view) {
-                        CharSequence clickedText = text.subSequence(start, stop);
-                        Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, topicName, Toast.LENGTH_SHORT).show();
                     }
                 };
+//                MyLog.e(MyLog.WIDGET_TAG, "start: " + start + ", stop: " + stop);
                 spannableStringBuild.setSpan(touchableSpan, start, stop, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }else if(matcher.group(3) != null) {
-                final int start = matcher.start();
-                final int stop = matcher.end();
+                final int start = matcher.start() - reduceCount;
+                final int stop = matcher.end() - reduceCount;
                 String emojiName = Emoticons.getImgName(matcher.group(3));
                 if(emojiName != null && !emojiName.isEmpty()) {
+                    MyLog.e(MyLog.WIDGET_TAG, emojiName);
                     int resId = context.getResources().getIdentifier(emojiName, "drawable", context.getPackageName());
                     Drawable emojiDrawable = context.getResources().getDrawable(resId);
                     emojiDrawable.setBounds(0, 0, emojiWidth, emojiWidth);
@@ -151,9 +157,10 @@ public class PlexTextView extends TextView {
             }else if(matcher.group(4) != null) {
                 final String url = matcher.group(4);
                 final String replaceStr = "☞网页链接";
-                final int start = matcher.start();
-                final int stop = matcher.end();
+                final int start = matcher.start() - reduceCount;
+                final int stop = matcher.end() - reduceCount;
                 spannableStringBuild.replace(start, stop, replaceStr);
+                reduceCount += (url.length() - replaceStr.length());
                 TouchableSpan touchableSpan = new TouchableSpan(getResources().getColor(R.color.colorPrimary),
                         getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorLightGray)) {
                     @Override
@@ -249,35 +256,117 @@ public class PlexTextView extends TextView {
         }
     }
 
+    @Override
+    public boolean hasFocusable() {
+        return false;
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        MyLog.v(MyLog.WIDGET_TAG, "textView OnTouchEvent 執行！！");
+       linkHit = false;
+       boolean res = super.onTouchEvent(event);
+
+       if (dontConsumeNonUrlClicks)
+            return linkHit;
+       return res;
+    }
 
     private class LinkTouchMovementMethod extends LinkMovementMethod {
         private TouchableSpan mPressedSpan;
 
+//        @Override
+//        public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent event) {
+//
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                mPressedSpan = getPressedSpan(textView, spannable, event);
+//                if (mPressedSpan != null) {
+//                    mPressedSpan.setPressed(true);
+//                    Selection.setSelection(spannable, spannable.getSpanStart(mPressedSpan),
+//                            spannable.getSpanEnd(mPressedSpan));
+//                }
+//            } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//                TouchableSpan touchedSpan = getPressedSpan(textView, spannable, event);
+//                if (mPressedSpan != null && touchedSpan != mPressedSpan) {
+//                    mPressedSpan.setPressed(false);
+//                    mPressedSpan = null;
+//                    Selection.removeSelection(spannable);
+//                }
+//            } else {
+//                if (mPressedSpan != null) {
+//                    mPressedSpan.setPressed(false);
+//                    super.onTouchEvent(textView, spannable, event);
+//                }
+//                Selection.removeSelection(spannable);
+//                mPressedSpan = null;
+//            }
+//            return true;
+//        }
+
         @Override
         public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+            int action = event.getAction();
+            if(action == MotionEvent.ACTION_DOWN) {
                 mPressedSpan = getPressedSpan(textView, spannable, event);
-                if (mPressedSpan != null) {
+            }
+            if(mPressedSpan != null) {
+                if(action == MotionEvent.ACTION_DOWN) {
                     mPressedSpan.setPressed(true);
                     Selection.setSelection(spannable, spannable.getSpanStart(mPressedSpan),
                             spannable.getSpanEnd(mPressedSpan));
-                }
-            } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                TouchableSpan touchedSpan = getPressedSpan(textView, spannable, event);
-                if (mPressedSpan != null && touchedSpan != mPressedSpan) {
-                    mPressedSpan.setPressed(false);
+                }else if (action == MotionEvent.ACTION_MOVE) {
+                    TouchableSpan touchedSpan = getPressedSpan(textView, spannable, event);
+                    if (touchedSpan != mPressedSpan) {
+                        mPressedSpan.setPressed(false);
+                        mPressedSpan = null;
+                        Selection.removeSelection(spannable);
+                    }
+                }else {
+//                    mPressedSpan.onClick(textView);
+                    if (mPressedSpan != null) {
+                        mPressedSpan.setPressed(false);
+                        MyLog.v(MyLog.WIDGET_TAG, "super OnTouchEvent 執行！！");
+                        super.onTouchEvent(textView, spannable, event);
+                    }
                     mPressedSpan = null;
                     Selection.removeSelection(spannable);
                 }
-            } else {
-                if (mPressedSpan != null) {
-                    mPressedSpan.setPressed(false);
-                    super.onTouchEvent(textView, spannable, event);
-                }
-                mPressedSpan = null;
+                linkHit = true;
+                return true;
+            }else {
+                linkHit = false;
                 Selection.removeSelection(spannable);
+                MyLog.v(MyLog.WIDGET_TAG, "else OnTouchEvent 执行！！");
+                Touch.onTouchEvent(textView, spannable, event);
+                return false;
             }
-            return true;
+
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                mPressedSpan = getPressedSpan(textView, spannable, event);
+//                if (mPressedSpan != null) {
+//                    mPressedSpan.setPressed(true);
+//                    Selection.setSelection(spannable, spannable.getSpanStart(mPressedSpan),
+//                            spannable.getSpanEnd(mPressedSpan));
+//                }
+//            } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//                TouchableSpan touchedSpan = getPressedSpan(textView, spannable, event);
+//                if (mPressedSpan != null && touchedSpan != mPressedSpan) {
+//                    mPressedSpan.setPressed(false);
+//                    mPressedSpan = null;
+//                    Selection.removeSelection(spannable);
+//                }
+//            } else {
+//                if (mPressedSpan != null) {
+//                    mPressedSpan.setPressed(false);
+//                    super.onTouchEvent(textView, spannable, event);
+//                }
+//                Selection.removeSelection(spannable);
+//                mPressedSpan = null;
+//            }
+//
+//            return true;
         }
 
         private TouchableSpan getPressedSpan(TextView textView, Spannable spannable, MotionEvent event) {

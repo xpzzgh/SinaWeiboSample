@@ -11,6 +11,7 @@ import android.view.View;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.model.entity.Emotion;
+import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.PrefUtil;
 
 import rx.Subscription;
@@ -45,6 +46,9 @@ public class IndexActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        MyLog.v(MyLog.UTIL_TAG, "最大可用内存为：" + maxMemory);
 
 //        initData();
         new Thread(new Runnable() {
