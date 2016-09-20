@@ -4,17 +4,16 @@ import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.model.entity.Comment;
 import com.example.pz.sinaweibosample.model.entity.Status;
-import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.Util;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
 
 /**
  * Created by pz on 2016/9/14.
@@ -28,9 +27,10 @@ public class CommentItemView extends RelativeLayout {
 
     TextView commentAuthorText;
     TextView commentTimeText;
-    SimpleDraweeView commentHeadImage;
+    ImageView commentHeadImage;
     TextView commentClientText;
     TextView commentContentText;
+    ImageView commentHeadVImage;
 
     public CommentItemView(Context context) {
         this(context, null, 0);
@@ -57,7 +57,8 @@ public class CommentItemView extends RelativeLayout {
     private void initView() {
         commentAuthorText = (TextView) this.findViewById(R.id.text_author_comment);
         commentTimeText = (TextView) this.findViewById(R.id.text_time_comment);
-        commentHeadImage = (SimpleDraweeView) this.findViewById(R.id.image_head_comment);
+        commentHeadImage = (ImageView) this.findViewById(R.id.image_head_comment);
+        commentHeadVImage = (ImageView) this.findViewById(R.id.image_v_comment_head);
         /**
          * 使链接文本可点击
          */
@@ -78,7 +79,22 @@ public class CommentItemView extends RelativeLayout {
             commentTimeText.setText(Util.timeFormatFromUTC(comment.getCreated_at()));
             commentClientText.setText(Html.fromHtml(comment.getSource()));
             commentContentText.setText(comment.getText());
-            commentHeadImage.setImageURI(comment.getUser().getAvatar_large());
+            Glide.with(context)
+                    .load(comment.getUser().getAvatar_large())
+                    .asBitmap()
+                    .transform(new GlideCircleTransform(context))
+                    .into(commentHeadImage);
+            if(comment.getUser().isVerified()) {
+                commentHeadVImage.setVisibility(VISIBLE);
+                if(comment.getUser().getVerified_type() == 3) {
+                    commentHeadVImage.setImageResource(R.drawable.ic_v_blue);
+                }else {
+                    commentHeadVImage.setImageResource(R.drawable.ic_v);
+                }
+            }else {
+                commentHeadVImage.setVisibility(GONE);
+            }
+//            commentHeadImage.setImageURI(comment.getUser().getAvatar_large());
         }
     }
 
@@ -93,7 +109,11 @@ public class CommentItemView extends RelativeLayout {
             commentTimeText.setText(Util.timeFormatFromUTC(status.getCreated_at()));
             commentClientText.setText(Html.fromHtml(status.getSource()));
             commentContentText.setText(status.getText());
-            commentHeadImage.setImageURI(status.getUser().getAvatar_large());
+            Glide.with(context)
+                    .load(status.getUser().getAvatar_large())
+                    .asBitmap()
+                    .transform(new GlideCircleTransform(context))
+                    .into(commentHeadImage);
         }
     }
 

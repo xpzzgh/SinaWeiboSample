@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.util.MyLog;
@@ -40,7 +42,7 @@ public class ImageFragment extends Fragment implements View.OnClickListener, Vie
     float dx = 0, dy = 0;
 
     @BindView(R.id.image_single_big)
-    SimpleDraweeView image;
+    ImageView image;
 
     public static ImageFragment instanceOf(String smallImageUrl, String imageUrl) {
         ImageFragment imageFragment = new ImageFragment();
@@ -64,28 +66,34 @@ public class ImageFragment extends Fragment implements View.OnClickListener, Vie
     }
 
     void init() {
-        GenericDraweeHierarchyBuilder builder =
-                new GenericDraweeHierarchyBuilder(getResources());
-        GenericDraweeHierarchy draweeHierarchy = builder
-                .setFadeDuration(500)
-                .setActualImageScaleType(new FitWidthScaleType())
-                .setProgressBarImage(new ProgressBarDrawable())
-                .build();
-        controllerListener = new BaseControllerListener() {
-
-        };
-        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                .setOldController(image.getController())
-                .setControllerListener(controllerListener)
-                .setLowResImageRequest(ImageRequest.fromUri(smallImageUrl))
-                .setImageRequest(ImageRequest.fromUri(imageUrl))
-                .build();
-//        .setPlaceholderImage(R.mipmap.a6, ScalingUtils.ScaleType.FIT_CENTER)
-//                .setFailureImage(R.mipmap.a5, ScalingUtils.ScaleType.FIT_CENTER)
-        image.setHierarchy(draweeHierarchy);
-        image.setController(draweeController);
+//        GenericDraweeHierarchyBuilder builder =
+//                new GenericDraweeHierarchyBuilder(getResources());
+//        GenericDraweeHierarchy draweeHierarchy = builder
+//                .setFadeDuration(500)
+//                .setActualImageScaleType(new FitWidthScaleType())
+//                .setProgressBarImage(new ProgressBarDrawable())
+//                .build();
+//        controllerListener = new BaseControllerListener() {
+//
+//        };
+//        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+//                .setOldController(image.getController())
+//                .setControllerListener(controllerListener)
+//                .setLowResImageRequest(ImageRequest.fromUri(smallImageUrl))
+//                .setImageRequest(ImageRequest.fromUri(imageUrl))
+//                .build();
+////        .setPlaceholderImage(R.mipmap.a6, ScalingUtils.ScaleType.FIT_CENTER)
+////                .setFailureImage(R.mipmap.a5, ScalingUtils.ScaleType.FIT_CENTER)
+//        image.setHierarchy(draweeHierarchy);
+//        image.setController(draweeController);
+        Glide.with(this)
+                .load(imageUrl)
+                .fitCenter()
+                .thumbnail(Glide.with(this).load(smallImageUrl))
+                .into(image);
         MyLog.v(MyLog.Image, "加载大图：" + imageUrl);
         image.setOnClickListener(this);
+
 //        image.setOnTouchListener(this);
 
     }

@@ -73,6 +73,8 @@ public class Status extends BaseObject{
 
     public boolean liked;
 
+    public int deleted;
+
     /**
      * 微博的可见性及指定可见分组信息。该 object 中 type 取值，
      * 0：普通微博，1：私密微博，3：指定分组微博，4：密友微博；
@@ -285,5 +287,13 @@ public class Status extends BaseObject{
 
     public void setLiked(boolean liked) {
         this.liked = liked;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
     }
 }

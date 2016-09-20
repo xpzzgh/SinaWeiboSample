@@ -3,6 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/image_single_big" />
+    <ImageView
+        android:id="@+id/image_single_big"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:transitionName="@string/transition_image_big"/>
 
 </FrameLayout>

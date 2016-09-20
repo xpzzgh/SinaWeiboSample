@@ -3,7 +3,7 @@ package com.example.pz.sinaweibosample.view.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Animatable;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -11,8 +11,14 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.model.entity.Status;
@@ -20,15 +26,14 @@ import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.Util;
 import com.example.pz.sinaweibosample.view.activity.ImageActivity;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
+import com.example.pz.sinaweibosample.view.util.CustomBitMapImageViewTarget;
 import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -53,7 +58,7 @@ public class MultiImageViewGroup extends ViewGroup {
     /**
      * 定义的固定高度，单图模式下显示的图片高度
      */
-    private int fixedHeight;
+    private int heightMax;
 
     Context context;
 
@@ -81,7 +86,7 @@ public class MultiImageViewGroup extends ViewGroup {
             widthPerImage = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_width_per_image, Util.dpToPx(80, context));
             widthImageGap = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_width_image_gap, Util.dpToPx(10, context));
             widthMax = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_width_max, Util.dpToPx(230, context));
-            fixedHeight = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_height_image_fixed, Util.dpToPx(150, context));
+            heightMax = a.getDimensionPixelSize(R.styleable.MultiImageViewGroup_height_max, Util.dpToPx(150, context));
         }finally {
             //回收TypedArray
             a.recycle();
@@ -92,7 +97,7 @@ public class MultiImageViewGroup extends ViewGroup {
         if (imageInfo != null && singleImage != null) {
             if(imageInfo instanceof ImageInfo) {
                 ImageInfo info = (ImageInfo)imageInfo;
-                singleImage.getLayoutParams().height = fixedHeight;
+                singleImage.getLayoutParams().height = heightMax;
                 singleImage.setAspectRatio((float) info.getWidth() / info.getHeight());
             }
         }
@@ -129,11 +134,8 @@ public class MultiImageViewGroup extends ViewGroup {
         }else if(realViewCount == 1) {
             final View view = realViewList.get(0);
             int measuredWidth = view.getMeasuredWidth();
-            int measuredHeight = fixedHeight;
-            //当宽度大于定义的最大宽度时，将宽度设为定义的最大宽度
-            if(widthMax < measuredWidth) {
-                measuredWidth = widthMax;
-            }
+            int measuredHeight = view.getMeasuredHeight();
+            MyLog.v(MyLog.WIDGET_TAG, "算出来的宽度和最大宽度分别为：" + measuredWidth + ", " + maxWidth);
             maxWidth += measuredWidth;
             maxHeight += measuredHeight;
             childState = combineMeasuredStates(childState, view.getMeasuredState());
@@ -216,12 +218,11 @@ public class MultiImageViewGroup extends ViewGroup {
     public void setData(Status status) {
         this.status = status;
         imageList = Util.getPriorityImagesUris(this.status, Constant.SMALL_IMAGE);
-        bigImageList = (ArrayList<String>) Util.getPriorityImagesUris(this.status, Constant.MEDIUM_IMAGE);
+        bigImageList = (ArrayList<String>) Util.getPriorityImagesUris(this.status, Constant.LARGE_IMAGE);
         if(imageList.size() == 1) {
             imageList = Util.getPriorityImagesUris(this.status, Constant.MEDIUM_IMAGE);
         }
-//        List<String> imageList
-//        MyLog.v(MyLog.STATUS_VIEW_TAG, "为图片控件设置数据，一共有" + imageList.size() + "张图片！");
+
         if(getChildCount() != 0) {
             removeAllViews();
         }
@@ -229,76 +230,67 @@ public class MultiImageViewGroup extends ViewGroup {
 
         for(int i = 0; i<imageSize; i++) {
             String imageUri = imageList.get(i);
-            View view = LayoutInflater.from(context).inflate(R.layout.image_single, null, false);
-            final SimpleDraweeView singleImage = (SimpleDraweeView)view.findViewById(R.id.imageView_simple);
+            View imageView = LayoutInflater.from(context).inflate(R.layout.image_single, null, false);
+            final ImageView singleImage = (ImageView)imageView.findViewById(R.id.imageView_simple);
 
-            listener = new BaseControllerListener() {
-
-                @Override
-                public void onIntermediateImageSet(String id, Object imageInfo) {
-                    super.onIntermediateImageSet(id, imageInfo);
-                }
-
-                @Override
-                public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
-                    if(imageSize > 1) {
-                        updateViewSize(imageInfo, singleImage);
-                    }
-                }
-            };
-
-            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setOldController(singleImage.getController())
-                    .setUri(imageUri)
-                    .setTapToRetryEnabled(true)
-                    .setControllerListener(listener).build();
-
-            singleImage.setController(controller);
-            singleImage.setMinimumWidth(Util.dpToPx((int)(getResources().getDimension(R.dimen.width_image_place_little)), context));
-            singleImage.setTag(i);
+            if(imageSize == 1) {
+                Glide.with(context)
+                        .load(imageUri)
+                        .asBitmap()
+                        .centerCrop()
+                        .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                        .into(new SimpleTarget<Bitmap>(widthMax, heightMax) {
+                            @Override
+                            public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                                LayoutParams layoutParams = new LayoutParams(10, 10);
+                                float radio = (float) bitmap.getWidth() / (float) bitmap.getHeight();
+                                if (bitmap.getHeight() > heightMax) {
+                                    layoutParams.height = heightMax;
+                                    if ((layoutParams.width = (int) (heightMax * radio)) > widthMax) {
+                                        layoutParams.width = widthMax;
+                                    }
+                                }else if(bitmap.getWidth() > widthMax) {
+                                    layoutParams.width = widthMax;
+                                    if ((layoutParams.height = (int) (widthMax / radio)) > heightMax) {
+                                        layoutParams.height = heightMax;
+                                    }
+                                }else {
+                                    layoutParams.width = bitmap.getWidth();
+                                    layoutParams.height = bitmap.getHeight();
+                                }
+                                singleImage.setImageBitmap(bitmap);
+                                singleImage.setLayoutParams(layoutParams);
+                                singleImage.requestLayout();
+                            }
+                        });
+            }else {
+                Glide.with(context)
+                        .load(imageUri)
+                        .asBitmap()
+                        .centerCrop()
+                        .into(singleImage);
+            }
+            singleImage.setTag(R.id.image_tag, i);
             singleImage.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, ImageActivity.class);
-                    intent.putExtra("current_item", (int)view.getTag());
+                    intent.putExtra("current_item", (int)view.getTag(R.id.image_tag));
                     intent.putStringArrayListExtra("url_list", bigImageList);
                     intent.putStringArrayListExtra("url_small_list", (ArrayList<String>) imageList);
                     String transitionName = context.getString(R.string.transition_image_big);
-                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(ActivityManager.instanceOf().getCurrentActivity())
+                    Bundle bundle = ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(ActivityManager.instanceOf().getCurrentActivity())
                             .toBundle();
 //                    .makeSceneTransitionAnimation(ActivityManager.instanceOf().getCurrentActivity(), view, transitionName)
                     context.startActivity(intent, bundle);
-                    Toast.makeText(context, "点击了大图地址为" + view.getTag() + "的图片！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "点击了大图地址为" + view.getTag(R.id.image_tag) + "的图片！", Toast.LENGTH_LONG).show();
                 }
             });
             addView(singleImage);
         }
 
-//        int childCount = getChildCount();
-//        if(childCount > 0) {
-//            for(int i = 0; i<childCount; i++) {
-//                SimpleDraweeView image = (SimpleDraweeView) getChildAt(i);
-//                image.setOnClickListener(new ImageOnClickListener(i));
-//            }
-//        }
-
         MyLog.v(MyLog.STATUS_VIEW_TAG, "图片控件一共有：" + getChildCount() + "张图片");
-    }
-
-    public class ImageOnClickListener implements OnClickListener {
-
-        int i;
-
-        public ImageOnClickListener(int i) {
-            this.i = i;
-        }
-
-        @Override
-        public void onClick(View view) {
-            status.getAttitudes_count();
-            Toast.makeText(context, "点击了第" + i + "张图片！", Toast.LENGTH_LONG).show();
-
-        }
     }
 }
 

@@ -2,6 +2,7 @@ package com.example.pz.sinaweibosample.view.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.model.entity.User;
@@ -19,8 +21,10 @@ import com.example.pz.sinaweibosample.util.PrefUtil;
 import com.example.pz.sinaweibosample.util.Util;
 import com.example.pz.sinaweibosample.view.activity.StatusDetailActivity;
 import com.example.pz.sinaweibosample.view.activity.UserActivity;
+import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -40,7 +44,7 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
     Status relayStatus;
 
 //    @BindView(R.id.image_status_head)
-    SimpleDraweeView statusHeadImage;
+    ImageView statusHeadImage;
 //    @BindView(R.id.text_status_author)
     TextView statusAuthorText;
 //    @BindView(R.id.text_status_time_ago)
@@ -57,6 +61,8 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
     MultiImageViewGroup statusRelayMultiImagesView;
 //    @BindView(R.id.view_relay_status)
     RelayStatusView statusRelayView;
+
+    ImageView statusVHeadImage;
 //    @BindView(R.id.view_button_relay)
 //    View relayButtonView;
 ////    @BindView(R.id.view_button_comment)
@@ -114,7 +120,7 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
     }
 
     private void initView(View view) {
-        statusHeadImage = (SimpleDraweeView) view.findViewById(R.id.image_status_head);
+        statusHeadImage = (ImageView) view.findViewById(R.id.image_status_head);
         statusAuthorText = (TextView) view.findViewById(R.id.text_status_author);
         statusTimeAgoText = (TextView) view.findViewById(R.id.text_status_time_ago);
         statusClientFromText = (TextView) view.findViewById(R.id.text_client_from);
@@ -128,6 +134,7 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         relayDivider = (ImageView) view.findViewById(R.id.image_divider_relay_status);
         followImage = (ImageView) view.findViewById(R.id.image_follow);
         bottomOperateTabView = (BottomOperateTabView)view.findViewById(R.id.view_relay_comment_like_status);
+        statusVHeadImage = (ImageView) view.findViewById(R.id.image_v_status_head);
         statusRelayView.setOnClickListener(this);
         statusHeadImage.setOnClickListener(this);
         statusAuthorText.setOnClickListener(this);
@@ -259,7 +266,20 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         }else {
             statusTimeAgoText.setText("未知客户端");
         }
-        statusHeadImage.setImageURI(user.getAvatar_large());
+        Glide.with(context)
+                .load(user.getAvatar_large())
+                .asBitmap()
+                .transform(new GlideCircleTransform(context))
+                .into(statusHeadImage);
+        if(user.isVerified()) {
+            statusVHeadImage.setVisibility(VISIBLE);
+            statusVHeadImage.setImageResource(R.drawable.ic_v);
+            if(user.getVerified_type() == 3) {
+                statusVHeadImage.setImageResource(R.drawable.ic_v_blue);
+            }
+        }else {
+            statusVHeadImage.setVisibility(GONE);
+        }
         statusAuthorText.setText(user.getName());
         statusClientFromText.setText(Html.fromHtml(status.getSource()));
         if(user.getId().equals(PrefUtil.getUserInfo().getId())) {

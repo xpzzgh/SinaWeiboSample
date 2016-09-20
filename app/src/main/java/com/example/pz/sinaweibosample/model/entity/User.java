@@ -75,7 +75,9 @@ public class User extends BaseObject{
     public boolean geo_enabled;
     /** 是否是微博认证用户，即加V用户，true：是，false：否 */
     public boolean verified;
-    /** 暂未支持 */
+    /**
+     * 0 金色 3蓝色
+     */
     public int verified_type;
     /** 用户备注信息，只有在查询用户关系时才返回此字段 */
     public String remark;
@@ -407,5 +409,6 @@ public class User extends BaseObject{
     public void setWeihao(String weihao) {
         this.weihao = weihao;
     }
+
 
 }

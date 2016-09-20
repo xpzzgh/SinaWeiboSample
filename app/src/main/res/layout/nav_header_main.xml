@@ -12,13 +12,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <ImageView
         android:id="@+id/image_head"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        fresco:placeholderImage="@mipmap/james_2"
-        fresco:placeholderImageScaleType="centerCrop"
-        fresco:roundAsCircle="true"
         android:transitionName="@string/transition_image_head"/>
 
     <RelativeLayout

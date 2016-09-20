@@ -5,19 +5,19 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.TransitionInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.base.BaseActivity;
@@ -30,8 +30,8 @@ import com.example.pz.sinaweibosample.view.adapter.SimpleDivideAdapter;
 import com.example.pz.sinaweibosample.view.adapter.UserStatusAdapter;
 import com.example.pz.sinaweibosample.view.decoration.SimpleDecoration;
 import com.example.pz.sinaweibosample.view.iview.IUserView;
+import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
 import com.example.pz.sinaweibosample.view.widget.FabRecyclerView;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
@@ -73,7 +73,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
     @BindView(R.id.text_user_title)
     TextView mTitle;
     @BindView(R.id.image_user_head)
-    SimpleDraweeView mHeadDrawee;
+    ImageView mHeadImage;
     @BindView(R.id.list_user_statuses)
     FabRecyclerView userStatusesRecycler;
 
@@ -160,7 +160,12 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
     public void fillUserSimpleInfo(User user) {
         mUsername.setText(user.getName());
         mUserDescription.setText(user.getDescription());
-        mHeadDrawee.setImageURI(user.getAvatar_large());
+//        mHeadImage.setImageURI(user.getAvatar_large());
+        Glide.with(this)
+                .load(user.getAvatar_large())
+                .asBitmap()
+                .transform(new GlideCircleTransform(this))
+                .into(mHeadImage);
         mTitle.setText(user.getName());
     }
 

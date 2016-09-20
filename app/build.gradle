@@ -47,10 +47,10 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.8'
     compile "com.squareup.retrofit2:retrofit:${retrofit}"
-    compile "com.squareup.retrofit2:converter-gson:${retrofit}"
     //ConverterFactory的Gson依赖包
-    compile "com.squareup.retrofit2:adapter-rxjava:${retrofit}"
+    compile "com.squareup.retrofit2:converter-gson:${retrofit}"
     //CallAdapterFactory的Rx依赖包
+    compile "com.squareup.retrofit2:adapter-rxjava:${retrofit}"
     compile 'com.facebook.fresco:fresco:0.12.0'
     compile 'cat.ereza:customactivityoncrash:1.5.0'
     //时间处理库
@@ -59,4 +59,6 @@ dependencies {
     compile 'com.github.orangegangsters:swipy:1.2.3@aar'
     //动态fab
     compile 'com.getbase:floatingactionbutton:1.10.1'
+    //glide图片加载
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

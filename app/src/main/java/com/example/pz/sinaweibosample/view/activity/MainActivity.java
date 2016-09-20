@@ -1,6 +1,5 @@
 package com.example.pz.sinaweibosample.view.activity;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,8 +17,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.BaseActivity;
 import com.example.pz.sinaweibosample.model.entity.User;
@@ -31,7 +32,7 @@ import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.view.adapter.StatusListViewPagerAdapter;
 import com.example.pz.sinaweibosample.view.fragment.StatusListFragment;
 import com.example.pz.sinaweibosample.view.iview.IMainView;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -52,7 +53,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
     View navigationHeaderView;
     TextView usernameText;
     TextView userDescription;
-    SimpleDraweeView userHeadDrawee;
+    ImageView userHeadImage;
     User user;
     StatusListViewPagerAdapter statusListViewPagerAdapter;
 
@@ -108,8 +109,8 @@ public class MainActivity extends BaseActivity<MainPresenter>
         navigationHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         usernameText = (TextView)navigationHeaderView.findViewById(R.id.text_username);
         userDescription = (TextView)navigationHeaderView.findViewById(R.id.text_description);
-        userHeadDrawee = (SimpleDraweeView)navigationHeaderView.findViewById(R.id.image_head);
-        userHeadDrawee.setOnClickListener(this);
+        userHeadImage = (ImageView)navigationHeaderView.findViewById(R.id.image_head);
+        userHeadImage.setOnClickListener(this);
         loginButton = (Button)navigationHeaderView.findViewById(R.id.login_button);
         handleLoginButton();
         //设置actionBar
@@ -152,7 +153,12 @@ public class MainActivity extends BaseActivity<MainPresenter>
         this.user = user;
         usernameText.setText(user.getName());
         userDescription.setText(user.getDescription());
-        userHeadDrawee.setImageURI(user.getAvatar_large());
+        Glide.with(this)
+                .load(user.getAvatar_large())
+                .transform(new GlideCircleTransform(this))
+                .into(userHeadImage);
+
+//        userHeadImage.setImageURI(user.getAvatar_large());
     }
 
     @Override
@@ -223,8 +229,8 @@ public class MainActivity extends BaseActivity<MainPresenter>
                     String transitionName = getString(R.string.transition_image_head);
                     Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
                             .toBundle();
-//                    .makeSceneTransitionAnimation(this, userHeadDrawee, transitionName)
-//                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, userHeadDrawee, transitionName).toBundle();
+//.makeSceneTransitionAnimation(this, userHeadImage, transitionName)
+//                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, userHeadImage, transitionName).toBundle();
                     startActivity(intent, bundle);
 //                    overridePendingTransition(R.transition.fade_activity, R.transition.explode_activity);
                     //fade_in 表示下一个activity淡入，fade_out表示这个activity切换时淡出

@@ -56,17 +56,22 @@
         android:layout_toRightOf="@+id/text_from_comment"/>
 
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <ImageView
         android:id="@+id/image_head_comment"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        fresco:roundAsCircle="true"
-        fresco:actualImageScaleType="centerCrop"
         android:layout_marginRight="10dp"
-        fresco:placeholderImage="@mipmap/james_1"
-        fresco:placeholderImageScaleType="centerCrop"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:padding="2dp"/>
+    <ImageView
+        android:id="@+id/image_v_comment_head"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignBottom="@+id/image_head_comment"
+        android:layout_alignRight="@+id/image_head_comment"
+        android:background="@drawable/ic_circle"
+        android:padding="1dp"/>
 
     <com.example.pz.sinaweibosample.view.widget.PlexTextView
         android:id="@+id/text_content_comment"

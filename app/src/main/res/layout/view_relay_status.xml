@@ -31,7 +31,7 @@
         custom:width_per_image="@dimen/width_images_little"
         custom:width_image_gap="@dimen/gap_images_little"
         custom:width_max="@dimen/width_image_max_little"
-        custom:height_image_fixed="@dimen/height_image_place_little"
+        custom:height_max="@dimen/height_image_place_little"
         >
 
     </com.example.pz.sinaweibosample.view.widget.MultiImageViewGroup>
