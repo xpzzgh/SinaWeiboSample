@@ -264,7 +264,7 @@ public class PlexTextView extends TextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        MyLog.v(MyLog.WIDGET_TAG, "textView OnTouchEvent 執行！！");
+        MyLog.v(MyLog.WIDGET_TAG, "textView OnTouchEvent 执行！！");
        linkHit = false;
        boolean res = super.onTouchEvent(event);
 
@@ -327,7 +327,7 @@ public class PlexTextView extends TextView {
 //                    mPressedSpan.onClick(textView);
                     if (mPressedSpan != null) {
                         mPressedSpan.setPressed(false);
-                        MyLog.v(MyLog.WIDGET_TAG, "super OnTouchEvent 執行！！");
+                        MyLog.v(MyLog.WIDGET_TAG, "super OnTouchEvent 执行！！");
                         super.onTouchEvent(textView, spannable, event);
                     }
                     mPressedSpan = null;
