@@ -231,7 +231,7 @@ public class MultiImageViewGroup extends ViewGroup {
         for(int i = 0; i<imageSize; i++) {
             String imageUri = imageList.get(i);
             View imageView = LayoutInflater.from(context).inflate(R.layout.image_single, null, false);
-            final ImageView singleImage = (ImageView)imageView.findViewById(R.id.imageView_simple);
+            final ImageViewWithTag singleImage = (ImageViewWithTag)imageView.findViewById(R.id.imageView_simple);
 
             if(imageSize == 1) {
                 Glide.with(context)
@@ -269,6 +269,10 @@ public class MultiImageViewGroup extends ViewGroup {
                         .asBitmap()
                         .centerCrop()
                         .into(singleImage);
+            }
+            if(imageUri.subSequence(imageUri.length() - 3, imageUri.length()).equals("gif")) {
+                singleImage.setTagEnable(true);
+                singleImage.setTagText("GIF");
             }
             singleImage.setTag(R.id.image_tag, i);
             singleImage.setOnClickListener(new OnClickListener() {

@@ -37,4 +37,14 @@
         <attr name="emojiWidth" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="ImageViewWithTag">
+        <attr name="tagEnable" format="boolean" />
+        <attr name="tagWidth" format="dimension" />
+        <attr name="tagHeight" format="dimension" />
+        <attr name="tagColor" format="color" />
+        <attr name="tagText" format="string" />
+        <attr name="tagTextColor" format="color" />
+        <attr name="tagTextSize" format="dimension" />
+    </declare-styleable>
+
 </resources>

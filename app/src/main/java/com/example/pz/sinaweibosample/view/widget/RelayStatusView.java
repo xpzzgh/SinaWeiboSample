@@ -108,11 +108,12 @@ public class RelayStatusView extends LinearLayout {
     public void setData(Status status) {
         if(status != null) {
 //            MyLog.v(MyLog.STATUS_VIEW_TAG, Util.pieceRelayBody(status));
-            if(status.getDeleted() != 1) {
+            if(status.getDeleted() != 1 && status.getUser() != null) {
                 textView.setText(Util.pieceRelayBody(status));
                 fillRelayMultiImagesUri(status);
             }else {
                 textView.setText(status.getText());
+                imageViewGroup.setVisibility(GONE);
             }
         }
     }

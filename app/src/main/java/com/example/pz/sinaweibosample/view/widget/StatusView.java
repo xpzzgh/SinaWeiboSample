@@ -148,11 +148,13 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
 
             switch (id) {
                 case R.id.view_relay_status:
-                    if(relayStatus != null) {
+                    if(relayStatus != null && relayStatus.deleted != 1 && relayStatus.getUser() != null) {
 //                        Toast.makeText(context, "点击了转发信息，信息内容为：" + relayStatus.getText(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, StatusDetailActivity.class);
                         intent.putExtra("status", relayStatus);
                         context.startActivity(intent);
+                    }else {
+                        Toast.makeText(context, "该微博已被删除", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.image_status_head:
