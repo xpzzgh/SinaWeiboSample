@@ -45,6 +45,7 @@ public class CommentListFragment extends BaseFragment<CommentListPresenter> impl
     List<Comment> comments;
     Status status;
     OnDataFinishedListener dataFinishedListener;
+    int noMoreTime = 0;
 
     CommentListAdapter commentListAdapter;
 
@@ -134,8 +135,8 @@ public class CommentListFragment extends BaseFragment<CommentListPresenter> impl
             comments.addAll(commentList);
         }
         commentListAdapter.notifyDataSetChanged();
-        //如果请求到的数目小于请求的数目，那么去掉加载更多的监听
-        if(commentList.size() < StatusParamsHelper.COMMENT_COUNT_PER_REQUEST) {
+        //如果请求到的数目小于请求的数目10条，那么去掉加载更多的监听
+        if(commentList.size() < StatusParamsHelper.COMMENT_COUNT_PER_REQUEST - 10) {
             commentListRecycler.setLoadMoreListener(null);
         }else {
             commentListRecycler.setLoadMoreListener(this);

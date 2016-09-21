@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
+    <com.example.pz.sinaweibosample.view.widget.FixedViewPager
         android:id="@+id/view_pager_image_big"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
+    </com.example.pz.sinaweibosample.view.widget.FixedViewPager>
 
     <com.example.pz.sinaweibosample.view.widget.PointProgressBar
         android:id="@+id/progressbar_point"

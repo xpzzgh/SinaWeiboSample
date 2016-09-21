@@ -134,7 +134,8 @@ public class MultiImageViewGroup extends ViewGroup {
         }else if(realViewCount == 1) {
             final View view = realViewList.get(0);
             int measuredWidth = view.getMeasuredWidth();
-            int measuredHeight = view.getMeasuredHeight();
+//            int measuredHeight = view.getMeasuredHeight();
+            int measuredHeight = heightMax;
             MyLog.v(MyLog.WIDGET_TAG, "算出来的宽度和最大宽度分别为：" + measuredWidth + ", " + maxWidth);
             maxWidth += measuredWidth;
             maxHeight += measuredHeight;
@@ -218,7 +219,7 @@ public class MultiImageViewGroup extends ViewGroup {
     public void setData(Status status) {
         this.status = status;
         imageList = Util.getPriorityImagesUris(this.status, Constant.SMALL_IMAGE);
-        bigImageList = (ArrayList<String>) Util.getPriorityImagesUris(this.status, Constant.LARGE_IMAGE);
+        bigImageList = (ArrayList<String>) Util.getPriorityImagesUris(this.status, Constant.MEDIUM_IMAGE);
         if(imageList.size() == 1) {
             imageList = Util.getPriorityImagesUris(this.status, Constant.MEDIUM_IMAGE);
         }
@@ -242,22 +243,27 @@ public class MultiImageViewGroup extends ViewGroup {
                         .into(new SimpleTarget<Bitmap>(widthMax, heightMax) {
                             @Override
                             public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+//                                LayoutParams layoutParams = singleImage.getLayoutParams();
                                 LayoutParams layoutParams = new LayoutParams(10, 10);
                                 float radio = (float) bitmap.getWidth() / (float) bitmap.getHeight();
-                                if (bitmap.getHeight() > heightMax) {
-                                    layoutParams.height = heightMax;
-                                    if ((layoutParams.width = (int) (heightMax * radio)) > widthMax) {
+                                layoutParams.height = heightMax;
+                                if ((layoutParams.width = (int) (heightMax * radio)) > widthMax) {
                                         layoutParams.width = widthMax;
                                     }
-                                }else if(bitmap.getWidth() > widthMax) {
-                                    layoutParams.width = widthMax;
-                                    if ((layoutParams.height = (int) (widthMax / radio)) > heightMax) {
-                                        layoutParams.height = heightMax;
-                                    }
-                                }else {
-                                    layoutParams.width = bitmap.getWidth();
-                                    layoutParams.height = bitmap.getHeight();
-                                }
+//                                if (bitmap.getHeight() > heightMax) {
+//                                    layoutParams.height = heightMax;
+//                                    if ((layoutParams.width = (int) (heightMax * radio)) > widthMax) {
+//                                        layoutParams.width = widthMax;
+//                                    }
+//                                }else if(bitmap.getWidth() > widthMax) {
+//                                    layoutParams.width = widthMax;
+//                                    if ((layoutParams.height = (int) (widthMax / radio)) > heightMax) {
+//                                        layoutParams.height = heightMax;
+//                                    }
+//                                }else {
+//                                    layoutParams.width = bitmap.getWidth();
+//                                    layoutParams.height = bitmap.getHeight();
+//                                }
                                 singleImage.setImageBitmap(bitmap);
                                 singleImage.setLayoutParams(layoutParams);
                                 singleImage.requestLayout();
@@ -284,10 +290,12 @@ public class MultiImageViewGroup extends ViewGroup {
                     intent.putStringArrayListExtra("url_small_list", (ArrayList<String>) imageList);
                     String transitionName = context.getString(R.string.transition_image_big);
                     Bundle bundle = ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(ActivityManager.instanceOf().getCurrentActivity(), view, transitionName)
                             .makeSceneTransitionAnimation(ActivityManager.instanceOf().getCurrentActivity())
                             .toBundle();
 //                    .makeSceneTransitionAnimation(ActivityManager.instanceOf().getCurrentActivity(), view, transitionName)
                     context.startActivity(intent, bundle);
+//                    context.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     Toast.makeText(context, "点击了大图地址为" + view.getTag(R.id.image_tag) + "的图片！", Toast.LENGTH_LONG).show();
                 }
             });

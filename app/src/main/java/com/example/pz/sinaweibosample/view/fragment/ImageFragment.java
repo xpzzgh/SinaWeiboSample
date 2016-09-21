@@ -1,5 +1,6 @@
 package com.example.pz.sinaweibosample.view.fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.util.MyLog;
@@ -27,6 +32,8 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by pz on 2016/9/16.
@@ -38,11 +45,11 @@ public class ImageFragment extends Fragment implements View.OnClickListener, Vie
     Unbinder unbinder;
     String imageUrl;
     String smallImageUrl;
-    ControllerListener controllerListener;
+    PhotoViewAttacher mAttacher;
     float dx = 0, dy = 0;
 
     @BindView(R.id.image_single_big)
-    ImageView image;
+    PhotoView image;
 
     public static ImageFragment instanceOf(String smallImageUrl, String imageUrl) {
         ImageFragment imageFragment = new ImageFragment();
@@ -86,14 +93,24 @@ public class ImageFragment extends Fragment implements View.OnClickListener, Vie
 ////                .setFailureImage(R.mipmap.a5, ScalingUtils.ScaleType.FIT_CENTER)
 //        image.setHierarchy(draweeHierarchy);
 //        image.setController(draweeController);
+        mAttacher = new PhotoViewAttacher(image);
+
         Glide.with(this)
                 .load(imageUrl)
+                .asBitmap()
                 .fitCenter()
-                .thumbnail(Glide.with(this).load(smallImageUrl))
-                .into(image);
+                .thumbnail(Glide.with(this).load(smallImageUrl).asBitmap())
+                .error(R.mipmap.a4)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        image.setImageBitmap(resource);
+                        mAttacher.update();
+                    }
+                });
         MyLog.v(MyLog.Image, "加载大图：" + imageUrl);
         image.setOnClickListener(this);
-
+//        mAttacher = new PhotoViewAttacher(image);
 //        image.setOnTouchListener(this);
 
     }

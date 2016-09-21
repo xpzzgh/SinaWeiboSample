@@ -146,14 +146,14 @@
         android:id="@+id/image_user_head"
         android:layout_width="@dimen/image_width"
         android:layout_height="@dimen/image_width"
+        android:layout_gravity="center_horizontal"
         app:finalHeight="@dimen/image_final_width"
         app:finalYPosition="2dp"
         app:layout_behavior="com.example.pz.sinaweibosample.view.behavior.AvatarImageBehavior"
         app:startHeight="2dp"
         app:startToolbarPosition="2dp"
         app:startXPosition="2dp"
-        android:transitionName="@string/transition_image_head"
-        app:layout_anchor="@+id/view_user_appbar" />
+        android:transitionName="@string/transition_image_head"/>
 
 
 

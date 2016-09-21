@@ -131,6 +131,11 @@ public class MainActivity extends BaseActivity<MainPresenter>
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void setPagerAdapter() {
         statusListViewPagerAdapter = new StatusListViewPagerAdapter(getSupportFragmentManager());
         statusListViewPagerAdapter.addFragment(StatusListFragment.instanceOf(Constant.FRIENDS_TYPE), "相关微博");

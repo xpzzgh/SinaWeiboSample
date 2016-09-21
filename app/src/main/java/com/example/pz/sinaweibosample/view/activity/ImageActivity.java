@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.view.adapter.BigImageViewPagerAdapter;
+import com.example.pz.sinaweibosample.view.widget.FixedViewPager;
 import com.example.pz.sinaweibosample.view.widget.PointProgressBar;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ImageActivity extends AppCompatActivity {
     int currentItem;
 
     @BindView(R.id.view_pager_image_big)
-    ViewPager imageViewpager;
+    FixedViewPager imageViewpager;
     @BindView(R.id.progressbar_point)
     PointProgressBar pointProgressBar;
 
