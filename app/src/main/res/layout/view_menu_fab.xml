@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.getbase.floatingactionbutton.FloatingActionsMenu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fab_plus_status"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:fab_addButtonColorNormal="@color/colorWhite"
+    app:fab_addButtonColorPressed="@color/colorWhite"
+    app:fab_addButtonPlusIconColor="@color/colorGray"
+    app:fab_labelStyle="@style/menu_labels_style"
+    android:layout_marginRight="16dp">
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_plus_word_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fab_colorNormal="@color/colorWhite"
+        app:fab_colorPressed="@color/colorLightGray"
+        app:fab_icon="@drawable/ic_emoji" />
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_plus_image_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fab_colorNormal="@color/colorWhite"
+        app:fab_colorPressed="@color/colorLightGray"
+        app:fab_icon="@drawable/ic_image"/>
+
+</com.getbase.floatingactionbutton.FloatingActionsMenu>

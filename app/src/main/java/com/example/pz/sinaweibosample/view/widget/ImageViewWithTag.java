@@ -41,6 +41,8 @@ public class ImageViewWithTag extends ImageView {
 
     Rect mTextBound;
 
+    Context context;
+
     public ImageViewWithTag(Context context) {
         this(context, null, 0);
     }
@@ -51,7 +53,7 @@ public class ImageViewWithTag extends ImageView {
 
     public ImageViewWithTag(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        this.context = context;
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ImageViewWithTag, 0, 0);
         try{
             tagEnable = a.getBoolean(R.styleable.ImageViewWithTag_tagEnable, false);
@@ -80,9 +82,10 @@ public class ImageViewWithTag extends ImageView {
         }
     }
 
-    public void setTagHeight(int tagHeight) {
-        if(tagHeight != 0 && tagHeight != this.tagHeight && tagEnable) {
-            this.tagHeight = tagHeight;
+    public void setTagHeight(int tagHeightDp) {
+        int tagHeightPx = Util.dpToPx(tagHeightDp, context);
+        if(tagHeightPx != 0 && tagHeightPx != tagHeight && tagEnable) {
+            tagHeight = tagHeightPx;
             invalidate();
         }
     }
@@ -94,9 +97,10 @@ public class ImageViewWithTag extends ImageView {
         }
     }
 
-    public void setTagWidth(int tagWidth) {
-        if(tagWidth != 0 && tagWidth != this.tagWidth && tagEnable) {
-            this.tagWidth = tagWidth;
+    public void setTagWidth(int tagWidthDp) {
+        int tagWidthPx = Util.dpToPx(tagWidthDp, context);
+        if(tagWidthPx != 0 && tagWidth != tagWidthPx && tagEnable) {
+            tagWidth = tagWidthPx;
             invalidate();
         }
     }

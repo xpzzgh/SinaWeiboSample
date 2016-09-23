@@ -24,6 +24,7 @@ import com.example.pz.sinaweibosample.view.adapter.StatusListAdapter;
 import com.example.pz.sinaweibosample.view.decoration.SimpleDecoration;
 import com.example.pz.sinaweibosample.view.iview.IStatusListView;
 import com.example.pz.sinaweibosample.view.widget.FabRecyclerView;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
@@ -53,7 +54,7 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
     @BindView(R.id.recycler_status_list)
     FabRecyclerView recyclerView;
 
-    FloatingActionButton fab;
+    FloatingActionsMenu fabMenu;
 
     public static StatusListFragment instanceOf(int fragmentType) {
         StatusListFragment statusListFragment = new StatusListFragment();
@@ -86,8 +87,8 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
         recyclerView.setAdapter(statusListAdapter);
         recyclerView.addItemDecoration(new SimpleDecoration(context, R.drawable.divider_status, SimpleDecoration.VERTICAL_LIST));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        fab = ((com.example.pz.sinaweibosample.view.activity.MainActivity)context).getFab();
-        recyclerView.bindFloatButton(fab);
+        fabMenu = ((com.example.pz.sinaweibosample.view.activity.MainActivity)context).getFab();
+        recyclerView.bindFloatButton(fabMenu);
         //设置刷新操作
         if(AccessTokenKeeper.isTokenValid()) {
             refreshLayout.setOnRefreshListener(this);
@@ -165,7 +166,7 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
     public void showSnackInfo(String infoString, final int code) {
         hideProgress();
         page--;
-        Snackbar snackbar = Snackbar.make(fab, infoString, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(fabMenu, infoString, Snackbar.LENGTH_LONG);
         TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         if(code == Constant.NO_MORE_CODE) {
             tv.setTextColor(getResources().getColor(R.color.colorWhite));

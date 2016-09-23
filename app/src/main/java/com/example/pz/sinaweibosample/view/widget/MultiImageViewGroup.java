@@ -267,6 +267,12 @@ public class MultiImageViewGroup extends ViewGroup {
                                 singleImage.setImageBitmap(bitmap);
                                 singleImage.setLayoutParams(layoutParams);
                                 singleImage.requestLayout();
+                                if(radio > 3 || radio < 0.3) {
+                                    singleImage.setTagEnable(true);
+                                    singleImage.setTagText("长图");
+                                    singleImage.setTagWidth(45);
+                                    singleImage.setTagHeight(28);
+                                }
                             }
                         });
             }else {

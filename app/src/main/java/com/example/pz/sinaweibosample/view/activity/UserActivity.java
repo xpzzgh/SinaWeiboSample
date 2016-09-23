@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.base.BaseActivity;
@@ -32,6 +31,7 @@ import com.example.pz.sinaweibosample.view.decoration.SimpleDecoration;
 import com.example.pz.sinaweibosample.view.iview.IUserView;
 import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
 import com.example.pz.sinaweibosample.view.widget.FabRecyclerView;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
@@ -82,6 +82,8 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
     @BindView(R.id.refresh_user_top)
     SwipeRefreshLayout userRefreshTop;
     @BindView(R.id.fab_plus_status)
+    FloatingActionsMenu fabMenu;
+
     FloatingActionButton fab;
 
 
@@ -111,6 +113,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
         Explode explode = new Explode();
         explode.setDuration(1000);
         getWindow().setEnterTransition(explode);
+
     }
 
     @Override
@@ -141,8 +144,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
         statusAdapter = new UserStatusAdapter(this, statusList);
         userStatusesRecycler.setAdapter(statusAdapter);
         userStatusesRecycler.addItemDecoration(new SimpleDecoration(this, R.drawable.divider_status, LinearLayout.VERTICAL));
-        userStatusesRecycler.bindFloatButton(fab);
-        fab.show();
+        userStatusesRecycler.bindFloatButton(fabMenu);
         //这个方法可以屏蔽recyclerView的滚动方法，是recyclerView在nestedScrollView中平滑滚动
 //        userStatusesRecycler.setNestedScrollingEnabled(false);
 
@@ -220,7 +222,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
         page--;
         hideProgress();
         hideLoadMoreProgress();
-        Snackbar snackbar = Snackbar.make(fab, errorString, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(fabMenu, errorString, Snackbar.LENGTH_LONG);
         TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         if(errorCode == Constant.NO_MORE_CODE) {
             tv.setTextColor(getResources().getColor(R.color.colorWhite));

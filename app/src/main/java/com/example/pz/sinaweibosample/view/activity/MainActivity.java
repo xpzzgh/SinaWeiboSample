@@ -2,12 +2,10 @@ package com.example.pz.sinaweibosample.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewPager;
-import android.transition.Slide;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,6 +31,7 @@ import com.example.pz.sinaweibosample.view.adapter.StatusListViewPagerAdapter;
 import com.example.pz.sinaweibosample.view.fragment.StatusListFragment;
 import com.example.pz.sinaweibosample.view.iview.IMainView;
 import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -61,7 +60,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
     Toolbar toolbar;
 
     @BindView(R.id.fab_plus_status)
-    FloatingActionButton addStatusFab;
+    FloatingActionsMenu plusStatusFabMenu;
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -73,6 +72,8 @@ public class MainActivity extends BaseActivity<MainPresenter>
     TabLayout tabLayout;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+    @BindView(R.id.fab_plus_word_status)
+    com.getbase.floatingactionbutton.FloatingActionButton plusWordStatusFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +81,13 @@ public class MainActivity extends BaseActivity<MainPresenter>
 //        setupWindowAnimations();
     }
 
-    void setupWindowAnimations() {
-//        Slide slide = (Slide) TransitionInflater.from(this).inflateTransition(R.transition.slide_activity);
+//    void setupWindowAnimations() {
+////        Slide slide = (Slide) TransitionInflater.from(this).inflateTransition(R.transition.slide_activity);
+////        getWindow().setExitTransition(slide);
+//        Slide slide = new Slide();
+//        slide.setDuration(1000);
 //        getWindow().setExitTransition(slide);
-        Slide slide = new Slide();
-        slide.setDuration(1000);
-        getWindow().setExitTransition(slide);
-    }
+//    }
 
     @Override
     protected int getLayoutResId() {
@@ -117,8 +118,6 @@ public class MainActivity extends BaseActivity<MainPresenter>
         setSupportActionBar(toolbar);
         //设置侧边栏item点击监听
         navigationView.setNavigationItemSelectedListener(this);
-        //浮动按钮点击监听
-//        addWeiboFab.setOnClickListener(this);
         //抽屉增加开关
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -128,7 +127,9 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
         //设置viewPager
         setPagerAdapter();
+        Snackbar snackbar = Snackbar.make(drawer, "asd", Snackbar.LENGTH_SHORT);
         tabLayout.setupWithViewPager(viewPager);
+        plusWordStatusFab.setOnClickListener(this);
     }
 
     @Override
@@ -144,8 +145,8 @@ public class MainActivity extends BaseActivity<MainPresenter>
         viewPager.setAdapter(statusListViewPagerAdapter);
     }
 
-    public FloatingActionButton getFab() {
-        return addStatusFab;
+    public FloatingActionsMenu getFab() {
+        return plusStatusFabMenu;
     }
 
     @Override
@@ -184,7 +185,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
     @Override
     public void showSnackInfo(String errorString, int errorCode) {
         hideProgress();
-        Snackbar snackbar = Snackbar.make(addStatusFab, errorString, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(plusStatusFabMenu, errorString, Snackbar.LENGTH_LONG);
         TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         if(errorCode == Constant.NO_MORE_CODE) {
             tv.setTextColor(getResources().getColor(R.color.colorWhite));
@@ -234,13 +235,20 @@ public class MainActivity extends BaseActivity<MainPresenter>
                     String transitionName = getString(R.string.transition_image_head);
                     Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
                             .toBundle();
-//.makeSceneTransitionAnimation(this, userHeadImage, transitionName)
-//                    Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, userHeadImage, transitionName).toBundle();
+                    //.makeSceneTransitionAnimation(this, userHeadImage, transitionName)
+                    //Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, userHeadImage, transitionName).toBundle();
                     startActivity(intent, bundle);
-//                    overridePendingTransition(R.transition.fade_activity, R.transition.explode_activity);
+                    //overridePendingTransition(R.transition.fade_activity, R.transition.explode_activity);
                     //fade_in 表示下一个activity淡入，fade_out表示这个activity切换时淡出
-//                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
+                break;
+            case R.id.fab_plus_word_status:
+                if(plusStatusFabMenu.isExpanded()) {
+                    plusStatusFabMenu.toggle();
+                }
+                Intent intent = new Intent(this, PostStatusActivity.class);
+                startActivity(intent);
         }
     }
 

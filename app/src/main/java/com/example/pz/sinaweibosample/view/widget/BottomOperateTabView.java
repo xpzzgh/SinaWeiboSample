@@ -1,14 +1,22 @@
 package com.example.pz.sinaweibosample.view.widget;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.model.entity.Status;
+import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.Util;
 
 /**
@@ -23,6 +31,7 @@ public class BottomOperateTabView extends LinearLayout implements View.OnClickLi
     TextView relayNumberText;
     TextView commentNumberText;
     TextView likeNumberText;
+    ImageView likeImage;
 
     Status status;
     View view;
@@ -58,6 +67,7 @@ public class BottomOperateTabView extends LinearLayout implements View.OnClickLi
         relayNumberText = (TextView) view.findViewById(R.id.text_number_relay);
         commentNumberText = (TextView) view.findViewById(R.id.text_number_comment);
         likeNumberText = (TextView) view.findViewById(R.id.text_number_like);
+        likeImage = (ImageView) view.findViewById(R.id.image_like_status);
         initClick();
     }
 
@@ -70,6 +80,9 @@ public class BottomOperateTabView extends LinearLayout implements View.OnClickLi
         likeNumberText.setText(status.getAttitudes_count() == 0 ? "点赞" : Util.bigNumToStr(status.getAttitudes_count()));
         commentNumberText.setText(status.getComments_count() == 0 ? "评论" : Util.bigNumToStr(status.getComments_count()));
         relayNumberText.setText(status.getReposts_count() == 0 ? "转发" : Util.bigNumToStr(status.getReposts_count()));
+        if(status.isLiked()) {
+            likeImage.setImageResource(R.drawable.ic_like_selected);
+        }
     }
 
     public void undoData() {
@@ -97,7 +110,30 @@ public class BottomOperateTabView extends LinearLayout implements View.OnClickLi
                     Toast.makeText(context,  "有" + status.getReposts_count() + "条转发！", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.view_button_like:
-                    Toast.makeText(context,  "有" + status.getAttitudes_count() + "个赞！", Toast.LENGTH_SHORT).show();
+                    if(status.isLiked()) {
+                        MyLog.v(MyLog.WIDGET_TAG, "该取消选中了");
+                        likeImage.setImageResource(R.drawable.ic_like);
+                        status.setLiked(false);
+                        status.setAttitudes_count(status.getAttitudes_count() - 1);
+                        if(status.getAttitudes_count() == 0) {
+                            likeNumberText.setText("点赞");
+                        }else {
+                            likeNumberText.setText("" + status.getAttitudes_count());
+                        }
+                    }else {
+                        MyLog.v(MyLog.WIDGET_TAG, "该选中了");
+                        likeImage.setImageResource(R.drawable.ic_like_selected);
+                        status.setLiked(true);
+                        status.setAttitudes_count(status.getAttitudes_count() + 1);
+                        likeNumberText.setText("" + status.getAttitudes_count());
+                    }
+                    AnimatorSet set = new AnimatorSet();
+                    ObjectAnimator animator0 = ObjectAnimator.ofFloat(likeImage, "scaleX", 1f, 1.5f, 1f);
+                    ObjectAnimator animator1 = ObjectAnimator.ofFloat(likeImage, "scaleY", 1f, 1.5f, 1f);
+                    set.setDuration(200);
+                    set.play(animator0).with(animator1);
+                    set.start();
+//                    Toast.makeText(context,  "有" + status.getAttitudes_count() + "个赞！", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
