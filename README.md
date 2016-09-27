@@ -12,5 +12,5 @@
 ---
 > 一些截图，详细的可以自己pull下来，也可以查看gif目录下的gif图
 
-![Alt text](/blob/master/ScreenShot/S60927-13495513.jpg?raw=true "截图")
+![](https://github.com/xpzzgh/SinaWeiboSample/blob/master/ScreenShot/S60927-13495513.jpg) ![](https://github.com/xpzzgh/SinaWeiboSample/blob/master/ScreenShot/S60927-13500719.jpg)
 
