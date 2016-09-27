@@ -12,5 +12,6 @@
 ---
 > 一些截图，详细的可以自己pull下来，也可以查看gif目录下的gif图
 
-![](./ScreenShot/S60927-13495513.jpg =320x) ![](./ScreenShot/S60927-13500719.jpg =320x)
+
+<img src="./ScreenShot/S60927-13495513.jpg" width="120"> <img src="./ScreenShot/S60927-13500719.jpg" width="120">
 
