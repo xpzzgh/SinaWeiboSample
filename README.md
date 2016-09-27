@@ -17,6 +17,7 @@
 
 ---
 > 如有意见，希望提issue，也可以发邮件给我，xpzzwy@163.com。
+---
 > 一些界面的截图，详细的可以自己pull下来，也可以查看gif目录下的gif图。
 
 <img src="./ScreenShot/S60927-13495513.jpg" width="240">            <img src="./ScreenShot/S60927-13500719.jpg" width="240">
