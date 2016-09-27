@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:scaleType="centerCrop"
-    android:src="@mipmap/a1"
+    android:src="@drawable/gray"
     android:transitionName="@string/transition_image_big"
     app:tagEnable="false">
     </com.example.pz.sinaweibosample.view.widget.ImageViewWithTag>
