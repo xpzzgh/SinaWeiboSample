@@ -22,9 +22,7 @@ import com.example.pz.sinaweibosample.util.Util;
 import com.example.pz.sinaweibosample.view.activity.StatusDetailActivity;
 import com.example.pz.sinaweibosample.view.activity.UserActivity;
 import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
-import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.io.File;
 import java.util.List;
 
 /**

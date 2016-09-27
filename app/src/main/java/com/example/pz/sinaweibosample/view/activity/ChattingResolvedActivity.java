@@ -15,17 +15,12 @@ import android.widget.TextView;
 
 import com.example.pz.sinaweibosample.R;
 
-import cn.dreamtobe.kpswitch.util.KPSwitchConflictUtil;
-import cn.dreamtobe.kpswitch.util.KeyboardUtil;
-import cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout;
-
 
 public class ChattingResolvedActivity extends AppCompatActivity {
 
     private static final String TAG = "ResolvedActivity";
     private RecyclerView mContentRyv;
     private EditText mSendEdt;
-    private KPSwitchPanelLinearLayout mPanelRoot;
     private TextView mSendImgTv;
     private ImageView mPlusIv;
     private Toolbar postStatusToolbar;
@@ -34,7 +29,6 @@ public class ChattingResolvedActivity extends AppCompatActivity {
     private void assignViews() {
 //        mContentRyv = (RecyclerView) findViewById(R.id.content_ryv);
         mSendEdt = (EditText) findViewById(R.id.send_edt);
-        mPanelRoot = (KPSwitchPanelLinearLayout) findViewById(R.id.panel_root);
         mSendImgTv = (TextView) findViewById(R.id.send_img_tv);
         mPlusIv = (ImageView) findViewById(R.id.plus_iv);
         postStatusToolbar = (Toolbar) findViewById(R.id.view_toolbar_post_status);
@@ -123,27 +117,7 @@ public class ChattingResolvedActivity extends AppCompatActivity {
 //            findViewById(R.id.rootView).setFitsSystemWindows(true);
 //        }
 
-        KeyboardUtil.attach(this, mPanelRoot,
-                // Add keyboard showing state callback, do like this when you want to listen in the
-                // keyboard's show/hide change.
-                new KeyboardUtil.OnKeyboardShowingListener() {
-                    @Override
-                    public void onKeyboardShowing(boolean isShowing) {
-                        Log.d(TAG, String.format("Keyboard is %s", isShowing ? "showing" : "hiding"));
-                    }
-                });
 
-        KPSwitchConflictUtil.attach(mPanelRoot, mPlusIv, contentEdit,
-                new KPSwitchConflictUtil.SwitchClickListener() {
-                    @Override
-                    public void onClickSwitch(boolean switchToPanel) {
-                        if (switchToPanel) {
-                            contentEdit.clearFocus();
-                        } else {
-                            contentEdit.requestFocus();
-                        }
-                    }
-                });
 
 //        if (isMultiSubPanel) {
 //            // If there are several sub-panels in this activity ( e.p. function-panel, emoji-panel).

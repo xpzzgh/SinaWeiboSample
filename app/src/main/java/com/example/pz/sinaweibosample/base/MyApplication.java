@@ -3,8 +3,6 @@ package com.example.pz.sinaweibosample.base;
 import android.app.Application;
 import android.content.Context;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-
 import net.danlew.android.joda.JodaTimeAndroid;
 
 /**
@@ -17,8 +15,6 @@ public class MyApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        //初始化fresco
-        Fresco.initialize(this);
         //报错时跳出错误处理页面
 //        CustomActivityOnCrash.setLaunchErrorActivityWhenInBackground(true);  //错误处理，设为false表示不显示，同时系统错误也将被屏蔽
 //        CustomActivityOnCrash.setShowErrorDetails(true); //是否显示报错详情和按钮

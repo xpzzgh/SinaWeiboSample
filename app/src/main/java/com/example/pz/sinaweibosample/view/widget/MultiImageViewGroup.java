@@ -5,18 +5,15 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.example.pz.sinaweibosample.R;
@@ -26,14 +23,10 @@ import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.Util;
 import com.example.pz.sinaweibosample.view.activity.ImageActivity;
-import com.example.pz.sinaweibosample.view.util.CustomBitMapImageViewTarget;
-import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.image.ImageInfo;
+
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -62,8 +55,6 @@ public class MultiImageViewGroup extends ViewGroup {
 
     Context context;
 
-    ControllerListener listener;
-
     Status status;
 
     List<String> imageList;
@@ -90,16 +81,6 @@ public class MultiImageViewGroup extends ViewGroup {
         }finally {
             //回收TypedArray
             a.recycle();
-        }
-    }
-
-    private void updateViewSize(@Nullable Object imageInfo, SimpleDraweeView singleImage) {
-        if (imageInfo != null && singleImage != null) {
-            if(imageInfo instanceof ImageInfo) {
-                ImageInfo info = (ImageInfo)imageInfo;
-                singleImage.getLayoutParams().height = heightMax;
-                singleImage.setAspectRatio((float) info.getWidth() / info.getHeight());
-            }
         }
     }
 

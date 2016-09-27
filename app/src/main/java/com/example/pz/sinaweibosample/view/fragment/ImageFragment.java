@@ -18,16 +18,6 @@ import com.bumptech.glide.request.target.Target;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.util.MyLog;
-import com.example.pz.sinaweibosample.view.util.FitWidthScaleType;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.drawee.drawable.ProgressBarDrawable;
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
