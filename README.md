@@ -12,5 +12,5 @@
 ---
 > 一些截图，详细的可以自己pull下来，也可以查看gif目录下的gif图
 
-![](https://github.com/xpzzgh/SinaWeiboSample/blob/master/ScreenShot/S60927-13495513.jpg =320) ![](https://github.com/xpzzgh/SinaWeiboSample/blob/master/ScreenShot/S60927-13500719.jpg =320)
+![](./ScreenShot/S60927-13495513.jpg =320x) ![](./ScreenShot/S60927-13500719.jpg =320x)
 
