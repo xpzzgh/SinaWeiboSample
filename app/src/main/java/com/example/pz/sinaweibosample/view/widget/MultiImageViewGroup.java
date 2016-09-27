@@ -243,27 +243,12 @@ public class MultiImageViewGroup extends ViewGroup {
                         .into(new SimpleTarget<Bitmap>(widthMax, heightMax) {
                             @Override
                             public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-//                                LayoutParams layoutParams = singleImage.getLayoutParams();
                                 LayoutParams layoutParams = new LayoutParams(10, 10);
                                 float radio = (float) bitmap.getWidth() / (float) bitmap.getHeight();
                                 layoutParams.height = heightMax;
                                 if ((layoutParams.width = (int) (heightMax * radio)) > widthMax) {
                                         layoutParams.width = widthMax;
                                     }
-//                                if (bitmap.getHeight() > heightMax) {
-//                                    layoutParams.height = heightMax;
-//                                    if ((layoutParams.width = (int) (heightMax * radio)) > widthMax) {
-//                                        layoutParams.width = widthMax;
-//                                    }
-//                                }else if(bitmap.getWidth() > widthMax) {
-//                                    layoutParams.width = widthMax;
-//                                    if ((layoutParams.height = (int) (widthMax / radio)) > heightMax) {
-//                                        layoutParams.height = heightMax;
-//                                    }
-//                                }else {
-//                                    layoutParams.width = bitmap.getWidth();
-//                                    layoutParams.height = bitmap.getHeight();
-//                                }
                                 singleImage.setImageBitmap(bitmap);
                                 singleImage.setLayoutParams(layoutParams);
                                 singleImage.requestLayout();

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_post_status"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,95 +12,62 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/AppTheme.AppBarOverlay">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/view_toolbar_post_status"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/view_toolbar_post_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-    </android.support.v7.widget.Toolbar>
+        </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <EditText
         android:id="@+id/edit_text_post_status"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="150dp"
         android:hint="分享新鲜事..."
         android:gravity="top"
         android:background="@null"
         android:maxLines="7"
+        android:maxLength="160"
         android:textColor="@color/colorFont"
-        android:layout_margin="15dp"
-        android:focusableInTouchMode="true"/>
-
+        android:layout_margin="15dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
+
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_keyboard_icon_tab"
-        android:background="@color/colorVeryLightGray">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height_keyboard_icon_tab"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/button_notify_post_status"
-                android:layout_height="@dimen/height_keyboard_icon_tab"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:text="\@"
-                android:textSize="20sp"
-                android:textColor="@color/colorGray"/>
-            <Button
-                android:id="@+id/button_topic_post_status"
-                android:layout_height="@dimen/height_keyboard_icon_tab"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:layout_toRightOf="@+id/button_notify_post_status"
-                android:text="#"
-                android:textSize="22sp"
-                android:textColor="@color/colorGray"/>
-            <ImageView
-                android:id="@+id/image_emoji_post_status"
-                android:layout_height="@dimen/height_keyboard_icon_tab"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:src="@drawable/ic_emoji"
-                android:padding="10dp"
-                android:clickable="true"/>
-            <ImageView
-                android:id="@+id/image_image_post_status"
-                android:layout_height="@dimen/height_keyboard_icon_tab"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:src="@drawable/ic_image"
-                android:padding="7dp"
-                android:clickable="true"/>
-            <ImageView
-                android:id="@+id/image_plus_post_status"
-                android:layout_height="@dimen/height_keyboard_icon_tab"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center"
-                android:src="@drawable/ic_plus"
-                android:padding="10dp"
-                android:clickable="true"/>
-        </LinearLayout>
+        android:layout_height="80dp">
+        <include layout="@layout/view_tab_util_post_status" />
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/view_panel_emoji_post_status"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:src="@color/colorLightGray"/>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager_panel_emoji_post_status"
+            android:layout_width="match_parent"
+            android:layout_height="220dp">
+        </android.support.v4.view.ViewPager>
+        <include layout="@layout/view_progress_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_margin="12dp"/>
+    </LinearLayout>
 
 </LinearLayout>

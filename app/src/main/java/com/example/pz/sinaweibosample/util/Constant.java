@@ -34,4 +34,15 @@ public class Constant {
 
     public static final int COMMENT_TYPE = 11;
     public static final int RELAY_TYPE = 12;
+
+    /**
+     * emoji键盘行列数
+     */
+    public static final int EMOJI_COUNT_COLUMN = 7;
+    public static final int EMOJI_COUNT_ROW = 4;
+    public static final int EMOJI_COUNT_PER_PAGER = EMOJI_COUNT_COLUMN * EMOJI_COUNT_ROW;
+
+    public static final int EMOJI_VIEW_TAG = 10021;
+
+    public static final int STATUS_MOST_LENGTH = 140;
 }

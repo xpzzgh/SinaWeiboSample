@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/image_emoji"
+    android:layout_width="@dimen/panel_emoji_per_height"
+    android:layout_height="@dimen/panel_emoji_per_height"
+    android:layout_marginBottom="@dimen/panel_emoji_per_gap"
+    android:layout_marginRight="@dimen/panel_emoji_per_gap"
+    android:src="@drawable/lxh_buhaoyisi"
+    android:clickable="true">
+
+</ImageView>

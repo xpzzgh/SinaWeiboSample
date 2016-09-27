@@ -73,26 +73,6 @@ public class ImageFragment extends Fragment implements View.OnClickListener, Vie
     }
 
     void init() {
-//        GenericDraweeHierarchyBuilder builder =
-//                new GenericDraweeHierarchyBuilder(getResources());
-//        GenericDraweeHierarchy draweeHierarchy = builder
-//                .setFadeDuration(500)
-//                .setActualImageScaleType(new FitWidthScaleType())
-//                .setProgressBarImage(new ProgressBarDrawable())
-//                .build();
-//        controllerListener = new BaseControllerListener() {
-//
-//        };
-//        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-//                .setOldController(image.getController())
-//                .setControllerListener(controllerListener)
-//                .setLowResImageRequest(ImageRequest.fromUri(smallImageUrl))
-//                .setImageRequest(ImageRequest.fromUri(imageUrl))
-//                .build();
-////        .setPlaceholderImage(R.mipmap.a6, ScalingUtils.ScaleType.FIT_CENTER)
-////                .setFailureImage(R.mipmap.a5, ScalingUtils.ScaleType.FIT_CENTER)
-//        image.setHierarchy(draweeHierarchy);
-//        image.setController(draweeController);
         mAttacher = new PhotoViewAttacher(image);
 
         Glide.with(this)

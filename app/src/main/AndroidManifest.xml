@@ -43,9 +43,13 @@
         <activity android:name=".view.activity.ImageActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".view.activity.PostStatusActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:screenOrientation="portrait" />
 
         <activity android:name=".view.activity.NotifyActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".view.activity.ChattingResolvedActivity"
             android:screenOrientation="portrait" />
     </application>
 

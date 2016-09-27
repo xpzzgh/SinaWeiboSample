@@ -31,6 +31,7 @@ import com.example.pz.sinaweibosample.view.adapter.StatusListViewPagerAdapter;
 import com.example.pz.sinaweibosample.view.fragment.StatusListFragment;
 import com.example.pz.sinaweibosample.view.iview.IMainView;
 import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -74,7 +75,8 @@ public class MainActivity extends BaseActivity<MainPresenter>
     ViewPager viewPager;
     @BindView(R.id.fab_plus_word_status)
     com.getbase.floatingactionbutton.FloatingActionButton plusWordStatusFab;
-
+    @BindView(R.id.fab_plus_image_status)
+    FloatingActionButton plusImageStatusFab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +132,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
         Snackbar snackbar = Snackbar.make(drawer, "asd", Snackbar.LENGTH_SHORT);
         tabLayout.setupWithViewPager(viewPager);
         plusWordStatusFab.setOnClickListener(this);
+        plusImageStatusFab.setOnClickListener(this);
     }
 
     @Override
@@ -224,10 +227,6 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 MyLog.v(MyLog.LOGIN_TAG, "点击了登陆按钮。");
                 mSsoHandler.authorize(new MyWeiboAuthlistener());
                 break;
-            case R.id.fab_plus_status:
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                break;
             case R.id.image_head:
                 if(user != null && !user.getId().isEmpty()) {
                     Intent intent = new Intent(this, UserActivity.class);
@@ -249,6 +248,15 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 }
                 Intent intent = new Intent(this, PostStatusActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.fab_plus_image_status:
+                MyLog.v(MyLog.POST_TAG, "点击了图片按钮");
+                if(plusStatusFabMenu.isExpanded()) {
+                    plusStatusFabMenu.toggle();
+                }
+                Intent intent2 = new Intent(this, ChattingResolvedActivity.class);
+                startActivity(intent2);
+                break;
         }
     }
 

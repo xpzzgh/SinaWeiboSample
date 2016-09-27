@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.pz.sinaweibosample.view.widget.PointProgressBar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/progressbar_point"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:pointWidth="5dp"
+    app:pointGapWidth="10dp">
+</com.example.pz.sinaweibosample.view.widget.PointProgressBar>

@@ -117,6 +117,8 @@ public class BottomOperateTabView extends LinearLayout implements View.OnClickLi
                         status.setAttitudes_count(status.getAttitudes_count() - 1);
                         if(status.getAttitudes_count() == 0) {
                             likeNumberText.setText("点赞");
+                        }else if(status.getAttitudes_count() > 10000) {
+                            //
                         }else {
                             likeNumberText.setText("" + status.getAttitudes_count());
                         }
@@ -125,7 +127,9 @@ public class BottomOperateTabView extends LinearLayout implements View.OnClickLi
                         likeImage.setImageResource(R.drawable.ic_like_selected);
                         status.setLiked(true);
                         status.setAttitudes_count(status.getAttitudes_count() + 1);
-                        likeNumberText.setText("" + status.getAttitudes_count());
+                        if(status.getAttitudes_count() < 10000) {
+                            likeNumberText.setText("" + status.getAttitudes_count());
+                        }
                     }
                     AnimatorSet set = new AnimatorSet();
                     ObjectAnimator animator0 = ObjectAnimator.ofFloat(likeImage, "scaleX", 1f, 1.5f, 1f);

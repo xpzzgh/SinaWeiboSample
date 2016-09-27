@@ -14,4 +14,8 @@
     <dimen name="width_icon_follow">22dp</dimen>
     <dimen name="width_icon_collect">22dp</dimen>
     <dimen name="height_keyboard_icon_tab">40dp</dimen>
+    <dimen name="panel_height">250dp</dimen>
+    <dimen name="panel_emoji_height">220dp</dimen>
+    <dimen name="panel_emoji_per_height">30dp</dimen>
+    <dimen name="panel_emoji_per_gap">20dp</dimen>
 </resources>

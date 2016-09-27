@@ -2,7 +2,9 @@ package com.example.pz.sinaweibosample.view.util;
 
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -200,6 +202,18 @@ public class Emoticons {
             return null;
         }
 
+    }
+
+    /**
+     * 获取所有的额emoji key，即类似 [神兽] 这种
+     * @return
+     */
+    public static List<String> getEmojiList() {
+        List<String> emojiList = new ArrayList<String>();
+        for(String key: emojiMap.keySet()) {
+            emojiList.add(key);
+        }
+        return emojiList;
     }
 
 }

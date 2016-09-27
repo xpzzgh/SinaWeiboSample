@@ -31,4 +31,11 @@
         <item name="android:textColor">@color/colorGray</item>
     </style>
 
+    <style name="Panel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/panel_height</item>
+        <item name="android:background">#fffefefe</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>
