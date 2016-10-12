@@ -92,4 +92,5 @@
             android:padding="10dp"
             android:clickable="true"/>
     </LinearLayout>
+    <include layout="@layout/view_keyboard_emoji" />
 </LinearLayout>

@@ -1,73 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_post_status"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.design.widget.AppBarLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.AppBarOverlay">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/view_toolbar_post_status"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/app_bar_common" />
 
     <EditText
         android:id="@+id/edit_text_post_status"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="130dp"
         android:hint="分享新鲜事..."
         android:gravity="top"
         android:background="@null"
-        android:maxLines="7"
+        android:maxLines="6"
         android:maxLength="160"
         android:textColor="@color/colorFont"
-        android:layout_margin="15dp"/>
+        android:layout_margin="15dp"
+        android:layout_below="@+id/view_appbar"/>
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_images_post_status"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_text_post_status"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp">
+    </android.support.v7.widget.RecyclerView>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
         <include layout="@layout/view_tab_util_post_status" />
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/view_panel_emoji_post_status"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:visibility="gone"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:src="@color/colorLightGray"/>
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager_panel_emoji_post_status"
-            android:layout_width="match_parent"
-            android:layout_height="220dp">
-        </android.support.v4.view.ViewPager>
-        <include layout="@layout/view_progress_point"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_margin="12dp"/>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

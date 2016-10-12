@@ -62,6 +62,8 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
         return statusListFragment;
     }
 
+
+
     private void setType(int type) {
         this.type = type;
     }
@@ -108,10 +110,10 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         if(type != 0) {
             outState.putInt("type", type);
         }
+        super.onSaveInstanceState(outState);
     }
 
     @Override

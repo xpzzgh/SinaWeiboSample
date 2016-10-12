@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_item_image_album_selection"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:clickable="true"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/cover_image_album_selection"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@mipmap/a5"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/title_image_album_selection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/cover_image_album_selection"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="60dp"
+        android:text="相机胶卷"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/image_label_album_selection"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignRight="@+id/title_image_album_selection"
+        android:src="@drawable/ic_circle_select"
+        android:layout_marginRight="40dp"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

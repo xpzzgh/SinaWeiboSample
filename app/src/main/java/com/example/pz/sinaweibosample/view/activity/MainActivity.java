@@ -1,10 +1,18 @@
 package com.example.pz.sinaweibosample.view.activity;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,10 +25,12 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.BaseActivity;
+import com.example.pz.sinaweibosample.base.MyApplication;
 import com.example.pz.sinaweibosample.model.entity.User;
 import com.example.pz.sinaweibosample.oauth.AccessTokenKeeper;
 import com.example.pz.sinaweibosample.presenter.MainPresenter;
@@ -33,6 +43,7 @@ import com.example.pz.sinaweibosample.view.iview.IMainView;
 import com.example.pz.sinaweibosample.view.util.GlideCircleTransform;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -41,12 +52,34 @@ import com.sina.weibo.sdk.exception.WeiboException;
 
 import butterknife.BindView;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 public class MainActivity extends BaseActivity<MainPresenter>
-        implements IMainView, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements IMainView, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener
+                    , ActivityCompat.OnRequestPermissionsResultCallback{
+
+    private static final int GPS_PERMISSION_REQUEST_CODE = 1002;
 
     AuthInfo mAuthInfo;
     private SsoHandler mSsoHandler;
     Oauth2AccessToken mAccessToken;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.fab_plus_status)
+    FloatingActionsMenu plusStatusFabMenu;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.view_tab)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    @BindView(R.id.fab_plus_word_status)
+    com.getbase.floatingactionbutton.FloatingActionButton plusWordStatusFab;
+    @BindView(R.id.fab_plus_image_status)
+    FloatingActionButton plusImageStatusFab;
 
     MenuItem preNavChecked;
     Button loginButton;
@@ -56,27 +89,8 @@ public class MainActivity extends BaseActivity<MainPresenter>
     ImageView userHeadImage;
     User user;
     StatusListViewPagerAdapter statusListViewPagerAdapter;
+    LocalBroadcastManager localBroadcastManager;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.fab_plus_status)
-    FloatingActionsMenu plusStatusFabMenu;
-
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
-
-    @BindView(R.id.view_tab)
-    TabLayout tabLayout;
-    @BindView(R.id.view_pager)
-    ViewPager viewPager;
-    @BindView(R.id.fab_plus_word_status)
-    com.getbase.floatingactionbutton.FloatingActionButton plusWordStatusFab;
-    @BindView(R.id.fab_plus_image_status)
-    FloatingActionButton plusImageStatusFab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +117,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
     @Override
     protected void initView() {
+        registerBroadcastReceiver();
         //实例化token请求对象
         mAuthInfo = new AuthInfo(this, AppInfo.APP_KEY, AppInfo.REDIRECT_URL, AppInfo.SCOPE);
         mSsoHandler = new SsoHandler(this, mAuthInfo);
@@ -135,9 +150,16 @@ public class MainActivity extends BaseActivity<MainPresenter>
         plusImageStatusFab.setOnClickListener(this);
     }
 
+    private void registerBroadcastReceiver() {
+        localBroadcastManager = LocalBroadcastManager.getInstance(MyApplication.getContext());
+        IntentFilter postStatusIntentFilter = new IntentFilter("com.example.pz.sinaweibosample.view.activity.PostStatusBroadcastReceiver");
+        localBroadcastManager.registerReceiver(new PostStatusBroadcastReceiver(), postStatusIntentFilter);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        requestPermission();
     }
 
     private void setPagerAdapter() {
@@ -246,16 +268,16 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 if(plusStatusFabMenu.isExpanded()) {
                     plusStatusFabMenu.toggle();
                 }
-                Intent intent = new Intent(this, PostStatusActivity.class);
-                startActivity(intent);
+                Intent wordIntent = new Intent(this, PostStatusActivity.class);
+                startActivity(wordIntent);
                 break;
             case R.id.fab_plus_image_status:
-                MyLog.v(MyLog.POST_TAG, "点击了图片按钮");
                 if(plusStatusFabMenu.isExpanded()) {
                     plusStatusFabMenu.toggle();
                 }
-                Intent intent2 = new Intent(this, ChattingResolvedActivity.class);
-                startActivity(intent2);
+                Intent imageIntent = new Intent(this, PostStatusActivity.class);
+                imageIntent.putExtra("image_status", true);
+                startActivity(imageIntent);
                 break;
         }
     }
@@ -350,6 +372,18 @@ public class MainActivity extends BaseActivity<MainPresenter>
         return true;
     }
 
+    private class PostStatusBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(MyApplication.getContext(), "发送成功", Toast.LENGTH_SHORT).show();
+            viewPager.setCurrentItem(0, true);
+            StatusListFragment page = (StatusListFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.view_pager + ":" + 0);
+            if(page != null) {
+                page.onRefresh(SwipyRefreshLayoutDirection.TOP);
+            }
+        }
+    }
+
     private class MyWeiboAuthlistener implements WeiboAuthListener {
         @Override
         public void onCancel() {
@@ -394,6 +428,26 @@ public class MainActivity extends BaseActivity<MainPresenter>
 //                ((StatusListFragment)page).bindOperateAfterLogin();
 //            }
 
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case GPS_PERMISSION_REQUEST_CODE:
+                if(grantResults[0] == PERMISSION_GRANTED && grantResults[1] == PERMISSION_GRANTED) {
+                    Toast.makeText(MyApplication.getContext(), "获取位置权限成功", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MyApplication.getContext(), "没有获取位置的权限", Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
+
+    private void requestPermission() {
+        if (ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPS_PERMISSION_REQUEST_CODE);
         }
     }
 }

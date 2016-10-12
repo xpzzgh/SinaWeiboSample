@@ -14,6 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class StatusRetrofitClient {
 
     private static Retrofit retrofit;
+    private static Retrofit uploadRetrofit;
 
     static {
         Gson gson = new GsonBuilder().setLenient().create();
@@ -23,13 +24,22 @@ public class StatusRetrofitClient {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+        uploadRetrofit = new Retrofit.Builder()
+                .baseUrl("https://upload.api.weibo.com/2/")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
     }
 
     public static StatusesRetrofit instanceOf() {
         return RetrofitHolder.statusesRetrofit;
     }
+    public static StatusesRetrofit uploadInstanceOf() {
+        return RetrofitHolder.uploadStatusesRetrofit;
+    }
 
     private static class RetrofitHolder {
         static final StatusesRetrofit statusesRetrofit = retrofit.create(StatusesRetrofit.class);
+        static final StatusesRetrofit uploadStatusesRetrofit = uploadRetrofit.create(StatusesRetrofit.class);
     }
 }

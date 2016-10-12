@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.pz.sinaweibosample.view.widget.ImageViewWithClose
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/image_group_with_close"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    app:imageWidth="120dp"
+    app:closeImageWidth="20dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="5dp">
+
+    <ImageView
+        android:id="@+id/image_with_close"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/a1"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/image_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/ic_close"
+        android:padding="5dp"/>
+</com.example.pz.sinaweibosample.view.widget.ImageViewWithClose>

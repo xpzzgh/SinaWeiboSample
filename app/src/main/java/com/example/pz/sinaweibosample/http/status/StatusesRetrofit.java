@@ -10,7 +10,16 @@ import com.example.pz.sinaweibosample.model.entity.StatusList;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
@@ -40,4 +49,12 @@ public interface StatusesRetrofit {
 
     @GET("emotions.json")
     Observable<List<Emotion>> getEmotions(@QueryMap Map<String, String> params);
+
+    @Multipart
+    @POST("statuses/upload.json")
+    Observable<Status> postImageStatus(@PartMap Map<String, RequestBody> params);
+
+    @FormUrlEncoded
+    @POST("statuses/update.json")
+    Observable<Status> postStatus(@FieldMap Map<String, Object> params);
 }
