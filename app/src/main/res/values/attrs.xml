@@ -47,4 +47,9 @@
         <attr name="tagTextSize" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="ImageViewWithClose">
+        <attr name="imageWidth" format="dimension" />
+        <attr name="closeImageWidth" format="dimension" />
+    </declare-styleable>
+
 </resources>

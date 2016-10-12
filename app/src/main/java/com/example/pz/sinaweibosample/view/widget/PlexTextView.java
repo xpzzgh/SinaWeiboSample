@@ -185,7 +185,7 @@ public class PlexTextView extends TextView {
             startIndex = stop;
 //            ClickableSpan clickableSpan = new ClickableSpan() {
 //                @Override
-//                public void onClick(View view) {
+//                public void onCloseClick(View view) {
 //                    CharSequence clickedText = text.subSequence(start, stop - 1);
 //                    Toast.makeText(context, clickedText, Toast.LENGTH_SHORT).show();
 //                }
@@ -215,7 +215,7 @@ public class PlexTextView extends TextView {
 //
 //            ClickableSpan clickableSpan = new ClickableSpan() {
 //                @Override
-//                public void onClick(View view) {
+//                public void onCloseClick(View view) {
 //                    TextView textView = (TextView) view;
 //                    Toast.makeText(context, textView.getText(), Toast.LENGTH_SHORT).show();
 //                }
@@ -232,7 +232,7 @@ public class PlexTextView extends TextView {
     }
 
 //    public interface OnNotifySpanClickListener {
-//        void onClick(View view);
+//        void onCloseClick(View view);
 //        void updateDrawState(TextPaint tp);
 //    }
 
@@ -324,7 +324,7 @@ public class PlexTextView extends TextView {
                         Selection.removeSelection(spannable);
                     }
                 }else {
-//                    mPressedSpan.onClick(textView);
+//                    mPressedSpan.onCloseClick(textView);
                     if (mPressedSpan != null) {
                         mPressedSpan.setPressed(false);
                         MyLog.v(MyLog.WIDGET_TAG, "super OnTouchEvent 执行！！");

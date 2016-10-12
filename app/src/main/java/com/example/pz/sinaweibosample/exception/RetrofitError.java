@@ -30,6 +30,7 @@ public class RetrofitError {
             try {
                 MyLog.e(MyLog.BASE_TAG, "HTTP错误！");
                 String errorInfo = ((HttpException)e).response().errorBody().source().readUtf8Line();
+                MyLog.e(MyLog.BASE_TAG, errorInfo);
                 BaseObject errorObject;
                 try{
                     errorObject = gson.fromJson(errorInfo, BaseObject.class);

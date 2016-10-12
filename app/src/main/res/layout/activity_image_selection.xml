@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_image_selection"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <include
+        android:id="@+id/view_app_bar_image_selection"
+        layout="@layout/app_bar_common" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_image_selection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_app_bar_image_selection"
+        >
+    </android.support.v7.widget.RecyclerView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimaryTransparent"
+        >
+        <Button
+            android:id="@+id/button_album_selection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="所有图片"
+            android:textSize="15sp"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/colorAccent"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="15dp"/>
+    </FrameLayout>
+
+</RelativeLayout>

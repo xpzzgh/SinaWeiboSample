@@ -175,69 +175,6 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         bottomOperateTabView.setVisibility(GONE);
     }
 
-    //    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//
-//        int maxWidth = getPaddingLeft() + getPaddingRight();  //初始宽度为左右两个padding
-//        int maxHeight = getPaddingTop() + getPaddingBottom();
-//        int childState = 0;
-//        View view = getChildAt(0);
-//        measureChild(view, widthMeasureSpec, heightMeasureSpec);
-//        maxWidth += view.getMeasuredWidth();
-//
-//        if(view instanceof LinearLayout) {
-//            LinearLayout viewGroup = (LinearLayout)view;
-//            int count = viewGroup.getChildCount();
-//            for(int i = 0; i<count; i++) {
-//                View childView = viewGroup.getChildAt(i);
-//                if(childView.getVisibility() != GONE) {
-//                    measureChild(childView, widthMeasureSpec, heightMeasureSpec);
-//                    maxHeight += childView.getMeasuredHeight();
-//                }
-//            }
-//        }else {
-//            maxHeight += view.getMeasuredHeight();
-//        }
-//
-//        childState = combineMeasuredStates(childState, view.getMeasuredState());
-//        setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
-//                resolveSizeAndState(maxHeight, heightMeasureSpec, childState));
-//    }
-//
-//    @Override
-//    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-//        final int scopeLeft = getPaddingLeft();
-//        final int scopeTop = getPaddingTop();
-//        final int scopeRight = getMeasuredWidth() - getPaddingRight();
-//        final int scopeBottom = getMeasuredHeight() - getPaddingBottom();
-//
-//        List<String> imageUris = Util.getPriorityImagesUris(status, Constant.SMALL_IMAGE);
-//        int imageCount = imageUris == null ? 0 : imageUris.size();
-//
-//
-//        int currentTop = scopeTop;
-//
-//        View view = getChildAt(0);
-//        if(view instanceof LinearLayout) {
-//            view.layout(scopeLeft, scopeTop, scopeRight, scopeBottom);
-//            LinearLayout viewGroup = (LinearLayout) view;
-//            int count = viewGroup.getChildCount();
-//            for(int i = 0; i<count; i++) {
-//                View childView = viewGroup.getChildAt(i);
-//                if(childView.getVisibility() != GONE) {
-//                    childView.layout(scopeLeft, currentTop, scopeLeft + childView.getMeasuredWidth(), currentTop+childView.getMeasuredHeight());
-//                    MyLog.v(MyLog.STATUS_VIEW_TAG, "子view的左上右下分别为：" + scopeLeft + " " + currentTop + " " + childView.getMeasuredWidth() + " " + (currentTop+childView.getMeasuredHeight())
-//                     + "有图片张数：" + imageCount);
-//                    currentTop += childView.getMeasuredHeight();
-//                }
-//            }
-//        }else {
-//            view.layout(scopeLeft, scopeTop, scopeRight, scopeBottom);
-//        }
-//    }
-
-
-
 
     /**
      * 将数据填充到控件
