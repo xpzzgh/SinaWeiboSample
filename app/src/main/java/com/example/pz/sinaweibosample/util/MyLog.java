@@ -18,6 +18,7 @@ public class MyLog {
     public static final String STATUS_DETAIL = "status_detail";
     public static final String Image = "big_image";
     public static final String POST_TAG = "post";
+    public static final String PUSH_FLAG = "push";
 
     private static int currentLevel = 8;
     private static final int VERBOSE_LEVEL = 7;

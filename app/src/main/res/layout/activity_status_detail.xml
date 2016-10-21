@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_status_detail"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
     <android.support.design.widget.CoordinatorLayout
@@ -10,6 +11,14 @@
         android:orientation="vertical"
         android:fitsSystemWindows="false"
         android:layout_above="@+id/view_relay_comment_like_status_detail">
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager_status_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
         <android.support.design.widget.AppBarLayout
             android:id="@+id/view_appbar_status_detail"
             android:layout_width="match_parent"
@@ -75,13 +84,6 @@
                 </TextView>
             </LinearLayout>
         </android.support.design.widget.AppBarLayout>
-
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager_status_detail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </android.support.design.widget.CoordinatorLayout>
     <include
         android:id="@+id/view_relay_comment_like_status_detail"

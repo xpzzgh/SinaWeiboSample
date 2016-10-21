@@ -19,8 +19,7 @@
         custom:emojiWidth="14sp"
         android:textColor="@color/colorFont"
         android:maxLines="10"
-        android:ellipsize="end"
-        android:text="阿斯顿法国和健康阿fdgfdgdfgdfgdfgdfgdsfgsdfdfgsdfgsdfgsdfg斯顿发sdfgdfgsdf过火，第三方公司的发给对方给第三方第三方大风歌是丢发给。"/>
+        android:ellipsize="end" />
 
     <com.example.pz.sinaweibosample.view.widget.MultiImageViewGroup
         android:id="@+id/view_multi_images_relay_status"

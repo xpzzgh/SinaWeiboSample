@@ -1,10 +1,12 @@
 <resources>
-    <string name="app_name">SinaWeiboSample</string>
+    <string name="app_name">微博小助手儿</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="menu_status">微博</string>
+    <string name="menu_message">消息</string>
     <string name="transition_image_head">transition_image_head</string>
     <string name="transition_image_big">transition_image_big</string>
 </resources>

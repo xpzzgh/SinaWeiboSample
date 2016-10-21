@@ -5,6 +5,8 @@ import android.content.Context;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by pz on 2016/8/18.
  */
@@ -23,6 +25,9 @@ public class MyApplication extends Application{
         context = getApplicationContext();
         //初始化joda时间库
         JodaTimeAndroid.init(this);
+        //初始化Jpush
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     public static Context getContext() {

@@ -5,23 +5,13 @@
         <item
             android:id="@+id/nav_weibo"
             android:icon="@drawable/ic_weibo"
-            android:title="Import"
+            android:title="@string/menu_status"
             android:checkable="true"
             android:checked="true"/>
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"
-            android:checkable="true"/>
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"
-            android:checkable="true"/>
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"
+            android:id="@+id/nav_message"
+            android:icon="@drawable/ic_comment"
+            android:title="@string/menu_message"
             android:checkable="true"/>
     </group>
 

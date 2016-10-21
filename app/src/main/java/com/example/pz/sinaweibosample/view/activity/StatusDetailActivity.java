@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +22,7 @@ import com.example.pz.sinaweibosample.presenter.StatusDetailPresenter;
 import com.example.pz.sinaweibosample.util.Util;
 import com.example.pz.sinaweibosample.view.adapter.StatusDetailViewPagerAdapter;
 import com.example.pz.sinaweibosample.view.fragment.CommentListFragment;
+import com.example.pz.sinaweibosample.view.fragment.ErrorFragment;
 import com.example.pz.sinaweibosample.view.fragment.RelayListFragment;
 import com.example.pz.sinaweibosample.view.iview.IStatusDetailView;
 import com.example.pz.sinaweibosample.view.widget.BottomOperateTabView;
@@ -33,11 +36,15 @@ import butterknife.BindView;
 
 public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> implements IStatusDetailView{
 
+    public static final String STATUS_FLAG = "status";
+    public static final String STATUS_ID_FLAG = "status_id";
+
     Status status;
     StatusDetailViewPagerAdapter viewPagerAdapter;
     ActionBar supportToolbar;
     CommentListFragment commentListFragment;
     RelayListFragment relayListFragment;
+    String statusId;
 
 
     @BindView(R.id.view_status_detail)
@@ -62,7 +69,8 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        status = (Status)getIntent().getSerializableExtra("status");
+        status = (Status)getIntent().getSerializableExtra(STATUS_FLAG);
+        statusId = getIntent().getStringExtra(STATUS_ID_FLAG);
         super.onCreate(savedInstanceState);
 //        initData();
     }
@@ -91,35 +99,48 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
     @Override
     public void fillStatusData(Status status) {
         this.status = status;
+        handleStatus();
         setTabTitle();
-        relayListFragment.initData();
-        commentListFragment.initData();
+//        relayListFragment.initData();
+//        commentListFragment.initData();
 //        viewPagerAdapter.notifyDataChanged();
     }
 
     @Override
     protected void initView() {
-        initFragment();
-        setupToolbar();
+        if(status == null && statusId == null) {
+            throw new RuntimeException("不知道打开哪一条微博");
+        }
         statusView.setRelayCommentLikeViewGone();
+        setupToolbar();
+        setupTitleAppear();
+        if(status == null) {
+            initData(statusId);
+        }else {
+            handleStatus();
+        }
+    }
+
+    void handleStatus() {
+        initFragment();
         statusView.setData(status);
         initBottomOperateTabView();
         setupViewPager();
-        statusDetailTabView.setupWithViewPager(statusDetailViewPager);
-        setupTitleAppear();
-        statusDetailLikeText.setText("点赞 " + (status.getAttitudes_count() == 0 ? "" : Util.bigNumToStr(status.getAttitudes_count())));
         initUpdateTitles();
-//        statusDetailRefresh.setOnRefreshListener(this);
+        statusDetailTabView.setupWithViewPager(statusDetailViewPager);
+        statusDetailLikeText.setText("点赞 " + (status.getAttitudes_count() == 0 ? "" : Util.bigNumToStr(status.getAttitudes_count())));
     }
 
     void initFragment() {
         commentListFragment = CommentListFragment.instanceOf(status);
-
         relayListFragment = RelayListFragment.instanceOf(status);
     }
 
-    void initData() {
-        presenter.fillStatusDetail(status.getId());
+//    void initData() {
+//        presenter.fillStatusDetail(status.getId());
+//    }
+    void initData(String id) {
+        presenter.fillStatusDetail(id);
     }
 
     void setupToolbar() {
@@ -180,7 +201,6 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
     void setupTitleAppear() {
 //        statusDetailCollapsing.setTitle("");
         statusDetailAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-
             boolean isShow = false;
             //appbar总共要滚动的高度，是appbar的高度
             int scrollRange = -1;
@@ -223,16 +243,18 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
 
     @Override
     public void showProgress() {
-//        if(!statusDetailRefresh.isRefreshing()) {
-//            statusDetailRefresh.setRefreshing(true);
-//        }
+        Toast.makeText(this, "正在加载，请稍等", Toast.LENGTH_SHORT).show();
     }
 
 
 
     @Override
     public void showSnackInfo(String errorString, int errorCode) {
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        ErrorFragment errorFragment = ErrorFragment.instanceOf(errorString);
+        fragmentTransaction.add(R.id.layout_status_detail, errorFragment);
+        fragmentTransaction.commit();
     }
 
     @Override

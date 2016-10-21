@@ -14,6 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <include layout="@layout/view_path_to_login"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="visible"/>
 
 
     <android.support.design.widget.NavigationView
@@ -23,5 +27,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/activity_main_drawer" />
+
 
 </android.support.v4.widget.DrawerLayout>

@@ -59,7 +59,7 @@ public class MainPresenter extends BasePresenter<IMainView> {
                         MyLog.v(MyLog.USER_TAG, user.getName());
                         iView.fillUserInfo(user);
                         iView.hideLoginButton();
-                    }
+                }
                 });
     }
 

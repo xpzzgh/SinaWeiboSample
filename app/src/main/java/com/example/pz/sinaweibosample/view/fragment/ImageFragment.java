@@ -8,13 +8,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.example.pz.sinaweibosample.R;
 import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.util.MyLog;
@@ -64,7 +61,17 @@ public class ImageFragment extends Fragment implements View.OnClickListener, Vie
 
     void init() {
         mAttacher = new PhotoViewAttacher(image);
+        mAttacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+            @Override
+            public void onPhotoTap(View view, float x, float y) {
+                ActivityManager.instanceOf().finishActivity(getActivity());
+            }
 
+            @Override
+            public void onOutsidePhotoTap() {
+
+            }
+        });
         Glide.with(this)
                 .load(imageUrl)
                 .asBitmap()

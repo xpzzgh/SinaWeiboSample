@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.example.pz.sinaweibosample.base.MyApplication;
 import com.example.pz.sinaweibosample.model.entity.Emotion;
 import com.example.pz.sinaweibosample.model.entity.User;
+import com.example.pz.sinaweibosample.oauth.AccessTokenKeeper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class PrefUtil {
 
+    private static final String LOGIN_FLAG = "login";
     private static final String USER_FLAG = "user";
     public static final String EMOTION_FLAG = "emotion";
 
@@ -27,6 +29,19 @@ public class PrefUtil {
         if(gson == null) {
             gson = new Gson();
         }
+    }
+
+    public static void setIsLogin(boolean isLogin) {
+        SharedPreferences.Editor prefsEditor = MyApplication.getContext().getSharedPreferences(LOGIN_FLAG, Context.MODE_PRIVATE).edit();
+        prefsEditor.putBoolean(LOGIN_FLAG, isLogin);
+        prefsEditor.commit();
+    }
+
+    public static boolean isLogin() {
+        SharedPreferences sp = MyApplication.getContext().getSharedPreferences(LOGIN_FLAG, Context.MODE_PRIVATE);
+        boolean isLogin = sp.getBoolean(LOGIN_FLAG, false);
+
+        return isLogin && AccessTokenKeeper.isTokenValid();
     }
 
     public static void setUserInfo(User user) {
@@ -41,7 +56,7 @@ public class PrefUtil {
     public static User getUserInfo() {
         SharedPreferences pref = MyApplication.getContext().getSharedPreferences(USER_FLAG, Context.MODE_PRIVATE);
         String userInfo = pref.getString(USER_FLAG, "");
-        if(!userInfo.isEmpty()) {
+        if(userInfo != null && !userInfo.isEmpty()) {
             User user = gson.fromJson(userInfo, User.class);
             return user;
         }

@@ -188,7 +188,7 @@ public class StatusListFragment extends BaseFragment<StatusListPresenter> implem
     public void onItemClick(View view, int position) {
         Toast.makeText(getActivity(), "单击了第" + position + "条微博！", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), StatusDetailActivity.class);
-        intent.putExtra("status", statusList.get(position));
+        intent.putExtra(StatusDetailActivity.STATUS_FLAG, statusList.get(position));
         startActivity(intent);
     }
 

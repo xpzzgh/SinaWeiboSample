@@ -10,6 +10,6 @@ import com.example.pz.sinaweibosample.model.entity.User;
 public interface IMainView extends IView{
 
     void fillUserInfo(User user);
-
     void hideLoginButton();
+    void openDrawer();
 }

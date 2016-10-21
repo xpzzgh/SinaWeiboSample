@@ -16,4 +16,5 @@
     <color name="colorRed">#D32F2F</color>
     <color name="colorGold">#f4c600</color>
     <color name="colorPrimaryTransparent">#663F51B5</color>
+    <color name="colorTransparent">#00121212</color>
 </resources>

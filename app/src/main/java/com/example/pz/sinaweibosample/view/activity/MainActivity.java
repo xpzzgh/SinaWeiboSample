@@ -37,6 +37,7 @@ import com.example.pz.sinaweibosample.presenter.MainPresenter;
 import com.example.pz.sinaweibosample.util.AppInfo;
 import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
+import com.example.pz.sinaweibosample.util.PrefUtil;
 import com.example.pz.sinaweibosample.view.adapter.StatusListViewPagerAdapter;
 import com.example.pz.sinaweibosample.view.fragment.StatusListFragment;
 import com.example.pz.sinaweibosample.view.iview.IMainView;
@@ -80,6 +81,8 @@ public class MainActivity extends BaseActivity<MainPresenter>
     com.getbase.floatingactionbutton.FloatingActionButton plusWordStatusFab;
     @BindView(R.id.fab_plus_image_status)
     FloatingActionButton plusImageStatusFab;
+    @BindView(R.id.view_path_to_login)
+    View pathToLoginView;
 
     MenuItem preNavChecked;
     Button loginButton;
@@ -117,6 +120,14 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
     @Override
     protected void initView() {
+        if(PrefUtil.isLogin()) {
+            pathToLoginView.setVisibility(View.GONE);
+        }else {
+            pathToLoginView.setVisibility(View.VISIBLE);
+            ImageView pathToLoginImage = (ImageView) pathToLoginView.findViewById(R.id.image_path_to_login);
+            pathToLoginImage.setOnClickListener(this);
+            PrefUtil.setIsLogin(true);
+        }
         registerBroadcastReceiver();
         //实例化token请求对象
         mAuthInfo = new AuthInfo(this, AppInfo.APP_KEY, AppInfo.REDIRECT_URL, AppInfo.SCOPE);
@@ -223,6 +234,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 presenter.getUserInfo();
             }
         }).show();
+        loginButton.setOnClickListener(this);
     }
 
     private void handleLoginButton() {
@@ -279,6 +291,9 @@ public class MainActivity extends BaseActivity<MainPresenter>
                 imageIntent.putExtra("image_status", true);
                 startActivity(imageIntent);
                 break;
+            case R.id.image_path_to_login:
+                pathToLoginView.setVisibility(View.GONE);
+                openDrawer();
         }
     }
 
@@ -310,7 +325,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -353,13 +368,9 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
             if (checkedId == R.id.nav_weibo) {
 
-            } else if (checkedId == R.id.nav_gallery) {
+            } else if (checkedId == R.id.nav_message) {
 
-            } else if (checkedId == R.id.nav_slideshow) {
-
-            } else if (checkedId == R.id.nav_manage) {
-
-            } else if (checkedId == R.id.nav_share) {
+            }  else if (checkedId == R.id.nav_share) {
 
             } else if (checkedId == R.id.nav_send) {
 
@@ -428,6 +439,13 @@ public class MainActivity extends BaseActivity<MainPresenter>
 //                ((StatusListFragment)page).bindOperateAfterLogin();
 //            }
 
+        }
+    }
+
+    @Override
+    public void openDrawer() {
+        if (!drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.openDrawer(GravityCompat.START);
         }
     }
 
