@@ -2,11 +2,11 @@
 <resources>
 
     <declare-styleable name="MultiImageViewGroup">
-        <attr name="width_per_image" format="dimension" />
-        <attr name="width_image_gap" format="dimension" />
-        <attr name="width_max" format="dimension" />
-        <attr name="height_max" format="dimension" />
-    </declare-styleable>
+    <attr name="width_per_image" format="dimension" />
+    <attr name="width_image_gap" format="dimension" />
+    <attr name="width_max" format="dimension" />
+    <attr name="height_max" format="dimension" />
+</declare-styleable>
 
     <declare-styleable name="AvatarImageBehavior">
         <attr name="finalYPosition" format="dimension"/>

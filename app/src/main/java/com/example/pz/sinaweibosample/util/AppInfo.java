@@ -25,7 +25,8 @@ public class AppInfo {
     /**
      * 项目 签名
      */
-    public static final String PACKAGE_SIGN = "382d8d7ff555f8c3f68ee10b73e11898";
+//    public static final String PACKAGE_SIGN = "382d8d7ff555f8c3f68ee10b73e11898";
+    public static final String PACKAGE_SIGN = "5f060b949d670c08289485a7562031d7";
 
     /**
      * 权限请求的范围
