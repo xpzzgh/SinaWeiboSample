@@ -57,4 +57,13 @@ public interface StatusesRetrofit {
     @FormUrlEncoded
     @POST("statuses/update.json")
     Observable<Status> postStatus(@FieldMap Map<String, Object> params);
+
+    @FormUrlEncoded
+    @POST("statuses/repost.json")
+    Observable<Status> relayStatus(@FieldMap Map<String, Object> params);
+
+    @FormUrlEncoded
+    @POST("comments/create.json")
+    Observable<Status> commentStatus(@FieldMap Map<String, Object> params);
+
 }

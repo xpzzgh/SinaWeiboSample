@@ -105,6 +105,13 @@ public class Status extends BaseObject{
             return builder.toString();
     }
 
+    public boolean isEmpty() {
+        if(id == null || id.isEmpty() || text == null || text.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
     public int getAttitudes_count() {
         return attitudes_count;
     }

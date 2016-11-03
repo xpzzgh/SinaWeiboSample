@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 /**
  * Created by pz on 2016/9/4.
@@ -196,6 +197,8 @@ public class Util {
             if (o == Integer.valueOf(0)) {
                 return true;
             }
+        }else if(o instanceof Status && ((Status) o).isEmpty()) {
+            return true;
         }
         return false;
     }

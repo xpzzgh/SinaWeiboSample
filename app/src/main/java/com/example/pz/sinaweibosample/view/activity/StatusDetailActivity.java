@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,8 +83,8 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
 //    }
 
     @Override
-    public void setTitle() {
-//        supportToolbar.setTitle("微博正文");
+    public void initTitle() {
+//        supportToolbar.initTitle("微博正文");
     }
 
     @Override
@@ -118,6 +119,13 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
             initData(statusId);
         }else {
             handleStatus();
+            statusView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(StatusDetailActivity.this, StatusDetailWebActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -199,7 +207,7 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
      * 设置页面title显示的情况
      */
     void setupTitleAppear() {
-//        statusDetailCollapsing.setTitle("");
+//        statusDetailCollapsing.initTitle("");
         statusDetailAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             //appbar总共要滚动的高度，是appbar的高度
@@ -214,11 +222,11 @@ public class StatusDetailActivity extends BaseActivity<StatusDetailPresenter> im
                 if (scrollRange + verticalOffset <= 20) {
                     supportToolbar.setDisplayHomeAsUpEnabled(true);
                     supportToolbar.setDisplayShowHomeEnabled(true);
-//                    statusDetailCollapsing.setTitle("微博正文");
+//                    statusDetailCollapsing.initTitle("微博正文");
                     supportToolbar.setTitle("微博正文");
                     isShow = true;
                 } else if(isShow) {
-//                    statusDetailCollapsing.setTitle(" ");//careful there should a space between double quote otherwise it wont work
+//                    statusDetailCollapsing.initTitle(" ");//careful there should a space between double quote otherwise it wont work
                     isShow = false;
                     supportToolbar.setTitle("");
                     supportToolbar.setDisplayHomeAsUpEnabled(false);

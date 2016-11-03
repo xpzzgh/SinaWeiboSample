@@ -42,10 +42,12 @@ import com.example.pz.sinaweibosample.base.ActivityManager;
 import com.example.pz.sinaweibosample.base.BaseActivity;
 import com.example.pz.sinaweibosample.base.MyApplication;
 import com.example.pz.sinaweibosample.model.entity.Album;
+import com.example.pz.sinaweibosample.model.entity.Status;
 import com.example.pz.sinaweibosample.presenter.PostStatusPresenter;
 import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.SoftKeyboardStateWatcher;
+import com.example.pz.sinaweibosample.util.Util;
 import com.example.pz.sinaweibosample.view.adapter.EmojiViewPagerAdapter;
 import com.example.pz.sinaweibosample.view.adapter.PostStatusImagesRecyclerAdapter;
 import com.example.pz.sinaweibosample.view.fragment.EmojiFragment;
@@ -53,8 +55,8 @@ import com.example.pz.sinaweibosample.view.iview.IEmojiView;
 import com.example.pz.sinaweibosample.view.iview.IPostStatusView;
 import com.example.pz.sinaweibosample.view.util.Emoticons;
 import com.example.pz.sinaweibosample.view.widget.PointProgressBar;
+import com.example.pz.sinaweibosample.view.widget.StatusView;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,9 +98,10 @@ public class PostStatusActivity extends BaseActivity<PostStatusPresenter> implem
     TextView postStatusTextLength;
     @BindView(R.id.recycler_images_post_status)
     RecyclerView postStatusImagesRecycler;
-//    @BindView(R.id.view_image_multi)
-//    ImageViewWithClose imageViewWithClose;
+    @BindView(R.id.view_relay_status_post)
+    StatusView postRelayStatusView;
 
+    int type;
     ActionBar actionBar;
     SpannableStringBuilder spannableStringBuilder;
     PostStatusTextWatcher textWatcher;
@@ -108,18 +111,21 @@ public class PostStatusActivity extends BaseActivity<PostStatusPresenter> implem
     PostStatusImagesRecyclerAdapter postStatusImagesRecyclerAdapter;
     private Album selectedImages;
     private SoftKeyboardStateWatcher softKeyboardStateWatcher;
+    private Status toRelayStatus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if(savedInstanceState!= null) {
             //还原保存的数据
-        }
-        if(getIntent().getBooleanExtra("image_status", false)) {
-            startImageSelectionActivity();
+            type = savedInstanceState.getInt(Constant.KEY_TYPE_STATUS);
+            toRelayStatus = (Status) savedInstanceState.getSerializable(Constant.KEY_COMMENT_RELAY_STATUS);
+        }else {
+            type = getIntent().getIntExtra(Constant.KEY_TYPE_STATUS, Constant.TYPE_STATUS_WORD);
         }
         spannableStringBuilder = new SpannableStringBuilder();
         super.onCreate(savedInstanceState);
-        setTitle();
+        initTitle();
+        initViewState();
     }
 
     @Override
@@ -134,10 +140,14 @@ public class PostStatusActivity extends BaseActivity<PostStatusPresenter> implem
 
     @Override
     protected void initView() {
+        //初始化StatusView的状态
+        postRelayStatusView.setRelayCommentLikeViewGone();
+        postRelayStatusView.setBackground(getResources().getDrawable(R.color.colorVeryLightGray));
+//        postRelayStatusView.getStatusRelayView().setBackground(getResources().getDrawable(R.color.colorLightGray));
         //使menuIcon动画的方法
         postStatusToolbar.addOnLayoutChangeListener(this);
-        postStatusToolbar.setTitle("发微博");
         setSupportActionBar(postStatusToolbar);
+        //设置键盘点击监听
         postStatusNotifyButton.setOnClickListener(this);
         postStatusTopicButton.setOnClickListener(this);
         postStatusEmojiImage.setOnClickListener(this);
@@ -151,23 +161,64 @@ public class PostStatusActivity extends BaseActivity<PostStatusPresenter> implem
         //处理emoji键盘
         handleEmojiPager();
         //初始化postStatusImagesRecycler
-//        selectedImages = new Album();
-
         postStatusImagesRecyclerAdapter = new PostStatusImagesRecyclerAdapter(this);
         postStatusImagesRecyclerAdapter.setImageOnClickListener(this);
         postStatusImagesRecycler.setAdapter(postStatusImagesRecyclerAdapter);
         postStatusImagesRecycler.setLayoutManager(new GridLayoutManager(this, 3));
-//        imageViewWithClose.setData(R.mipmap.a1, true);
     }
 
-//    private void initData() {
-//        resIds.add(R.mipmap.a5);
-//        resIds.add(R.mipmap.a2);
-//        resIds.add(R.mipmap.a3);
-//        resIds.add(R.mipmap.a4);
-//        resIds.add(R.mipmap.a6);
-//        postStatusImagesRecyclerAdapter.notifyDataSetChanged();
-//    }
+    private void initViewState() {
+
+        switch (type) {
+            case Constant.TYPE_STATUS_WORD:
+                setTitle("发微博");
+                setRelayStatusDisplay(false);
+                break;
+            case Constant.TYPE_STATUS_IMAGE:
+                setRelayStatusDisplay(false);
+                setTitle("发图片微博");
+                startImageSelectionActivity();
+                break;
+            case Constant.TYPE_STATUS_RELAY:
+                setTitle("转发");
+                initRelayStatus();
+                break;
+            case Constant.TYPE_STATUS_COMMENT:
+                setTitle("评论");
+                initRelayStatus();
+                break;
+            case Constant.TYPE_STATUS_COMMENT_ANSWER:
+            case Constant.TYPE_STATUS_COMMENT_RELAY:
+                break;
+        }
+    }
+
+    /**
+     * 处理评论和转发微博时，界面的填充
+     */
+    private void initRelayStatus() {
+        if(toRelayStatus == null) {
+            toRelayStatus = (Status) getIntent().getSerializableExtra(Constant.KEY_COMMENT_RELAY_STATUS);
+            if(Util.isEmpty(toRelayStatus)) {
+                throw new RuntimeException("转发微博一定要传递微博数据 !");
+            }
+        }
+        setMultiImageDisplay(false);
+        if(type == Constant.TYPE_STATUS_RELAY) {
+            if(Util.isEmpty(toRelayStatus.getRetweeted_status())) {
+                postRelayStatusView.setData(toRelayStatus);
+            }else {
+                String relayText = "//@" + toRelayStatus.getUser().getName() + ": " + toRelayStatus.getText();
+                postStatusEditText.setText(relayText);
+                postStatusEditText.setSelection(0);
+                postRelayStatusView.setData(toRelayStatus.getRetweeted_status());
+            }
+        }else {
+            postRelayStatusView.setData(toRelayStatus);
+        }
+    }
+
+
 
     @Override
     protected void onResume() {
@@ -176,12 +227,21 @@ public class PostStatusActivity extends BaseActivity<PostStatusPresenter> implem
 //        initData();
     }
 
+
+
     @Override
-    public void setTitle() {
+    public void initTitle() {
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 //        actionBar.setDis
+    }
+
+    public void setTitle(String title) {
+        if(Util.isEmpty(title)) {
+            return;
+        }
+        actionBar.setTitle(title);
     }
 
     @Override
@@ -216,33 +276,69 @@ public class PostStatusActivity extends BaseActivity<PostStatusPresenter> implem
                     if(selectedImages != null && selectedImages.getImageInfoList().size() > 1) {
                         Toast.makeText(MyApplication.getContext(), "新浪微博接口只允许上传一张图片，因此将上传第一张图片", Toast.LENGTH_SHORT).show();
                     }
-                    AnimatorSet set = new AnimatorSet();
-                    ObjectAnimator animator = ObjectAnimator
-                            .ofFloat(v, "translationX", 0, -60);
-                    animator.setDuration(1000);
-                    ObjectAnimator animator1 = ObjectAnimator
-                            .ofFloat(v, "translationX", -60, 300);
-                    animator1.setDuration(500);
-                    set.play(animator).before(animator1);
-                    set.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            Boolean isStartService;
-                            if(postStatusEditText.getText().toString().isEmpty() && (selectedImages == null || selectedImages.getImageInfoList().size() <= 0)) {
-                                Toast.makeText(MyApplication.getContext(), "微博和图片不能同时为空！！", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            isStartService = presenter.sendStatus(postStatusEditText.getText().toString(), 0, selectedImages, "来自XPZ微博！");
-
-                            if(v.getTranslationX() >= 290 && isStartService) {
-                                ActivityManager.instanceOf().finishActivity(PostStatusActivity.this);
-                            }
-                        }
-                    });
-                    set.start();
+//                    if(postStatusEditText.getText().toString().isEmpty() && (selectedImages == null || selectedImages.getImageInfoList().size() <= 0)) {
+//                        Toast.makeText(MyApplication.getContext(), "微博和图片不能同时为空！！", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+                    handleSendStatusAnimator(v);
                 }
             });
         }
+    }
+
+    private void handleSendStatusAnimator(final View v) {
+        AnimatorSet set = new AnimatorSet();
+        ObjectAnimator animator = ObjectAnimator
+                .ofFloat(v, "translationX", 0, -60);
+        animator.setDuration(1000);
+        ObjectAnimator animator1 = ObjectAnimator
+                .ofFloat(v, "translationX", -60, 300);
+        animator1.setDuration(500);
+        set.play(animator).before(animator1);
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Boolean isStartService;
+
+                isStartService = handleSendStatus();
+                if(v.getTranslationX() >= 290 && isStartService) {
+                    ActivityManager.instanceOf().finishActivity(PostStatusActivity.this);
+                }
+            }
+        });
+        set.start();
+    }
+
+    private boolean handleSendStatus() {
+        Boolean isStartService = false;
+        switch (type) {
+            case Constant.TYPE_STATUS_WORD:
+            case Constant.TYPE_STATUS_IMAGE:
+                isStartService = presenter.sendStatus(postStatusEditText.getText().toString(), 0, selectedImages, "来自XPZ微博！");
+                break;
+            case Constant.TYPE_STATUS_RELAY:
+                String text = postStatusEditText.getText().toString();
+                if(!Util.isEmpty(text)) {
+                    //有“//”时，截取前面的字符串，否则截取全部字符串
+                    int index = text.indexOf("//");
+                    if(index != 0) {
+//                        String relayStatusText = text.substring(0, index);
+//                        isStartService = presenter.relayStatus(toRelayStatus.getId(), relayStatusText, 0);
+                        isStartService = presenter.relayStatus(toRelayStatus.getId(), text, 0);
+                    }else {
+                        isStartService = presenter.relayStatus(toRelayStatus.getId(), "转发tmd微博" + text, 0);
+                    }
+//                    isStartService = presenter.relayStatus(toRelayStatus.getId(), text, 0);
+                }else {
+                    isStartService = presenter.relayStatus(toRelayStatus.getId(), "转发tmd微博", 0);
+                }
+
+                break;
+            case Constant.TYPE_STATUS_COMMENT:
+                isStartService = presenter.commentStatus();
+                break;
+        }
+        return isStartService;
     }
 
     /**
@@ -569,7 +665,8 @@ public class PostStatusActivity extends BaseActivity<PostStatusPresenter> implem
 
     @Override
     protected void saveCurrentState(Bundle bundle) {
-
+        bundle.putInt(Constant.KEY_TYPE_STATUS, type);
+        bundle.putSerializable(Constant.KEY_COMMENT_RELAY_STATUS, toRelayStatus);
     }
 
     @Override
@@ -614,5 +711,19 @@ public class PostStatusActivity extends BaseActivity<PostStatusPresenter> implem
         }
     }
 
+    private void setMultiImageDisplay(boolean show) {
+        if(show) {
+            postStatusImagesRecycler.setVisibility(View.VISIBLE);
+        }else {
+            postStatusImagesRecycler.setVisibility(View.GONE);
+        }
+    }
 
+    private void setRelayStatusDisplay(boolean show) {
+        if(show) {
+            postRelayStatusView.setVisibility(View.VISIBLE);
+        }else {
+            postRelayStatusView.setVisibility(View.GONE);
+        }
+    }
 }

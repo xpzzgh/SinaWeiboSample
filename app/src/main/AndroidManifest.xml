@@ -78,6 +78,12 @@
         <activity android:name=".view.activity.ImageSelectionActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".view.activity.StatusDetailWebActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".view.activity.WidgetActivity"
+            android:screenOrientation="portrait" />
+
         <service android:name=".service.PostStatusService" />
 
 

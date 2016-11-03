@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
     }
 
     @Override
-    public void setTitle() {
+    public void initTitle() {
         getSupportActionBar().setTitle("bigZ微博");
     }
 
@@ -281,6 +281,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
                     plusStatusFabMenu.toggle();
                 }
                 Intent wordIntent = new Intent(this, PostStatusActivity.class);
+                wordIntent.putExtra(Constant.KEY_TYPE_STATUS, Constant.TYPE_STATUS_WORD);
                 startActivity(wordIntent);
                 break;
             case R.id.fab_plus_image_status:
@@ -288,7 +289,7 @@ public class MainActivity extends BaseActivity<MainPresenter>
                     plusStatusFabMenu.toggle();
                 }
                 Intent imageIntent = new Intent(this, PostStatusActivity.class);
-                imageIntent.putExtra("image_status", true);
+                imageIntent.putExtra(Constant.KEY_TYPE_STATUS, Constant.TYPE_STATUS_IMAGE);
                 startActivity(imageIntent);
                 break;
             case R.id.image_path_to_login:
@@ -370,7 +371,10 @@ public class MainActivity extends BaseActivity<MainPresenter>
 
             } else if (checkedId == R.id.nav_message) {
 
-            }  else if (checkedId == R.id.nav_share) {
+            } else if (checkedId == R.id.nav_widget) {
+                Intent intent = new Intent(this, WidgetActivity.class);
+                startActivity(intent);
+            } else if (checkedId == R.id.nav_share) {
 
             } else if (checkedId == R.id.nav_send) {
 
@@ -467,5 +471,10 @@ public class MainActivity extends BaseActivity<MainPresenter>
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GPS_PERMISSION_REQUEST_CODE);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

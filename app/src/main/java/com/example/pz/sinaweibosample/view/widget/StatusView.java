@@ -139,6 +139,10 @@ public class StatusView extends FrameLayout implements View.OnClickListener{
         followImage.setOnClickListener(this);
     }
 
+    public RelayStatusView getStatusRelayView() {
+        return statusRelayView;
+    }
+
     @Override
     public void onClick(View view) {
         if(status != null) {

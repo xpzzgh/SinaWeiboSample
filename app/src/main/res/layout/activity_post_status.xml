@@ -9,11 +9,11 @@
     <EditText
         android:id="@+id/edit_text_post_status"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="170dp"
         android:hint="分享新鲜事..."
         android:gravity="top"
         android:background="@null"
-        android:maxLines="6"
+        android:maxLines="10"
         android:maxLength="160"
         android:textColor="@color/colorFont"
         android:layout_margin="15dp"
@@ -25,8 +25,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/edit_text_post_status"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp">
+        >
     </android.support.v7.widget.RecyclerView>
+
+    <include
+        android:id="@+id/view_relay_status_post"
+        layout="@layout/view_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recycler_images_post_status"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
 
     <ScrollView
         android:layout_width="match_parent"

@@ -99,9 +99,7 @@ public class StatusParamsHelper {
     }
 
     public static Map<String, Object> getPostStatusParams(String text, int visible, String annotations) throws UnsupportedEncodingException {
-        if(text == null || text.isEmpty()) {
-            return null;
-        }
+        text = "这个人很懒，什么都没有填";
         Map<String, Object> fieldMap = new HashMap<String, Object>();
         fieldMap.put("status", text);
         fieldMap.put("access_token", AccessTokenKeeper.readToken().getToken());
@@ -145,5 +143,21 @@ public class StatusParamsHelper {
 //            params.put("annotations", RequestBody.create(MediaType.parse("Text/plain"), annotations));
         }
         return params;
+    }
+
+    /**
+     *
+     * @param statusId 要转发的微博ID。
+     * @param text  添加的转发文本，必须做URLencode，内容不超过140个汉字，不填则默认为“转发微博”。
+     * @param isComment  是否在转发的同时发表评论，0：否、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0 。
+     * @return 转发微博所需的参数
+     */
+    public static Map<String, Object> getRelayStatusParams(String statusId, String text, int isComment) {
+        Map<String, Object> fieldMap = new HashMap<String,  Object>();
+        fieldMap.put("access_token", AccessTokenKeeper.readToken().getToken());
+        fieldMap.put("id", statusId);
+        fieldMap.put("status", Util.isEmpty(text) ? "来自XPZ客户端的转发微博" : text);
+        fieldMap.put("is_comment", isComment);
+        return fieldMap;
     }
 }

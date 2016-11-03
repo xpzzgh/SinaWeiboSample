@@ -48,4 +48,17 @@ public class Constant {
     public static final int EMOJI_VIEW_TAG = 10021;
 
     public static final int STATUS_MOST_LENGTH = 140;
+
+    /**
+     * 微博类型
+     */
+//    public static final String KEY_COMMENT_STATUS = "comment_status";
+    public static final String KEY_COMMENT_RELAY_STATUS = "relay_status";
+    public static final String KEY_TYPE_STATUS = "status_type";
+    public static final int TYPE_STATUS_WORD = 55;
+    public static final int TYPE_STATUS_IMAGE = 66;
+    public static final int TYPE_STATUS_RELAY = 77;
+    public static final int TYPE_STATUS_COMMENT = 88;
+    public static final int TYPE_STATUS_COMMENT_ANSWER = 555;
+    public static final int TYPE_STATUS_COMMENT_RELAY = 666;
 }

@@ -122,7 +122,7 @@ public class UserActivity extends BaseActivity<UserPresenter> implements IUserVi
     }
 
     @Override
-    public void setTitle() {
+    public void initTitle() {
     }
 
     @Override

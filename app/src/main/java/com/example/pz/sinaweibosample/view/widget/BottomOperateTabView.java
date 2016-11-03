@@ -3,21 +3,22 @@ package com.example.pz.sinaweibosample.view.widget;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pz.sinaweibosample.R;
+import com.example.pz.sinaweibosample.base.ActivityManager;
+import com.example.pz.sinaweibosample.base.MyApplication;
 import com.example.pz.sinaweibosample.model.entity.Status;
+import com.example.pz.sinaweibosample.util.Constant;
 import com.example.pz.sinaweibosample.util.MyLog;
 import com.example.pz.sinaweibosample.util.Util;
+import com.example.pz.sinaweibosample.view.activity.PostStatusActivity;
 
 /**
  * Created by pz on 2016/9/13.
@@ -105,9 +106,19 @@ public class BottomOperateTabView extends LinearLayout implements View.OnClickLi
             switch (id) {
                 case R.id.view_button_comment:
                     Toast.makeText(context, "有" + status.getComments_count() + "条评论！", Toast.LENGTH_SHORT).show();
+                    Intent commentIntent = new Intent(ActivityManager.instanceOf().getCurrentActivity(), PostStatusActivity.class);
+                    commentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    commentIntent.putExtra(Constant.KEY_COMMENT_RELAY_STATUS, status);
+                    commentIntent.putExtra(Constant.KEY_TYPE_STATUS, Constant.TYPE_STATUS_COMMENT);
+                    MyApplication.getContext().startActivity(commentIntent);
                     break;
                 case R.id.view_button_relay:
                     Toast.makeText(context,  "有" + status.getReposts_count() + "条转发！", Toast.LENGTH_SHORT).show();
+                    Intent relayIntent = new Intent(ActivityManager.instanceOf().getCurrentActivity(), PostStatusActivity.class);
+                    relayIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    relayIntent.putExtra(Constant.KEY_COMMENT_RELAY_STATUS, status);
+                    relayIntent.putExtra(Constant.KEY_TYPE_STATUS, Constant.TYPE_STATUS_RELAY);
+                    MyApplication.getContext().startActivity(relayIntent);
                     break;
                 case R.id.view_button_like:
                     if(status.isLiked()) {

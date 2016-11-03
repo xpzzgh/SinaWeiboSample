@@ -14,6 +14,7 @@ import java.util.Stack;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by pz on 2016/8/18.
@@ -61,7 +62,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         MyLog.v(MyLog.BASE_TAG, allActivity);
     }
 
-    public abstract void setTitle();
+    public abstract void initTitle();
 
     public T getPresenter() {
         return presenter;
@@ -88,7 +89,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onStart() {
         super.onStart();
-        setTitle();
+        initTitle();
         MyLog.v(MyLog.BASE_TAG, this.getLocalClassName() + ": OnStart");
     }
 
@@ -101,6 +102,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onPause() {
         pauseOperation();
+        JPushInterface.onPause(this);
         super.onPause();
         MyLog.v(MyLog.BASE_TAG, this.getLocalClassName() + ": OnPause");
     }
@@ -116,6 +118,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onResume() {
         super.onResume();
+        JPushInterface.onResume(this);
         MyLog.v(MyLog.BASE_TAG, this.getLocalClassName() + ": OnResume");
     }
 

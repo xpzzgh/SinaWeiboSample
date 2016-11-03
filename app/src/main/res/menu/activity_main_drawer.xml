@@ -13,6 +13,11 @@
             android:icon="@drawable/ic_comment"
             android:title="@string/menu_message"
             android:checkable="true"/>
+        <item
+            android:id="@+id/nav_widget"
+            android:icon="@drawable/ic_plus"
+            android:title="@string/menu_widget"
+            android:checkable="true" />
     </group>
 
     <item android:title="Communicate">
